@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 连框颜色值 --><item>
+    <shape>
+        <solid android:color="#ff0000" />
+    </shape>
+</item>
+    <!-- 主体背景颜色值 -->
+    <item android:bottom="3dp" android:right="3dp">
+        <shape>
+            <solid android:color="#ffffff" />
+
+            <padding android:bottom="10dp"
+                android:left="10dp"
+                android:right="10dp"
+                android:top="10dp" />
+        </shape>
+    </item>
+</layer-list>

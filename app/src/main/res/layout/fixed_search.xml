@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/makeRoad_header"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="#ff00a0e9" />
+
+    <Button
+        android:id="@+id/makeRoad_GoBack"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/iconfont_zuojiantou" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/makeRoad_header"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="附近"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="22sp" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/makeRoad_header"
+        android:layout_marginTop="0dp"
+        android:background="#ffe2e2e2"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/churukou"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t01"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:onClick="true"
+                    android:text="出入口"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t02"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t01"
+                    android:layout_alignLeft="@+id/t01"
+                    android:layout_alignStart="@id/t01"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:onClick="false"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t02"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:onClick="false"
+                    android:layout_toEndOf="@+id/t02"
+                    android:layout_toRightOf="@+id/t02"
+                    android:background="@drawable/wei"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton"
+                    android:layout_toRightOf="@+id/imageButton"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dengjikou"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t03"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:onClick="true"
+                    android:text="登机口"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t04"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t03"
+                    android:layout_alignLeft="@+id/t03"
+                    android:layout_alignStart="@id/t03"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_feiji1"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton01"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t04"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@+id/t04"
+                    android:layout_toRightOf="@+id/t04"
+                    android:background="@drawable/wei"
+                    android:onClick="false"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton01"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton01"
+                    android:layout_toRightOf="@+id/imageButton01"
+                    android:elevation="10dp"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/anjian"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t05"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:onClick="true"
+                    android:text="安检"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t06"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t05"
+                    android:layout_alignLeft="@+id/t05"
+                    android:layout_alignStart="@id/t05"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_anjianchu"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton02"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t06"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@+id/t06"
+                    android:onClick="false"
+                    android:layout_toRightOf="@+id/t06"
+                    android:background="@drawable/wei"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton02"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton02"
+                    android:layout_toRightOf="@+id/imageButton02"
+                    android:elevation="10dp"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/shangdian"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t07"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:onClick="true"
+                    android:text="商店"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t08"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t07"
+                    android:layout_alignLeft="@+id/t07"
+                    android:layout_alignStart="@id/t07"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_shangdian"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton03"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t08"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@+id/t08"
+                    android:onClick="false"
+                    android:layout_toRightOf="@+id/t08"
+                    android:background="@drawable/wei"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton03"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton03"
+                    android:layout_toRightOf="@+id/imageButton03"
+                    android:elevation="10dp"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/atm"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t09"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:onClick="true"
+                    android:paddingTop="5dp"
+                    android:text="@string/atm"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t10"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t09"
+                    android:layout_alignLeft="@+id/t09"
+                    android:layout_alignStart="@id/t09"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_draw"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton04"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t10"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@+id/t10"
+                    android:layout_toRightOf="@+id/t10"
+                    android:onClick="false"
+                    android:background="@drawable/wei"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton04"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton04"
+                    android:layout_toRightOf="@+id/imageButton04"
+                    android:elevation="10dp"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/weishengjian"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t11"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:onClick="true"
+                    android:text="卫生间"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t12"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t11"
+                    android:layout_alignLeft="@+id/t11"
+                    android:layout_alignStart="@id/t11"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_xishoujian"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton05"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t12"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@+id/t12"
+                    android:layout_toRightOf="@+id/t12"
+                    android:background="@drawable/wei"
+                    android:onClick="false"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton05"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton05"
+                    android:layout_toRightOf="@+id/imageButton05"
+                    android:elevation="10dp"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/dianti"
+                android:onClick="true"
+                android:layout_marginTop="7dp">
+
+                <Button
+                    android:id="@+id/t13"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="10dp"
+                    android:gravity="left"
+                    android:paddingLeft="60dp"
+                    android:onClick="true"
+                    android:paddingTop="5dp"
+                    android:text="电梯"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/t14"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/t13"
+                    android:layout_alignLeft="@+id/t13"
+                    android:layout_alignStart="@id/t13"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_dianti"
+                    android:elevation="10dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton06"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_alignBottom="@+id/t14"
+                    android:layout_marginBottom="-15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@+id/t14"
+                    android:layout_toRightOf="@+id/t14"
+                    android:onClick="false"
+                    android:background="@drawable/wei"
+                    android:elevation="10dp" />
+
+                <TextView
+                    android:id="@+id/fix_text7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:layout_alignBottom="@+id/imageButton06"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/imageButton06"
+                    android:layout_toRightOf="@+id/imageButton06"
+                    android:elevation="10dp"
+                    android:text="距离最近是13m"
+                    android:textSize="13sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    android:id="@+id/tools"
+    style="@android:style/Animation">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:id="@+id/makeRoad_header"
+        android:layout_gravity="top"
+        android:background="#ff00a0e9" />
+
+    <Button
+        android:id="@+id/makeRoad_GoBack"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/iconfont_zuojiantou" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="工具箱"
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/makeRoad_header"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:textSize="21sp" />
+
+
+    <LinearLayout
+        android:id="@+id/personalSet"
+        android:layout_below="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_switch_notification"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp">
+
+            <TextView
+                android:text="开启推送"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="20dp"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_open_notification"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/on"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_close_notification"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/off"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/spit_view1"
+            android:layout_width="310dp"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/rl_switch_notification"
+            android:background="#d3e3e3"
+            android:layout_marginLeft="30dp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/rl_switch_voice"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp" >
+
+            <TextView
+                android:text="声音"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="20dp"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/iv_open_voice"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/on"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_close_voice"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/off"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/spit_view7"
+            android:layout_width="310dp"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/rl_switch_voice"
+            android:background="#d3e3e3"
+            android:layout_marginLeft="30dp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/rl_switch_vibrate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp" >
+
+            <TextView
+                android:text="震动"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="20dp"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/iv_open_vibrate"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/on"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_close_vibrate"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/off"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/spit_view8"
+            android:layout_width="310dp"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/rl_switch_vibrate"
+            android:background="#d3e3e3"
+            android:layout_marginLeft="30dp"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="位置分享"
+        android:id="@+id/button4"
+        android:paddingLeft="30dp"
+        android:gravity="left|center_vertical"
+        android:textSize="16sp"
+        android:background="@drawable/selector02"
+        android:layout_below="@+id/personalSet"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/spit_view2"
+        android:layout_width="310dp"
+        android:layout_height="0.6dp"
+        android:layout_below="@+id/button4"
+        android:background="#d3e3e3"
+        android:layout_marginLeft="30dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="意见反馈"
+        android:id="@+id/button5"
+        android:paddingLeft="30dp"
+        android:gravity="left|center_vertical"
+        android:textSize="16sp"
+        android:background="@drawable/selector02"
+        android:layout_below="@+id/button4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/spit_view3"
+        android:layout_width="310dp"
+        android:layout_height="0.6dp"
+        android:layout_below="@+id/button5"
+        android:background="#d3e3e3"
+        android:layout_marginLeft="30dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="定位接口设置"
+        android:id="@+id/button15"
+        android:paddingLeft="30dp"
+        android:gravity="left|center_vertical"
+        android:textSize="16sp"
+        android:background="@drawable/selector02"
+        android:layout_below="@+id/button5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/spit_view4"
+        android:layout_width="310dp"
+        android:layout_height="0.6dp"
+        android:layout_below="@+id/button15"
+        android:background="#d3e3e3"
+        android:layout_marginLeft="30dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="导入地图"
+        android:id="@+id/button16"
+        android:paddingLeft="30dp"
+        android:gravity="left|center_vertical"
+        android:textSize="16sp"
+        android:background="@drawable/selector02"
+        android:layout_below="@+id/button15"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/spit_view5"
+        android:layout_width="310dp"
+        android:layout_height="0.6dp"
+        android:layout_below="@+id/button16"
+        android:background="#d3e3e3"
+        android:layout_marginLeft="30dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="使用引导"
+        android:id="@+id/button17"
+        android:paddingLeft="30dp"
+        android:gravity="left|center_vertical"
+        android:textSize="16sp"
+        android:background="@drawable/selector02"
+        android:layout_below="@+id/button16"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="退出登录"
+        android:id="@+id/set_logout"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="16sp"
+        android:background="@drawable/selector08"
+        android:textAlignment="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_below="@+id/button17"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white" />
+</RelativeLayout>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:weightSum="1">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/head">
+        <TextView
+            android:id="@+id/makeRoad_header"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="top"
+            android:background="#ff00a0e9"
+            android:text="路线"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="21sp"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/makeRoad_GoBack"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/iconfont_zuojiantou" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:id="@+id/start">
+        <TextView
+            android:id="@+id/editText"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:clickable="false"
+            android:hint="@string/your_position"
+            android:lines="1"
+            android:paddingLeft="40dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp" />
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageButton2"
+            android:layout_alignBottom="@+id/editText"
+            android:layout_alignLeft="@+id/editText"
+            android:layout_alignStart="@+id/editText"
+            android:clickable="false"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/start" />
+        <Button
+            android:id="@+id/search"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:enabled="true"
+            android:clickable="true"
+            android:lines="1"
+            android:paddingLeft="40dp"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+    <View
+        android:id="@+id/spit_view2"
+        android:layout_width="290dp"
+        android:layout_height="0.6dp"
+        android:layout_below="@+id/rl_psw"
+        android:background="#d3e3e3"
+        android:layout_marginLeft="40dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/aim">
+        <TextView
+            android:id="@+id/editText2"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:clickable="false"
+            android:hint="输入终点"
+            android:lines="1"
+            android:paddingLeft="40dp"
+            android:gravity="center_vertical"
+            android:textSize="18sp" />
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageButton3"
+            android:layout_alignBottom="@+id/editText2"
+            android:layout_alignLeft="@+id/editText2"
+            android:layout_alignStart="@+id/editText2"
+            android:clickable="false"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/end" />
+        <Button
+            android:id="@+id/search2"
+            android:layout_width="290dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:enabled="true"
+            android:clickable="true"
+            android:lines="1"
+            android:paddingLeft="40dp"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+        <!--android:layout_width="290dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/button1"-->
+        <!--android:layout_alignLeft="@+id/editText2"-->
+        <!--android:layout_alignStart="@+id/editText2"-->
+        <!--android:layout_below="@+id/editText2"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:minHeight="30dp">-->
+
+    <RelativeLayout
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/go"
+        android:layout_gravity="center_horizontal">
+        <Button
+            android:id="@+id/rount"
+            android:layout_width="210dp"
+            android:layout_height="48dp"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/selector01"
+            android:singleLine="false"
+            android:text="@string/make_road_button"
+            android:textColor="@android:color/white"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/buttonadd"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/selector06"
+            android:singleLine="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <LinearLayout
+    android:layout_width="290dp"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/button1"
+    android:layout_alignLeft="@+id/editText2"
+    android:layout_alignStart="@+id/editText2"
+    android:layout_below="@+id/editText2"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
+    android:minHeight="30dp">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="10sp"
+            android:gravity="center_horizontal"
+            />
+    </LinearLayout>
+
+    <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
+        android:id="@+id/dynamiclistview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        />
+
+
+
+
+</LinearLayout>

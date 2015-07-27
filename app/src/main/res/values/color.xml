@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="novoda_blue">#ff6164ff</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparency">#00000000</color>
+    <color name="title_bg">#1C86EE</color>
+    <color name="end_color">#A0cfef83</color>
+    <color name="black">#464646</color>
+    <color name="gray">#ffdedede</color>
+    <color name="cyan" >#CEF6F5</color>
+    <color name="pathcolor" >#ff00a0e9</color>
+</resources>

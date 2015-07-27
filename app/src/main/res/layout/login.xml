@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#f5f5f0"
+    android:layout_height="match_parent"
+    android:id="@+id/login"
+    style="@android:style/Animation">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:id="@+id/makeRoad_header"
+        android:layout_gravity="top"
+        android:background="#ff00a0e9" />
+
+    <Button
+        android:id="@+id/makeRoad_GoBack"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/iconfont_zuojiantou" />
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="欢迎登录"
+    android:id="@+id/textView2"
+    android:layout_alignBottom="@+id/makeRoad_header"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentTop="true"
+    android:textColor="@android:color/white"
+    android:textAlignment="center"
+    android:gravity="center_vertical"
+    android:textSize="22sp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/makeRoad_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:weightSum="1"
+        android:id="@+id/linearLayout"
+        android:layout_marginTop="60dp">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/imageView3"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_weight="0.8"
+            android:background="@drawable/logo"
+            android:layout_marginBottom="60dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/loginTelImg"
+                android:background="@drawable/iconfonttel"
+                android:layout_gravity="left|bottom"
+                android:layout_marginLeft="25dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/loginName"
+                android:layout_weight="0.70"
+                android:layout_gravity="bottom|right"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="15dp"
+                android:autoText="false"
+                android:hint="手机号码" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/lockImg"
+                android:background="@drawable/iconfontlock"
+                android:layout_gravity="left|bottom"
+                android:layout_marginLeft="25dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/loginPass"
+                android:layout_weight="0.70"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="15dp"
+                android:hint="密码"
+                android:layout_gravity="bottom" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="登录"
+            android:id="@+id/loginBtn"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/selector03"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="没有帐号？ 马上"
+            android:id="@+id/textView"
+            android:gravity="center_vertical|right"
+            android:layout_weight="1.5"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text=" 注册！"
+            android:id="@+id/registerBtn"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:background="@color/white"
+            android:gravity="left|center_vertical"
+            android:textStyle="normal"
+            android:textColor="#27a4ff"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/makeRoad_header"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:background="#fff6f6f6">-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:id="@+id/imageView2"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:background="#ff00a0e9" />-->
+
+            <!--<com.example.amap.util.CircularImage-->
+                <!--android:layout_width="77dp"-->
+                <!--android:layout_height="77dp"-->
+                <!--android:id="@+id/circle"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:elevation="30dp"-->
+                <!--/>-->
+
+            <!--<com.example.amap.util.CircularImage-->
+                <!--android:layout_width="73dp"-->
+                <!--android:layout_height="73dp"-->
+                <!--android:id="@+id/cover_user_photo"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:elevation="30dp" />-->
+
+        <!--</RelativeLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:background="#ff00a0e9">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="fill_parent"-->
+                <!--android:text="Zeashon"-->
+                <!--android:id="@+id/textView21"-->
+                <!--android:textSize="20sp"-->
+                <!--android:gravity="top|center_horizontal"-->
+                <!--android:textColor="@android:color/white" />-->
+        <!--</LinearLayout>-->
+
+
+    <!--</LinearLayout>-->
+
+</RelativeLayout>
