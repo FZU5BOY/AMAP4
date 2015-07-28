@@ -9,14 +9,14 @@
     <TextView
         android:id="@+id/makeRoad_header"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_gravity="top"
         android:background="#ff00a0e9" />
 
     <Button
         android:id="@+id/makeRoad_GoBack"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="5dp"
@@ -34,7 +34,7 @@
         android:text="附近"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="22sp" />
+        android:textSize="21sp" />
 
     <ScrollView
         android:layout_width="fill_parent"

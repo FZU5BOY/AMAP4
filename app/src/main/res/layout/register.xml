@@ -7,15 +7,15 @@
     style="@android:style/Animation">
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:id="@+id/makeRoad_header"
         android:layout_gravity="top"
         android:background="#ff00a0e9" />
 
     <Button
         android:id="@+id/makeRoad_GoBack"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="5dp"
@@ -32,7 +32,7 @@
     android:textColor="@android:color/white"
     android:textAlignment="center"
     android:gravity="center_vertical"
-    android:textSize="22sp" />
+    android:textSize="21sp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -45,22 +45,36 @@
         android:layout_alignParentEnd="true"
         android:weightSum="1"
         android:id="@+id/linearLayout"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:id="@+id/imageView3"
+        <RelativeLayout
+            android:layout_width="73dp"
+            android:layout_height="73dp"
+            android:layout_centerInParent="true"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_weight="0.8"
-            android:background="@drawable/logo"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp">
+            <com.example.amap.util.CircularImage
+                android:layout_width="77dp"
+                android:layout_height="77dp"
+                android:id="@+id/circle"
+                android:layout_centerInParent="true"
+                android:layout_gravity="bottom|center_horizontal"
+                />
+            <com.example.amap.util.CircularImage
+                android:layout_width="73dp"
+                android:layout_height="73dp"
+                android:id="@+id/cover_user_photo"
+                android:layout_centerInParent="true"
+                android:layout_gravity="bottom|center_horizontal"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/l1">
 
             <ImageView
                 android:layout_width="30dp"
@@ -68,6 +82,7 @@
                 android:id="@+id/nickImg"
                 android:background="@drawable/iconfont_gerenzhongxin"
                 android:layout_gravity="left|bottom"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="25dp" />
 
             <EditText
@@ -78,14 +93,26 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginRight="25dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
                 android:autoText="false"
-                android:hint="昵称" />
+                android:hint="昵称"
+                android:background="@color/transparency"/>
 
-        </LinearLayout><LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal">
+        </LinearLayout>
+        <View
+            android:id="@+id/spit_view2"
+            android:layout_width="290dp"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/l1"
+            android:background="#d3e3e3"
+            android:layout_marginLeft="60dp"
+            />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/l2">
 
         <ImageView
             android:layout_width="30dp"
@@ -93,7 +120,8 @@
             android:id="@+id/loginTelImg"
             android:background="@drawable/iconfonttel"
             android:layout_gravity="left|bottom"
-            android:layout_marginLeft="25dp" />
+            android:layout_marginLeft="25dp"
+            android:layout_marginBottom="5dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -103,16 +131,26 @@
             android:layout_gravity="bottom|right"
             android:layout_marginRight="25dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
             android:autoText="false"
-            android:hint="手机号码" />
+            android:hint="手机号码"
+            android:background="@color/transparency"/>
 
     </LinearLayout>
-
+        <View
+            android:id="@+id/spit_view3"
+            android:layout_width="290dp"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/l2"
+            android:background="#d3e3e3"
+            android:layout_marginLeft="60dp"
+            />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_gravity="center_horizontal" >
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/l3">
 
             <ImageView
                 android:layout_width="30dp"
@@ -120,7 +158,8 @@
                 android:id="@+id/lockImg01"
                 android:background="@drawable/iconfontlock"
                 android:layout_gravity="left|bottom"
-                android:layout_marginLeft="25dp" />
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="8dp" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -131,10 +170,20 @@
                 android:layout_weight="0.70"
                 android:layout_marginRight="25dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
                 android:hint="6-10位的密码"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"
+                android:background="@color/transparency"/>
 
         </LinearLayout>
+        <View
+            android:id="@+id/spit_view1"
+            android:layout_width="290dp"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/l3"
+            android:background="#d3e3e3"
+            android:layout_marginLeft="60dp"
+            />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -147,7 +196,8 @@
                 android:id="@+id/lockImg02"
                 android:background="@drawable/iconfontlock"
                 android:layout_gravity="left|bottom"
-                android:layout_marginLeft="25dp" />
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="8dp" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -158,21 +208,23 @@
                 android:layout_weight="0.70"
                 android:layout_marginRight="25dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
                 android:hint="再次输入密码"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"
+                android:background="@color/transparency"/>
 
         </LinearLayout>
 
         <Button
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_width="330dp"
+            android:layout_height="40dp"
             android:text="完成注册"
             android:id="@+id/registerBtn"
             android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="30dp"
-            android:background="@drawable/selector03"
+            android:background="@drawable/selector09"
             android:textColor="@color/white"
-            android:textSize="25sp" />
+            android:textSize="22sp" />
 
     </LinearLayout>
 </RelativeLayout>

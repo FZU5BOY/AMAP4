@@ -29,15 +29,19 @@ public class LoginActivity extends Activity {
 //        TelephonyManager phoneMgr=(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 //        ln.setText(phoneMgr.getLine1Number());
 //        Log.i("123",phoneMgr.getLine1Number());
+        CircularImage cover_user_photo = (CircularImage) findViewById(R.id.cover_user_photo);
+        cover_user_photo.setImageResource(R.drawable.head);
+        CircularImage cover_user_photo_circle = (CircularImage) findViewById(R.id.circle);
+        cover_user_photo_circle.setImageResource(R.drawable.circle);
 
-        Button btn = (Button)findViewById(R.id.makeRoad_GoBack);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        Button btn = (Button)findViewById(R.id.makeRoad_GoBack);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         Button regbtn = (Button)findViewById(R.id.registerBtn);
         regbtn.setOnClickListener(new View.OnClickListener() {

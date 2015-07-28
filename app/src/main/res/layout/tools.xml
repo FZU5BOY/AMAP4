@@ -186,7 +186,7 @@
         android:paddingLeft="30dp"
         android:gravity="left|center_vertical"
         android:textSize="16sp"
-        android:background="@drawable/selector02"
+        android:background="@drawable/selector05"
         android:layout_below="@+id/personalSet"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -208,7 +208,7 @@
         android:paddingLeft="30dp"
         android:gravity="left|center_vertical"
         android:textSize="16sp"
-        android:background="@drawable/selector02"
+        android:background="@drawable/selector05"
         android:layout_below="@+id/button4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -230,7 +230,7 @@
         android:paddingLeft="30dp"
         android:gravity="left|center_vertical"
         android:textSize="16sp"
-        android:background="@drawable/selector02"
+        android:background="@drawable/selector05"
         android:layout_below="@+id/button5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -252,7 +252,7 @@
         android:paddingLeft="30dp"
         android:gravity="left|center_vertical"
         android:textSize="16sp"
-        android:background="@drawable/selector02"
+        android:background="@drawable/selector05"
         android:layout_below="@+id/button15"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -274,14 +274,14 @@
         android:paddingLeft="30dp"
         android:gravity="left|center_vertical"
         android:textSize="16sp"
-        android:background="@drawable/selector02"
+        android:background="@drawable/selector05"
         android:layout_below="@+id/button16"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="退出登录"
         android:id="@+id/set_logout"
         android:gravity="center_vertical|center_horizontal"
@@ -292,5 +292,6 @@
         android:paddingRight="20dp"
         android:layout_below="@+id/button17"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp" />
 </RelativeLayout>

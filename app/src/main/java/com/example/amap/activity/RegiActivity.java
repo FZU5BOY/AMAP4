@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.amap.R;
+import com.example.amap.util.CircularImage;
 
 /**
  * Created by Zeashon on 2015/5/10.
@@ -22,6 +23,10 @@ public class RegiActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
+        CircularImage cover_user_photo = (CircularImage) findViewById(R.id.cover_user_photo);
+        cover_user_photo.setImageResource(R.drawable.head);
+        CircularImage cover_user_photo_circle = (CircularImage) findViewById(R.id.circle);
+        cover_user_photo_circle.setImageResource(R.drawable.circle);
 
         Button btn = (Button)findViewById(R.id.makeRoad_GoBack);
         btn.setOnClickListener(new View.OnClickListener() {

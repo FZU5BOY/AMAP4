@@ -180,7 +180,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
     private void initView() {
 //        initTopBarForOnlyTitle("设置");
 
-//        layout_info = (RelativeLayout) findViewById(R.id.layout_info);
+//          layout_info = (RelativeLayout) findViewById(R.id.layout_info);
         rl_switch_notification = (RelativeLayout) findViewById(R.id.rl_switch_notification);
         rl_switch_voice = (RelativeLayout) findViewById(R.id.rl_switch_voice);
         rl_switch_vibrate = (RelativeLayout) findViewById(R.id.rl_switch_vibrate);
@@ -199,7 +199,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
         btn_logout = (Button) findViewById(R.id.set_logout);
 
         // 初始化
-        boolean isAllowNotify = mSharedUtil.isAllowPushNotify();
+        boolean isAllowNotify = true;//mSharedUtil.isAllowPushNotify();
 
         if (isAllowNotify) {
             iv_open_notification.setVisibility(View.VISIBLE);
@@ -208,7 +208,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
             iv_open_notification.setVisibility(View.INVISIBLE);
             iv_close_notification.setVisibility(View.VISIBLE);
         }
-        boolean isAllowVoice = mSharedUtil.isAllowVoice();
+        boolean isAllowVoice = true;//mSharedUtil.isAllowVoice();
         if (isAllowVoice) {
             iv_open_voice.setVisibility(View.VISIBLE);
             iv_close_voice.setVisibility(View.INVISIBLE);
@@ -216,7 +216,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
             iv_open_voice.setVisibility(View.INVISIBLE);
             iv_close_voice.setVisibility(View.VISIBLE);
         }
-        boolean isAllowVibrate = mSharedUtil.isAllowVibrate();
+        boolean isAllowVibrate = true;//mSharedUtil.isAllowVibrate();
         if (isAllowVibrate) {
             iv_open_vibrate.setVisibility(View.VISIBLE);
             iv_close_vibrate.setVisibility(View.INVISIBLE);
