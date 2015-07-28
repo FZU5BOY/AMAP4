@@ -199,7 +199,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
         btn_logout = (Button) findViewById(R.id.set_logout);
 
         // 初始化
-        boolean isAllowNotify = true;//mSharedUtil.isAllowPushNotify();
+        boolean isAllowNotify = true;////mSharedUtil.isAllowPushNotify();
 
         if (isAllowNotify) {
             iv_open_notification.setVisibility(View.VISIBLE);
