@@ -211,7 +211,8 @@
         android:background="@drawable/selector05"
         android:layout_below="@+id/button4"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="1dp"/>
 
     <View
         android:id="@+id/spit_view3"
@@ -233,7 +234,8 @@
         android:background="@drawable/selector05"
         android:layout_below="@+id/button5"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="1dp"/>
 
     <View
         android:id="@+id/spit_view4"
@@ -255,7 +257,8 @@
         android:background="@drawable/selector05"
         android:layout_below="@+id/button15"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="1dp"/>
 
     <View
         android:id="@+id/spit_view5"
@@ -277,7 +280,8 @@
         android:background="@drawable/selector05"
         android:layout_below="@+id/button16"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="1dp"/>
 
     <Button
         android:layout_width="wrap_content"
