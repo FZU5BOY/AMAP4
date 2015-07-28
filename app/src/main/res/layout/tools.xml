@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--git test 02 zeashon-->
+<!--git test 02 zeashon -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@android:color/white"
