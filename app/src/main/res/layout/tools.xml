@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--git test 02 zeashon -->
+<!--git test zeashon-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent"
     android:id="@+id/tools"
     style="@android:style/Animation">
+    <!-- wocha -->
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="40dp"
