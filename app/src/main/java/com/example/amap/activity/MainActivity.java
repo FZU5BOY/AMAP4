@@ -89,7 +89,7 @@ public class MainActivity extends Activity  {
 	final int COMPLETEAAL=4;
 	final int UPORDOWNFLOOR=5;
 	final int UPDATEGP = 6;
-
+    //test git
 	Graphic main_gp;//临时变量
 	int     main_fl;//临时变量 handle用
 	boolean isloadok=true;//是否加载成功,判断是否正确引入地图包
