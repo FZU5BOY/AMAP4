@@ -32,7 +32,8 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/start">
         <TextView
             android:id="@+id/editText"
@@ -40,7 +41,7 @@
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:clickable="false"
             android:hint="@string/your_position"
             android:lines="1"
@@ -63,7 +64,7 @@
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:enabled="true"
             android:clickable="true"
             android:lines="1"
@@ -117,19 +118,11 @@
             android:paddingLeft="40dp"
             android:background="@android:color/transparent" />
     </RelativeLayout>
-        <!--android:layout_width="290dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@+id/button1"-->
-        <!--android:layout_alignLeft="@+id/editText2"-->
-        <!--android:layout_alignStart="@+id/editText2"-->
-        <!--android:layout_below="@+id/editText2"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:minHeight="30dp">-->
 
     <RelativeLayout
         android:layout_width="290dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:id="@+id/go"
         android:layout_gravity="center_horizontal">
         <Button
