@@ -47,7 +47,7 @@ public class NaviActivity extends Activity {
         setting = this.getSharedPreferences("check", MODE_PRIVATE);
         boolean fristload=setting.getBoolean("fristload", true);
         if (!fristload) {
-            Intent intent = new Intent(NaviActivity.this, SplashScreen.class);
+            Intent intent = new Intent(NaviActivity.this,  SplashScreen.class);
             startActivity(intent);
             NaviActivity.this.finish();
         }
