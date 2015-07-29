@@ -19,7 +19,7 @@ public class RegiActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
@@ -28,7 +28,7 @@ public class RegiActivity extends Activity {
         CircularImage cover_user_photo_circle = (CircularImage) findViewById(R.id.circle);
         cover_user_photo_circle.setImageResource(R.drawable.circle);
 
-        Button btn = (Button)findViewById(R.id.makeRoad_GoBack);
+        Button btn = (Button) findViewById(R.id.makeRoad_GoBack);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,28 +42,25 @@ public class RegiActivity extends Activity {
         final EditText userName = (EditText) findViewById(R.id.newNickName);
         final EditText userTel = (EditText) findViewById(R.id.loginName);
 
-        Button regbtn = (Button)findViewById(R.id.registerBtn);
+        Button regbtn = (Button) findViewById(R.id.registerBtn);
         regbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userName.getText().length()<=0 || userTel.getText().length()<=0 || password01.getText().length()<=0 || password02.getText().length()<=0)
-                {
+                if (userName.getText().length() <= 0 || userTel.getText().length() <= 0 || password01.getText().length() <= 0 || password02.getText().length() <= 0) {
                     Toast.makeText(getApplicationContext(), "请填写完整注册信息", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(password01.getText().toString().length()<6 || password01.getText().toString().length()>10)
-                {
+                if (password01.getText().toString().length() < 6 || password01.getText().toString().length() > 10) {
                     Toast.makeText(getApplicationContext(), "密码应为6-10位的数字", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(!password01.getText().toString().equals(password02.getText().toString()))
-                {
+                if (!password01.getText().toString().equals(password02.getText().toString())) {
                     Toast.makeText(getApplicationContext(), "两次输入密码不同", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Toast.makeText(getApplicationContext(), "注册成功，登录帐号为你的手机号", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(RegiActivity.this, MainActivity.class);
+                Intent intent = new Intent(RegiActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

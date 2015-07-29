@@ -1,417 +1,432 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
-    >
+    android:background="@color/gray">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
 
         <com.esri.android.map.MapView
             android:id="@+id/map"
+            initExtent="-13042576 3854531 -13026007 3870439"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
-            initExtent="-13042576 3854531 -13026007 3870439"
-            >
+            android:layout_alignParentLeft="true">
 
         </com.esri.android.map.MapView>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="9dp"
-            android:background="@drawable/shapesolid02">
+            android:background="@drawable/shapesolid02"
+            android:orientation="vertical">
 
             <Button
+                android:id="@+id/font_up"
                 android:layout_width="32dp"
                 android:layout_height="29dp"
-                android:id="@+id/font_up"
                 android:background="@drawable/iconfont_up"
                 android:onClick="TurnUP"
                 android:outlineProvider="background" />
 
             <Button
+                android:id="@+id/font_middle"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:text="1"
-                android:id="@+id/font_middle"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                android:background="#ffc2e9ff" />
+                android:background="#ffc2e9ff"
+                android:text="1"
+                android:textSize="20sp" />
 
             <Button
+                android:id="@+id/font_down"
                 android:layout_width="32dip"
                 android:layout_height="32dip"
-                android:id="@+id/font_down"
-                android:onClick="TurnDown"
                 android:layout_weight="1"
-                android:background="@drawable/iconfont_down" />
+                android:background="@drawable/iconfont_down"
+                android:onClick="TurnDown" />
         </LinearLayout>
 
     </FrameLayout>
+
     <TextView
+        android:id="@+id/dingwei"
         android:layout_width="fill_parent"
         android:layout_height="25dp"
-        android:text="定位中..."
-        android:id="@+id/dingwei"
-        android:textSize="15sp"
-        android:gravity="center_vertical|center_horizontal"
-        android:clickable="true"
         android:background="#ff3095ff"
-        android:visibility="invisible"
-        />
-
-            <Button
-                android:layout_width="600dp"
-                android:layout_height="48dp"
-                android:text="查找地点"
-                android:id="@+id/search_main"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_alignParentTop="false"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="23dp"
-                android:gravity="left|center_vertical"
-                android:textColor="@android:color/darker_gray"
-                android:paddingLeft="52dp"
-                android:textSize="13sp"
-                android:background="@drawable/shapesolid"
-                 />
-            <Button
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:id="@+id/textView12"
-                android:layout_alignLeft="@+id/search_main"
-                android:layout_alignBottom="@+id/search_main"
-                android:layout_alignStart="@+id/search_main"
-                android:layout_marginBottom="9dp"
-                android:layout_marginLeft="6dp"
-                android:elevation="30dp"
-                android:background="@drawable/iconfont_search"/>
-
-            <Button
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:id="@+id/search_video"
-                android:background="@drawable/iconfont_yuyin"
-                android:singleLine="true"
-                android:gravity="center_vertical|center_horizontal"
-                android:textAlignment="center"
-                android:layout_alignRight="@+id/search_main"
-                android:layout_alignEnd="@+id/search_main"
-                android:layout_alignBottom="@+id/search_main"
-                android:elevation="30dp"
-                android:layout_marginBottom="9dp"
-                android:layout_marginRight="3dp" />
+        android:clickable="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="定位中..."
+        android:textSize="15sp"
+        android:visibility="invisible" />
 
     <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:id="@+id/button_clear"
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/search_main"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/iconfont_del"
-                android:onClick="ClearAllGra"
-                android:elevation="30dp" />
+        android:id="@+id/search_main"
+        android:layout_width="600dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/shapesolid"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="52dp"
+        android:text="查找地点"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/textView12"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignBottom="@+id/search_main"
+        android:layout_alignLeft="@+id/search_main"
+        android:layout_alignStart="@+id/search_main"
+        android:layout_marginBottom="9dp"
+        android:layout_marginLeft="6dp"
+        android:background="@drawable/iconfont_search"
+        android:elevation="30dp" />
+
+    <Button
+        android:id="@+id/search_video"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignBottom="@+id/search_main"
+        android:layout_alignEnd="@+id/search_main"
+        android:layout_alignRight="@+id/search_main"
+        android:layout_marginBottom="9dp"
+        android:layout_marginRight="3dp"
+        android:background="@drawable/iconfont_yuyin"
+        android:elevation="30dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:singleLine="true"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/search_main"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/iconfont_del"
+        android:elevation="30dp"
+        android:onClick="ClearAllGra" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shapesolid"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginBottom="7dp"
-        android:layout_marginRight="7dp"
         android:layout_marginLeft="7dp"
-        android:id="@+id/linearLayout2"
-        >
+        android:layout_marginRight="7dp"
+        android:background="@drawable/shapesolid">
+
         <RelativeLayout
+            android:id="@+id/fixed"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/fixed"
-            android:clickable="true"
             android:layout_weight="1"
-            android:background="@drawable/selector07">
+            android:background="@drawable/selector07"
+            android:clickable="true">
+
             <Button
+                android:id="@+id/button16"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/button16"
                 android:layout_alignBottom="@+id/near"
                 android:layout_alignLeft="@+id/near"
                 android:layout_alignStart="@id/near"
-                android:background="@drawable/iconfont_fujinshangjia"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="5dp"
+                android:background="@drawable/iconfont_fujinshangjia"
                 android:clickable="false" />
+
             <Button
+                android:id="@+id/near"
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
-                android:text="附近"
-                android:id="@+id/near"
-                android:paddingLeft="32dp"
                 android:background="@android:color/transparent"
-                android:textColor="#ff797979"
                 android:clickable="false"
+                android:paddingLeft="32dp"
+                android:text="附近"
+                android:textColor="#ff797979"
                 android:textSize="12dp" />
         </RelativeLayout>
+
         <RelativeLayout
+            android:id="@+id/rount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rount"
-            android:clickable="true"
             android:layout_weight="1"
-            android:background="@drawable/selector07">
+            android:background="@drawable/selector07"
+            android:clickable="true">
+
             <Button
+                android:id="@+id/button17"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/button17"
                 android:layout_alignBottom="@+id/way"
                 android:layout_alignLeft="@+id/way"
                 android:layout_alignStart="@id/way"
-                android:background="@drawable/iconfont_luxiandaohang"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="3dp"
+                android:background="@drawable/iconfont_luxiandaohang"
                 android:clickable="false" />
+
             <Button
+                android:id="@+id/way"
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
                 android:layout_weight="1"
-                android:text="路径"
-                android:id="@+id/way"
-                android:paddingLeft="32dp"
-                android:textSize="12dp"
-                android:textColor="#ff797979"
+                android:background="@android:color/transparent"
                 android:clickable="false"
-                android:background="@android:color/transparent"/>
+                android:paddingLeft="32dp"
+                android:text="路径"
+                android:textColor="#ff797979"
+                android:textSize="12dp" />
         </RelativeLayout>
+
         <RelativeLayout
+            android:id="@+id/tools"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tools"
-            android:clickable="true"
             android:layout_weight="1"
-            android:background="@drawable/selector07">
+            android:background="@drawable/selector07"
+            android:clickable="true">
+
             <Button
+                android:id="@+id/button18"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/button18"
                 android:layout_alignBottom="@+id/tool"
                 android:layout_alignLeft="@+id/tool"
                 android:layout_alignStart="@id/tool"
-                android:background="@drawable/iconfont_iconfontset"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="3dp"
+                android:background="@drawable/iconfont_iconfontset"
                 android:clickable="false" />
+
             <Button
+                android:id="@+id/tool"
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
-                android:text="工具"
                 android:layout_weight="1"
-                android:id="@+id/tool"
-                android:paddingLeft="32dp"
-                android:textSize="12dp"
-                android:textColor="#ff797979"
+                android:background="@android:color/transparent"
                 android:clickable="false"
-                android:background="@android:color/transparent" />
+                android:paddingLeft="32dp"
+                android:text="工具"
+                android:textColor="#ff797979"
+                android:textSize="12dp" />
         </RelativeLayout>
+
         <RelativeLayout
+            android:id="@+id/person"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/person"
-            android:clickable="true"
             android:layout_weight="1"
-            android:background="@drawable/selector07">
+            android:background="@drawable/selector07"
+            android:clickable="true">
+
             <Button
+                android:id="@+id/button19"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/button19"
                 android:layout_alignBottom="@+id/personal"
                 android:layout_alignLeft="@+id/personal"
                 android:layout_alignStart="@id/personal"
-                android:background="@drawable/iconfont_gerenzhongxin"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="3dp"
+                android:background="@drawable/iconfont_gerenzhongxin"
                 android:clickable="false" />
+
             <Button
+                android:id="@+id/personal"
                 android:layout_width="wrap_content"
                 android:layout_height="42dp"
                 android:layout_weight="1"
-                android:text="我的"
-                android:id="@+id/personal"
-                android:paddingLeft="32dp"
-                android:textSize="12dp"
-                android:textColor="#ff797979"
+                android:background="@android:color/transparent"
                 android:clickable="false"
-                android:background="@android:color/transparent"/>
+                android:paddingLeft="32dp"
+                android:text="我的"
+                android:textColor="#ff797979"
+                android:textSize="12dp" />
         </RelativeLayout>
 
     </LinearLayout>
 
     <Button
+        android:id="@+id/button_dingwei"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:text=""
-        android:id="@+id/button_dingwei"
         android:layout_above="@+id/linearLayout2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/iconfont_dingwei"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/iconfont_dingwei"
+        android:onClick="GetLocation"
         android:shadowColor="@android:color/black"
         android:shadowDx="0"
         android:shadowDy="1"
-        android:onClick="GetLocation"
-        android:shadowRadius="1"/>
+        android:shadowRadius="1"
+        android:text="" />
 
     <Button
+        android:id="@+id/shut_photo"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:id="@+id/shut_photo"
-        android:layout_below="@id/search_main"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
+        android:layout_below="@id/search_main"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/iconfont_jieping" />
-        <RelativeLayout
+
+    <RelativeLayout
+        android:id="@+id/allinfo"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffffff"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/show"
             android:layout_width="fill_parent"
-            android:layout_height="120dp"
-            android:layout_alignParentBottom="true"
-            android:background="#ffffffff"
-            android:id="@+id/allinfo"
-            android:clickable="true"
-            android:visibility="gone"
-            >
+            android:layout_height="70dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/poiname"
+                android:layout_width="200dp"
+                android:layout_height="fill_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/xiangqing"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="14dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/shape01"
+                android:text="详情"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/spit_view2"
+            android:layout_width="fill_parent"
+            android:layout_height="0.6dp"
+            android:layout_below="@+id/show"
+            android:layout_marginTop="0dp"
+            android:background="#d3e3e3" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="70dp"
-                android:orientation="horizontal"
-                android:id="@+id/show"
-                >
-                <TextView
-                    android:layout_width="200dp"
-                    android:layout_height="fill_parent"
-                    android:text=""
-                    android:layout_alignParentBottom="true"
-                    android:id="@+id/poiname"
-                    android:textSize="20sp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:clickable="true"
-                    android:layout_weight="1"
-                    />
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="14dp"
-                    android:textSize="14sp"
-                    android:id="@+id/xiangqing"
-                    android:text="详情"
-                    android:background="@drawable/shape01"
-                    />
-            </LinearLayout>
-            <View
-                android:id="@+id/spit_view2"
-                android:layout_width="fill_parent"
-                android:layout_height="0.6dp"
-                android:layout_below="@+id/show"
-                android:background="#d3e3e3"
-                android:layout_marginTop="0dp" />
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="5dp"
-                android:layout_below="@+id/show">
-            <LinearLayout
+                android:id="@+id/from_here"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical|center_horizontal"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:id="@+id/from_here">
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/from"
                     android:clickable="false"
-                    />
+                    android:src="@drawable/from" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="从这出发"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textSize="11sp"
+                    android:layout_marginLeft="10dp"
                     android:clickable="false"
-                    android:layout_marginLeft="10dp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:orientation="horizontal"
                     android:gravity="center_vertical|center_horizontal"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:id="@+id/search_zhoubian">
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/zhoubian"
-                        android:clickable="false"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="周边"
-                        android:textSize="11sp"
-                        android:clickable="false"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="#ff000000" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="13dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:clickable="true"
-                    android:id="@+id/go_there">
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/to"
-                        android:clickable="false"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="11sp"
-                        android:clickable="false"
-                        android:text="到这儿去"
-                        android:layout_marginLeft="10dp" />
-                </LinearLayout>
+                    android:text="从这出发"
+                    android:textSize="11sp" />
             </LinearLayout>
-        </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/search_zhoubian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:clickable="false"
+                    android:src="@drawable/zhoubian" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:clickable="false"
+                    android:text="周边"
+                    android:textColor="#ff000000"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/go_there"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:clickable="false"
+                    android:src="@drawable/to" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:clickable="false"
+                    android:text="到这儿去"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

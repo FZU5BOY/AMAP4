@@ -21,7 +21,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
@@ -43,11 +43,19 @@ public class LoginActivity extends Activity {
 //            }
 //        });
 
-        Button regbtn = (Button)findViewById(R.id.registerBtn);
+        Button regbtn = (Button) findViewById(R.id.registerBtn);
         regbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegiActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button logbtn = (Button) findViewById(R.id.loginBtn);
+        logbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, PersonActivity.class);
                 startActivity(intent);
             }
         });

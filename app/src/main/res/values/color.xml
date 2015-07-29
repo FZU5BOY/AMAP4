@@ -10,4 +10,6 @@
     <color name="cyan" >#CEF6F5</color>
     <color name="pathcolor" >#ff00a0e9</color>
     <color name="gray_light">#FFF1F4F9</color>
+    <color name="myblue1">#FF317EC8</color>
+    <color name="myblue2">#FF0090FF</color>
 </resources>

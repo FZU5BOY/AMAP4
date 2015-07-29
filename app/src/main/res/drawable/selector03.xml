@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true"
-        android:drawable="@drawable/shape07"
-        />
-    <item android:state_pressed="false"
-        android:drawable="@drawable/shape06"
-        />
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/myblue1" />
+            <!-- android:radius 弧形的半径 -->
+            <corners android:radius="3dip" />
+        </shape>
+    </item>
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/myblue2" />
+            <!-- android:radius 弧形的半径 -->
+            <corners android:radius="3dip" />
+        </shape>
+    </item>
 </selector>
