@@ -75,8 +75,9 @@ public class NaviActivity extends Activity {
             ProgressDialog dialog = new ProgressDialog(NaviActivity.this);
             @Override
             public void onClick(View v) {
-                dialog.setTitle("提示");
+//                dialog.setTitle("提示");
                 dialog.setMessage("初次使用，正在导入地图文件！");
+                dialog.setCanceledOnTouchOutside(false);
                 dialog.show();//显示对话框
                 new Thread(){
                     public void run() {
@@ -85,6 +86,7 @@ public class NaviActivity extends Activity {
                             while(!iszipok){
                                 Thread.sleep(100);
                             }
+                            dialog.setMessage("导入成功...");
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
