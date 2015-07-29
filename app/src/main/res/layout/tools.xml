@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:id="@+id/tools"
     style="@android:style/Animation">
-    <!-- wocha -->
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="40dp"
@@ -300,4 +299,5 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
         android:layout_marginTop="10dp" />
+
 </RelativeLayout>
