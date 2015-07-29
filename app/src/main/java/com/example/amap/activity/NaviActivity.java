@@ -1,10 +1,5 @@
 package com.example.amap.activity;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,24 +13,18 @@ import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
-
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.esri.core.geometry.Point;
-import com.esri.core.map.Feature;
-import com.esri.core.map.Graphic;
-import com.esri.core.symbol.PictureMarkerSymbol;
 import com.example.amap.R;
-import com.example.amap.custom.MyToast;
-import com.example.amap.util.MyPoint;
 import com.example.amap.util.UnzipAssets;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Zeashon on 2015/5/10.
@@ -58,7 +47,7 @@ public class NaviActivity extends Activity {
         setting = this.getSharedPreferences("check", MODE_PRIVATE);
         boolean fristload=setting.getBoolean("fristload", true);
         if (!fristload) {
-            Intent intent = new Intent(NaviActivity.this, MainActivity.class);
+            Intent intent = new Intent(NaviActivity.this, SplashScreen.class);
             startActivity(intent);
             NaviActivity.this.finish();
         }
