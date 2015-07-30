@@ -17,13 +17,12 @@ import android.widget.TextView;
 
 import com.example.amap.adapter.ListAdapter;
 import com.example.amap.R;
-import com.example.amap.util.PoiSearch;
+import com.example.amap.util.rount.PoiSearch;
 import com.iflytek.speech.RecognizerResult;
 import com.iflytek.speech.SpeechConfig;
 import com.iflytek.speech.SpeechError;
 import com.iflytek.ui.RecognizerDialog;
 import com.iflytek.ui.RecognizerDialogListener;
-import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,9 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esri.core.internal.catalog.User;
 import com.example.amap.R;
-import com.example.amap.util.MyPoint;
+import com.example.amap.util.rount.MyPoint;
 import com.example.amap.util.SharePreferenceUtil;
 
 import java.io.FileInputStream;
