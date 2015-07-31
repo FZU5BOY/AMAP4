@@ -51,6 +51,7 @@ import com.esri.core.symbol.PictureMarkerSymbol;
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.tasks.query.QueryParameters;
+import com.example.amap.config.Config;
 import com.example.amap.custom.MyToast;
 import com.example.amap.R;
 import com.example.amap.util.rount.MyPoint;
@@ -80,6 +81,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Future;
+
+import cn.bmob.im.BmobChat;
 
 
 public class MainActivity extends Activity  {
@@ -165,6 +168,9 @@ public class MainActivity extends Activity  {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		ArcGISRuntime.setClientId("uK0DxqYT0om1UXa9");
 		setContentView(R.layout.main);
+		BmobChat.DEBUG_MODE = true;
+		//BmobIM SDK初始化--只需要这一段代码即可完成初始化
+		BmobChat.getInstance(this).init(Config.applicationId);
 		nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		currentFloor=1;//默认为F1
 		mMapView = (MapView)findViewById(R.id.map);
@@ -612,7 +618,7 @@ public class MainActivity extends Activity  {
 		}
 		return closeFeature;
 		}
-	//由任意两天制作的路径，跨楼层，是否第一次生成， 并把isfirst传值给makePathDetail
+	//由任意两点制作的路径，跨楼层，是否第一次生成， 并把isfirst传值给makePathDetail
 	public void makePathAll(MyPoint START_POS,MyPoint OBJECT_POS,boolean isfirst){
 		allinfo.setVisibility(View.GONE);
 		if(endFeature!=null){

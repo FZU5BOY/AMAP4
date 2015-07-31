@@ -47,6 +47,11 @@
     <string name="itemdeleted">删除</string>
     <string name="imlocation">我在用室图，我在这儿，点我吧 -></string>
     <string name="activity_dynamiclistview_header">Touch the grip or long press an item to drag.\nSwipe to dismiss.\nTap an item to insert a new item.</string>
+    <string name="toast_register_all_error">请填写完整注册信息</string>
+    <string name="toast_register_tel_error">手机位数应为11位</string>
+    <string name="toast_register_pswlenth_error">密码应大于等于6位</string>
+    <string name="toast_register_psw_unequal_error">两次输入密码不同</string>
+    <string name="toast_register_success">注册成功，登录帐号为你的手机号</string>
     <!-- chat -->
     <!--<string name="app_name">Bmob_IM_test</string>-->
     <!--<string name="action_settings">Settings</string>-->

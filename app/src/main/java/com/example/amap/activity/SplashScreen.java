@@ -11,9 +11,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.amap.R;
+import com.example.amap.config.Config;
+
+import cn.bmob.im.BmobChat;
 
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends BaseActivity {
     /**
      * Called when the activity is first created.
      */
@@ -26,6 +29,7 @@ public class SplashScreen extends Activity {
         getWindow().setFormat(PixelFormat.RGBA_8888);
 
         setContentView(R.layout.splash);
+        //可设置调试模式，当为true的时候，会在logcat的BmobChat下输出一些日志，包括推送服务是否正常运行，如果服务端返回错误，也会一并打印出来。方便开发者调试
 
 
         new Handler().postDelayed(new Runnable() {

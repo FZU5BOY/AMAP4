@@ -9,7 +9,7 @@
         android:id="@+id/common_actionbar"
         layout="@layout/include_action_bar" />
 
-    <com.bmob.im.demo.view.ClearEditText
+    <com.example.amap.view.ClearEditText
         android:id="@+id/et_msg_search"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/base_action_bar_height"

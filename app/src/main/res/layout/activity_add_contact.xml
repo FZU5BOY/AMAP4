@@ -39,7 +39,7 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <com.bmob.im.demo.view.xlist.XListView
+    <com.example.amap.view.xlist.XListView
         android:id="@+id/list_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -5,9 +5,11 @@
 
      <include
         android:id="@+id/common_actionbar"
-        android:layout_alignParentTop="true"
         layout="@layout/include_action_bar" />
-     
+    <!--<include-->
+        <!--android:id="@+id/common_actionbar"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--layout="@layout/include_action_bar" />-->
     <com.baidu.mapapi.map.MapView
         android:id="@+id/bmapView"
         android:layout_width="fill_parent"

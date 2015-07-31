@@ -102,7 +102,7 @@ public class BaseActivity extends FragmentActivity {
 	 * @throws
 	 */
 	public void ShowLog(String msg){
-		Log.i("life",msg);
+		Log.i("zjx",msg);
 	}
 
 	/**

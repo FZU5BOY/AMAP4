@@ -15,7 +15,7 @@
         android:background="@color/base_bg"
         android:orientation="vertical" >
 
-        <com.bmob.im.demo.view.ClearEditText
+        <com.example.amap.view.ClearEditText
             android:id="@+id/et_msg_search"
             android:layout_width="match_parent"
             android:layout_height="@dimen/base_action_bar_height"
@@ -61,7 +61,7 @@
                 android:visibility="invisible" />
         </RelativeLayout>
 
-        <com.bmob.im.demo.view.MyLetterView
+        <com.example.amap.view.MyLetterView
             android:id="@+id/right_letter"
             android:layout_width="25dip"
             android:layout_height="match_parent"
