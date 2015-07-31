@@ -276,18 +276,19 @@ public class UserMainActivity extends ActivityBase implements EventListener{
 
 
 	private static long firstTime;
-	/**
-	 * 连续按两次返回键就退出
-	 */
+//	/**
+//	 * 连续按两次返回键就退出
+//	 */
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
-		if (firstTime + 2000 > System.currentTimeMillis()) {
-			super.onBackPressed();
-		} else {
-			ShowToast("再按一次退出程序");
-		}
-		firstTime = System.currentTimeMillis();
+//		if (firstTime + 2000 > System.currentTimeMillis()) {
+//			super.onBackPressed();
+//		} else {
+//			ShowToast("再按一次退出程序");
+//		}
+//		firstTime = System.currentTimeMillis();
+		startAnimActivity(MainActivity.class);
 	}
 
 	@Override

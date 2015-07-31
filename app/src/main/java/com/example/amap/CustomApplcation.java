@@ -66,7 +66,7 @@ public class CustomApplcation extends Application {
 			// 获取本地好友user list到内存,方便以后获取好友list
 			contactList = CollectionUtils.list2map(BmobDB.create(getApplicationContext()).getContactList());
 		}
-		initBaidu();
+//		initBaidu();
 	}
 
 	/**

@@ -204,7 +204,7 @@ public class BaseActivity extends FragmentActivity {
 	public void updateUserInfos(){
 		//更新地理位置信息
 		updateUserLocation();
-		//查询该用户的好友列表(这个好友列表是去除黑名单用户的哦),目前支持的查询好友个数为100，如需修改请在调用这个方法前设置BmobConfig.LIMIT_CONTACTS即可。
+		//查询该用户的好友列表(这个好友列表是去除黑名单用户的),目前支持的查询好友个数为100，如需修改请在调用这个方法前设置BmobConfig.LIMIT_CONTACTS即可。
 		//这里默认采取的是登陆成功之后即将好于列表存储到数据库中，并更新到当前内存中,
 		userManager.queryCurrentContactList(new FindListener<BmobChatUser>() {
 

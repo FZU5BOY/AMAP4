@@ -1,5 +1,6 @@
 package com.example.amap.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -85,8 +86,9 @@ import java.util.concurrent.Future;
 import cn.bmob.im.BmobChat;
 
 
-public class MainActivity extends Activity  {
-
+public class MainActivity extends BaseActivity  {
+	private static final int GO_HOME = 100;
+	private static final int GO_LOGIN = 200;
 	final int HIDECALLOUTANDALLINFO=2;//handle 消息值
 	final int SHOWCURRENTFLOOR=3;
 	final int COMPLETEAAL=4;
@@ -247,8 +249,15 @@ public class MainActivity extends Activity  {
 			@Override
 			public void onClick(View v) {
 				Log.i("zjx", "click to tow");
-				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-				startActivity(intent);
+				if (userManager.getCurrentUser() != null) {
+					// 每次自动登陆的时候就需要更新下当前位置和好友的资料，因为好友的头像，昵称啥的是经常变动的
+					updateUserInfos();
+					mHandler.sendEmptyMessageDelayed(GO_HOME, 1000);
+				} else {
+					mHandler.sendEmptyMessageDelayed(GO_LOGIN, 1000);
+				}
+//				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//				startActivity(intent);
 			}
 		});
 		tools =(RelativeLayout)findViewById(R.id.tools);//工具
@@ -483,7 +492,22 @@ public class MainActivity extends Activity  {
 		paths.clear();
 	}
 
-
+	@SuppressLint("HandlerLeak")
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+				case GO_HOME:
+					startAnimActivity(UserMainActivity.class);
+//					finish();
+					break;
+				case GO_LOGIN:
+					startAnimActivity(LoginActivity.class);
+//					finish();
+					break;
+			}
+		}
+	};
 
 
 //自定义线程类
