@@ -236,13 +236,16 @@ public class BaseActivity extends FragmentActivity {
 	 */
 	public void updateUserLocation(){
 		if(CustomApplcation.lastPoint!=null){
-			String saveLatitude  = mApplication.getLatitude();
-			String saveLongtitude = mApplication.getLongtitude();
-			String newLat = String.valueOf(CustomApplcation.lastPoint.getLatitude());
-			String newLong = String.valueOf(CustomApplcation.lastPoint.getLongitude());
+			String savex  = mApplication.getAmapx();
+			String savey = mApplication.getAmapy();
+			String savez  = mApplication.getAmapz();
+			String newMapID =String.valueOf(CustomApplcation.lastPoint.getAmapId());
+			String newX = String.valueOf(CustomApplcation.lastPoint.getX());
+			String newY = String.valueOf(CustomApplcation.lastPoint.getY());
+			String newZ = String.valueOf(CustomApplcation.lastPoint.getZ());
 //			ShowLog("saveLatitude ="+saveLatitude+",saveLongtitude = "+saveLongtitude);
 //			ShowLog("newLat ="+newLat+",newLong = "+newLong);
-			if(!saveLatitude.equals(newLat)|| !saveLongtitude.equals(newLong)){//只有位置有变化就更新当前位置，达到实时更新的目的
+			if(!savex.equals(newX)|| !savey.equals(newY)|| !savez.equals(newZ)){//只有位置有变化就更新当前位置，达到实时更新的目的
 				User u = (User) userManager.getCurrentUser(User.class);
 				final User user = new User();
 				user.setLocation(CustomApplcation.lastPoint);
@@ -251,8 +254,9 @@ public class BaseActivity extends FragmentActivity {
 					@Override
 					public void onSuccess() {
 						// TODO Auto-generated method stub
-						CustomApplcation.getInstance().setLatitude(String.valueOf(user.getLocation().getLatitude()));
-						CustomApplcation.getInstance().setLongtitude(String.valueOf(user.getLocation().getLongitude()));
+						CustomApplcation.getInstance().setAmapx(String.valueOf(user.getLocation().getX()));
+						CustomApplcation.getInstance().setAmapy(String.valueOf(user.getLocation().getY()));
+						CustomApplcation.getInstance().setAmapz(String.valueOf(user.getLocation().getZ()));
 //						ShowLog("经纬度更新成功");
 					}
 					@Override

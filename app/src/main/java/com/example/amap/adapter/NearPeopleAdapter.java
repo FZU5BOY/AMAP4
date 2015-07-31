@@ -10,6 +10,7 @@ import com.example.amap.CustomApplcation;
 import com.example.amap.R;
 import com.example.amap.adapter.base.BaseListAdapter;
 import com.example.amap.adapter.base.ViewHolder;
+import com.example.amap.bean.AMapPoint;
 import com.example.amap.bean.User;
 import com.example.amap.util.ImageLoadOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -51,12 +52,12 @@ public class NearPeopleAdapter extends BaseListAdapter<User> {
 		} else {
 			iv_avatar.setImageResource(R.drawable.default_head);
 		}
-		BmobGeoPoint location = contract.getLocation();
-		String currentLat = CustomApplcation.getInstance().getLatitude();
-		String currentLong = CustomApplcation.getInstance().getLongtitude();
+		AMapPoint location = contract.getLocation();
+		String currentLat = CustomApplcation.getInstance().getAmapx();
+		String currentLong = CustomApplcation.getInstance().getAmapy();
 		if(location!=null && !currentLat.equals("") && !currentLong.equals("")){
-			double distance = DistanceOfTwoPoints(Double.parseDouble(currentLat),Double.parseDouble(currentLong),contract.getLocation().getLatitude(),
-					contract.getLocation().getLongitude());
+			double distance = DistanceOfTwoPoints(Double.parseDouble(currentLat),Double.parseDouble(currentLong),contract.getLocation().getX(),
+					contract.getLocation().getY());
 			tv_distance.setText(String.valueOf(distance)+"米");
 		}else{
 			tv_distance.setText("未知");

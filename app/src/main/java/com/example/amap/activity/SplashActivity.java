@@ -47,7 +47,7 @@ public class SplashActivity extends BaseActivity {
 		//请到Bmob官网(http://www.bmob.cn/)申请ApplicationId,具体地址:http://docs.bmob.cn/android/faststart/index.html?menukey=fast_start&key=start_android
 		BmobChat.getInstance(this).init(Config.applicationId);
 		// 开启定位
-		initLocClient();
+//		initLocClient();
 		// 注册地图 SDK 广播监听者
 		IntentFilter iFilter = new IntentFilter();
 		iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
@@ -76,16 +76,16 @@ public class SplashActivity extends BaseActivity {
 	 * @return void
 	 * @throws
 	 */
-	private void initLocClient() {
-		mLocationClient = CustomApplcation.getInstance().mLocationClient;
-		LocationClientOption option = new LocationClientOption();
-		option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式:高精度模式
-		option.setCoorType("bd09ll"); // 设置坐标类型:百度经纬度
-		option.setScanSpan(1000);// 设置发起定位请求的间隔时间为1000ms:低于1000为手动定位一次，大于或等于1000则为定时定位
-		option.setIsNeedAddress(false);// 不需要包含地址信息
-		mLocationClient.setLocOption(option);
-		mLocationClient.start();
-	}
+//	private void initLocClient() {
+//		mLocationClient = CustomApplcation.getInstance().mLocationClient;
+//		LocationClientOption option = new LocationClientOption();
+//		option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式:高精度模式
+//		option.setCoorType("bd09ll"); // 设置坐标类型:百度经纬度
+//		option.setScanSpan(1000);// 设置发起定位请求的间隔时间为1000ms:低于1000为手动定位一次，大于或等于1000则为定时定位
+//		option.setIsNeedAddress(false);// 不需要包含地址信息
+//		mLocationClient.setLocOption(option);
+//		mLocationClient.start();
+//	}
 
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {

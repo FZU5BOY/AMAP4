@@ -79,9 +79,9 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 			progress.show();
 		}
 
-		if(!mApplication.getLatitude().equals("")&&!mApplication.getLongtitude().equals("")){
-			double latitude = Double.parseDouble(mApplication.getLatitude());
-			double longtitude = Double.parseDouble(mApplication.getLongtitude());
+		if(!mApplication.getAmapx().equals("")&&!mApplication.getAmapy().equals("")){
+			double latitude = Double.parseDouble(mApplication.getAmapx());
+			double longtitude = Double.parseDouble(mApplication.getAmapy());
 			//封装的查询方法，当进入此页面时 isUpdate为false，当下拉刷新的时候设置为true就行。
 			//此方法默认每页查询10条数据,若想查询多于10条，可在查询之前设置BRequest.QUERY_LIMIT_COUNT，如：BRequest.QUERY_LIMIT_COUNT=20
 			// 此方法是新增的查询指定10公里内的性别为女性的用户列表，默认包含好友列表
@@ -144,8 +144,8 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 	 * @throws
 	 */
 	private void queryMoreNearList(int page){
-		double latitude = Double.parseDouble(mApplication.getLatitude());
-		double longtitude = Double.parseDouble(mApplication.getLongtitude());
+		double latitude = Double.parseDouble(mApplication.getAmapx());
+		double longtitude = Double.parseDouble(mApplication.getAmapy());
 		//查询10公里范围内的性别为女的用户列表
 		userManager.queryKiloMetersListByPage(true,page,"location", longtitude, latitude, true,QUERY_KILOMETERS,"sex",false,new FindListener<User>() {
 			//查询全部地理位置信息且性别为女性的用户列表
@@ -201,8 +201,8 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 	@Override
 	public void onLoadMore() {
 		// TODO Auto-generated method stub
-		double latitude = Double.parseDouble(mApplication.getLatitude());
-		double longtitude = Double.parseDouble(mApplication.getLongtitude());
+		double latitude = Double.parseDouble(mApplication.getAmapx());
+		double longtitude = Double.parseDouble(mApplication.getAmapy());
 		//这是查询10公里范围内的性别为女用户总数
 		userManager.queryKiloMetersTotalCount(User.class, "location", longtitude, latitude, true,QUERY_KILOMETERS,"sex",false,new CountListener() {
 			//这是查询附近的人且性别为女性的用户总数
