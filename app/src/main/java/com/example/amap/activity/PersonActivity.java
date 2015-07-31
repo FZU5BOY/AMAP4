@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.example.amap.R;
 import com.example.amap.util.CircularImage;
@@ -32,5 +33,13 @@ public class PersonActivity extends Activity {
         cover_user_photo.setImageResource(R.drawable.head);
         CircularImage cover_user_photo_circle = (CircularImage) findViewById(R.id.circle);
         cover_user_photo_circle.setImageResource(R.drawable.circle);
+        RelativeLayout setbtn = (RelativeLayout)findViewById(R.id.user_set);
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
