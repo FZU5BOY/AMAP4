@@ -185,7 +185,7 @@
                 </action>
             </intent-filter>
         </service>
-
+        <service  android:name=".service.LocationService" />
         <!-- IM聊天所需的Push start-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"

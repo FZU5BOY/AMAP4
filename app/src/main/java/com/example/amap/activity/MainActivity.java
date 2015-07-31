@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -55,6 +57,7 @@ import com.esri.core.tasks.query.QueryParameters;
 import com.example.amap.config.Config;
 import com.example.amap.custom.MyToast;
 import com.example.amap.R;
+import com.example.amap.service.LocationService;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.util.rount.Node;
 import com.example.amap.util.rount.PathFinding;
@@ -152,7 +155,7 @@ public class MainActivity extends BaseActivity  {
 	GraphicsLayer mGraphicsLayer[] = {new GraphicsLayer(),new GraphicsLayer(),new GraphicsLayer()};
 	GraphicsLayer loactionGraphicsLayer = new GraphicsLayer();
 	static List<FeatureLayer> featureLayers=new ArrayList<>();
-
+	private MyReceiver receiver=null;
 	View calloutView;//地图的callout
 	CalThread calThread;//自定义线程 用于实时规划
 	Timer timer;//timer
@@ -484,6 +487,32 @@ public class MainActivity extends BaseActivity  {
 				}
 			}
 		});
+		//启动服务
+		startService(new Intent(this, LocationService.class));
+
+		//注册广播
+		receiver=new MyReceiver();
+		IntentFilter filter=new IntentFilter();
+		filter.addAction("com.example.amap.service.LocationService");
+		registerReceiver(receiver, filter);
+	}
+	//获取广播数据
+	private class MyReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Bundle bundle=intent.getExtras();
+			String ax=bundle.getString("ax");
+			String ay=bundle.getString("ay");
+			String az=bundle.getString("az");
+//			if(lon!=null&&!"".equals(lon)&&lat!=null&&!"".equals(lat)){
+//				double distance=getDistance(Double.parseDouble(lat),
+//						Double.parseDouble(lon), homeLat, homeLon);
+//				editText.setText("目前经纬度\n经度："+lon+"\n纬度："+lat+"\n离宿舍距离："+java.lang.Math.abs(distance));
+//			}else{
+//				editText.setText("目前经纬度\n经度："+lon+"\n纬度："+lat);
+//			}
+			ShowLog("ax:"+ax+" ay:"+ay);
+		}
 	}
 	//清除中间元素
 	public void clearMid(){
@@ -1683,6 +1712,9 @@ public class MainActivity extends BaseActivity  {
 	}
 	@Override
 	protected void onDestroy() {
+		unregisterReceiver(receiver);
+		//结束服务，如果想让服务一直运行就注销此句
+		stopService(new Intent(this, LocationService.class));
 		super.onDestroy();
 		mMapView.destroyDrawingCache();
 	}
@@ -1851,7 +1883,7 @@ public class MainActivity extends BaseActivity  {
 		else {
 			filename=filestr;
 		}
-		Log.i("zjx","getfilename函数返回----"+filename);
+		Log.i("zjx", "getfilename函数返回----" + filename);
 		return filename;
 	}
 	private boolean doubleBackToExitPressedOnce = false;
@@ -1876,7 +1908,7 @@ public class MainActivity extends BaseActivity  {
 
 			@Override
 			public void run() {
-				doubleBackToExitPressedOnce=false;
+				doubleBackToExitPressedOnce = false;
 			}
 		}, 2000);
 	}
