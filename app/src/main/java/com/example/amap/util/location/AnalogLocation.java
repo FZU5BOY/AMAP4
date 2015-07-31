@@ -36,7 +36,7 @@ import java.net.URLConnection;
  * Created by Administrator on 2015/7/31.
  */
 public class AnalogLocation {
-    private AMapPoint aMapPoint = null;
+    private AMapPoint aMapPoint = new AMapPoint();
     private Context context = null;
     ShangeUtil su=new ShangeUtil();//栅格工具类
     private int LOCATION_OK = 1;
@@ -57,17 +57,36 @@ public class AnalogLocation {
     }
 
 //得到定位ip
+public String getLocationIP(){
+    final String FILE_NAME = "ip.txt";
+    FileInputStream fis = null;
+    try {
+        fis = this.context.openFileInput(FILE_NAME);
+        if (fis.available() == 0) {
+            return "";
+        }
+        byte[] readBytes = new byte[fis.available()];
+        while (fis.read(readBytes) != -1) {
+        }
+        String text = new String(readBytes);
+        return text;
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return "";
+}
     /**
      * 以字符为单位读取文件，常用于读文本，数字等类型的文件
      */
     public String readFileByBytes(String fileName) {
         String text = "";
         File file = new File(fileName);
-        InputStream in = null;
+        FileInputStream in = null;
         try {
             // 一次读一个字节
             in = new FileInputStream(file);
-            int tempbyte;
             byte[] readBytes = new byte[in.available()];
             while (in.read(readBytes) != -1) {
             }
@@ -105,7 +124,8 @@ public class AnalogLocation {
     //模拟定位
    public AMapPoint location()
     {
-        String locateIp = readFileByBytes("ip.txt");
+//        String locateIp = readFileByBytes("ip.txt");
+        String locateIp = getLocationIP();
         if(locateIp==null||"".equals(locateIp)){
             aMapPoint.setState(LOCATION_LOCATION_IP_NOSET);
             return aMapPoint;

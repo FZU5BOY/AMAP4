@@ -16,7 +16,7 @@ public class AMapPoint extends BmobObject {
 	private Double x = Double.valueOf(0.0D);
 	private Double y = Double.valueOf(0.0D);
 	private Integer z = Integer.valueOf(0);
-	private String detailAddress;
+	private String detailAddress = String.valueOf("detailAddress");;
 	private int state = 1;
 	public AMapPoint() {
 	}
@@ -89,5 +89,7 @@ public class AMapPoint extends BmobObject {
 	public void setAmapId(String amapId) {
 		this.amapId = amapId;
 	}
-
+	public String toString(){
+		return "[amapId:"+amapId+",x:"+x+",y:"+y+",z:"+z+",state:"+state+",detailAddress:"+detailAddress+"}";
+	}
 }

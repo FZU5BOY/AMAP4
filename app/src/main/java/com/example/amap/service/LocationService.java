@@ -3,6 +3,7 @@ package com.example.amap.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.example.amap.bean.AMapPoint;
 import com.example.amap.util.location.AnalogLocation;
@@ -30,8 +31,8 @@ public class LocationService extends Service {
 
                     if(analogLocation!=null){ //当结束服务时analogLocation为空
                         //获取经纬度
-                        AMapPoint location=analogLocation.getLocation();
-
+                        AMapPoint location=analogLocation.location();
+                        Log.i("zjx",location.toString());
                         //发送广播
                         Intent intent=new Intent();
                         intent.putExtra("ax", location==null?"":location.getX()+"");
