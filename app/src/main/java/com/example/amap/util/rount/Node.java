@@ -30,8 +30,10 @@ public Node _parentnode;
 //  else return 5*m+11*n;
 //  return m>n?8*m+7*n:7*m+8*n;
   int max=m>n?m:n;
-//  int min=m<n?m:n;
-//  int d2=(int)(Math.sqrt(2)*min)+m+n-2*min;
+  int min=m<n?m:n;
+//  int d2=4*(int)(Math.sqrt(2)*min)+3*(max-min);
+//  int d2=4*min+3*(max-min);
+//  return m+n;
   return m+n;
  }
  //check if the node is the destination point

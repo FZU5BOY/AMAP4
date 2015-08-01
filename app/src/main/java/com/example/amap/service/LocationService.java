@@ -24,7 +24,7 @@ public class LocationService extends Service {
             public void run() {
                 while (!threadDisable) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -42,7 +42,7 @@ public class LocationService extends Service {
                         intent.putExtra("amapid", location.getAmapId());
                         intent.putExtra("adetail", location.getDetailAddress());
                         intent.setAction("com.example.amap.service.LocationService");
-                        sendBroadcast(intent);
+                        sendOrderedBroadcast(intent,null);
                     }
 
                 }

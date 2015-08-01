@@ -99,6 +99,7 @@ public class MainActivity extends BaseActivity  {
 	final int UPDATEGP = 16;
 	final int LOCATION_CLOST=17;
 	final int LOCATION_ING= 18;
+	final int MAKE_PATH_ALL =19;
 	private final int LOCATION_OK = 1;
 	private final int LOCATION_NO_IN_MAP = 2;
 	private final int LOCATION_NET_ERROR = 3;
@@ -169,6 +170,7 @@ public class MainActivity extends BaseActivity  {
 	GraphicsLayer loactionGraphicsLayer = new GraphicsLayer();
 	static List<FeatureLayer> featureLayers=new ArrayList<>();
 	private MyReceiver receiver=null;
+	private MyReceiver2 receiver2=null;
 	View calloutView;//地图的callout
 	CalThread calThread;//自定义线程 用于实时规划
 	Timer timer;//timer
@@ -318,44 +320,7 @@ public class MainActivity extends BaseActivity  {
 		shut_photo.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				String result="";
-				boolean isshutok = false;
-				try {
-					 result = mapviewshot();
-					Toast.makeText(getApplicationContext(), R.string.shut_ok, Toast.LENGTH_SHORT).show();
-					isshutok = true;
-				} catch (Exception e) {
-					Log.e("zjx", "shut e:" + e.toString());
-				}
-				if (isshutok) {
-					Intent intent = new Intent(MainActivity.this
-							, PersonActivity.class);
-					PendingIntent pi = PendingIntent.getActivity(
-							MainActivity.this, 4, intent, 0);
-					Notification notify = new Notification.Builder(v.getContext())
-							// 设置打开该通知，该通知自动消失
-							.setAutoCancel(true)
-									// 设置显示在状态栏的通知提示信息
-							.setTicker("有新消息")
-									// 设置通知的图标
-							.setSmallIcon(R.drawable.iconfont_jieping)
-									// 设置通知内容的标题
-							.setContentTitle("新消息:截图成功")
-									// 设置通知内容
-							.setContentText("截图保存在：" + result)
-									// // 设置使用系统默认的声音、默认LED灯
-									// .setDefaults(Notification.DEFAULT_SOUND
-									// |Notification.DEFAULT_LIGHTS)
-									// 设置通知的自定义声音
-//						.setSound(Uri.parse("android.resource://com.example.amap/"
-//								+ R.raw.msg))
-							.setWhen(System.currentTimeMillis())
-									// 设改通知将要启动程序的Intent
-							.setContentIntent(pi).build();
-					// 发送通知
-					nm.notify(NOTIFICATION_ID, notify);
-
-				}
+				ShutPhoto(v);
 			}
 		});
 		font_up=(Button)findViewById(R.id.font_up);//上楼按钮
@@ -366,25 +331,7 @@ public class MainActivity extends BaseActivity  {
 		from_here.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i("zjx", "from here");
-				mMapView.getCallout().hide();
-				startFeature = currentFeature;
-				startMyPoint = currentMyPoint;
-				PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.begining));
-				Point poi= new Point((double)startFeature.getAttributeValue("pointX"),(double)startFeature.getAttributeValue("pointy"));
-								Graphic gp = new Graphic(poi,pic);
-								mGraphicsLayer[currentFloor].addGraphic(gp);
-				//如果都非空可规划一条路径
-				if (startMyPoint != null&&endMyPoint !=null ) {
-					clearMid();
-					ClearTimeThread();
-					ClearAllGraphic();
-					rountstart=(String)startFeature.getAttributeValue("nickname");
-					rountend=(String)endFeature.getAttributeValue("nickname");
-					MakePath mp = new MakePath(from_here.getContext());
-					mp.execute(startMyPoint, endMyPoint);
-//					makePathAll(startMyPoint, endMyPoint);
-				}
+				fromHere();
 			}
 		});
 		//ui处理
@@ -415,6 +362,12 @@ public class MainActivity extends BaseActivity  {
 						}
 						break;
 					case COMPLETEAAL:
+						try{
+							unregisterReceiver(receiver2);
+						}
+						catch (Exception e){
+							e.printStackTrace();
+						}
 						tryClearAllGra();
 						break;
 					case LOCATION_START:
@@ -483,6 +436,8 @@ public class MainActivity extends BaseActivity  {
 					case UPDATEGP:
 						mGraphicsLayer[main_fl].addGraphic(main_gp);
 						break;
+					case MAKE_PATH_ALL:
+						makePathAll(locateMyPoint, midPoints.getFirst(), false);
 					default:break;
 				}
 			}
@@ -500,14 +455,11 @@ public class MainActivity extends BaseActivity  {
 				Graphic gp = new Graphic(poi, pic);
 				mGraphicsLayer[currentFloor].addGraphic(gp);
 				if (endMyPoint != null) {
-//					MyPoint endMyPoint=new MyPoint(MapToMyPointX(endFeature.getAttributeValue("x1")),MapToMyPointY(endFeature.getAttributeValue("y1")));
-
 					if (startMyPoint != null) {
 						rountstart = (String) startFeature.getAttributeValue("nickname");
 						rountend = (String) endFeature.getAttributeValue("nickname");
 						clearMid();
 						ClearTimeThread();
-//						startMyPoint =new MyPoint(MapToMyPointX(startFeature.getAttributeValue("x1")),MapToMyPointY(startFeature.getAttributeValue("y1")));
 						ClearAllGraphic();
 						MakePath mp = new MakePath(getApplicationContext());
 						mp.execute(startMyPoint, endMyPoint);
@@ -529,26 +481,177 @@ public class MainActivity extends BaseActivity  {
 						Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
 						mMapView.centerAt(poi2, true);
 						mMapView.setScale(7000.0);
-						if (calThread == null) {
-							calThread = new CalThread();
-							// 启动新线程
-							calThread.start();
-						}
-						if (timer == null) {
-							timer = new Timer();
-						}
-						timer.schedule(new TimerTask() {
-							@Override
-							public void run() {
-								calThread.mHandler.sendEmptyMessage(0x123);
-								Log.i("zjx", "haha");
-							}
-						}, 500, 500);
+						//注册广播
+						receiver2=new MyReceiver2();
+						IntentFilter filter=new IntentFilter();
+						filter.setPriority(20);
+						filter.addAction("com.example.amap.service.LocationService");
+						registerReceiver(receiver2, filter);
+//						if (calThread == null) {
+//							calThread = new CalThread();
+//							// 启动新线程
+//							calThread.start();
+//						}
+//						if (timer == null) {
+//							timer = new Timer();
+//						}
+//						timer.schedule(new TimerTask() {
+//							@Override
+//							public void run() {
+//								calThread.mHandler.sendEmptyMessage(0x123);
+//								Log.i("zjx", "haha");
+//							}
+//						}, 500, 500);
 					}
 				}
 			}
 		});
 
+	}
+	private void ShutPhoto(View v){
+		String result="";
+		boolean isshutok = false;
+		try {
+			result = mapviewshot();
+			Toast.makeText(getApplicationContext(), R.string.shut_ok, Toast.LENGTH_SHORT).show();
+			isshutok = true;
+		} catch (Exception e) {
+			Log.e("zjx", "shut e:" + e.toString());
+		}
+		if (isshutok) {
+			Intent intent = new Intent(MainActivity.this
+					, PersonActivity.class);
+			PendingIntent pi = PendingIntent.getActivity(
+					MainActivity.this, 4, intent, 0);
+			Notification notify = new Notification.Builder(v.getContext())
+					// 设置打开该通知，该通知自动消失
+					.setAutoCancel(true)
+							// 设置显示在状态栏的通知提示信息
+					.setTicker("有新消息")
+							// 设置通知的图标
+					.setSmallIcon(R.drawable.iconfont_jieping)
+							// 设置通知内容的标题
+					.setContentTitle("新消息:截图成功")
+							// 设置通知内容
+					.setContentText("截图保存在：" + result)
+							// // 设置使用系统默认的声音、默认LED灯
+							// .setDefaults(Notification.DEFAULT_SOUND
+							// |Notification.DEFAULT_LIGHTS)
+							// 设置通知的自定义声音
+//						.setSound(Uri.parse("android.resource://com.example.amap/"
+//								+ R.raw.msg))
+					.setWhen(System.currentTimeMillis())
+							// 设改通知将要启动程序的Intent
+					.setContentIntent(pi).build();
+			// 发送通知
+			nm.notify(NOTIFICATION_ID, notify);
+
+		}
+	}
+	private  void fromHere(){
+		Log.i("zjx", "from here");
+		mMapView.getCallout().hide();
+		startFeature = currentFeature;
+		startMyPoint = currentMyPoint;
+		PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.begining));
+		Point poi= new Point((double)startFeature.getAttributeValue("pointX"),(double)startFeature.getAttributeValue("pointy"));
+		Graphic gp = new Graphic(poi,pic);
+		mGraphicsLayer[currentFloor].addGraphic(gp);
+		//如果都非空可规划一条路径
+		if (startMyPoint != null&&endMyPoint !=null ) {
+			clearMid();
+			ClearTimeThread();
+			ClearAllGraphic();
+			rountstart=(String)startFeature.getAttributeValue("nickname");
+			rountend=(String)endFeature.getAttributeValue("nickname");
+			MakePath mp = new MakePath(from_here.getContext());
+			mp.execute(startMyPoint, endMyPoint);
+//					makePathAll(startMyPoint, endMyPoint);
+		}
+	}
+	private class MyReceiver2 extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Bundle bundle=intent.getExtras();
+			double ax=bundle.getDouble("ax");
+			double ay=bundle.getDouble("ay");
+			int az=bundle.getInt("az");
+			int astate=bundle.getInt("astate");
+			Bundle addBundle = getResultExtras(true);
+			boolean ischanged = addBundle.getBoolean("ischanged",false);
+			if(astate!=LOCATION_OK)return;
+			Point mapPoint = new Point(LocationToMapX(ax),LocationToMapY(ay));
+			MyPoint locateMyPoint2 = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),az);
+			int result;
+				if (!ischanged) {
+					ShowLog("还在该点");
+					result = 0;
+				}
+				else {
+					MyPoint mi =null;
+					try {
+						mi=midPoints.getFirst();
+					}
+					catch (Exception e){
+						e.printStackTrace();
+					}
+
+					if (mi != null) {
+					//中间点还有
+						if (Math.abs(locateMyPoint.x - mi.x) <= OFFSET && Math.abs(locateMyPoint.y - mi.y) <= OFFSET && locateMyPoint.z == mi.z) {
+							midPoints.removeFirst();
+							pathId.removeFirst();
+							paths.removeFirst();
+							if (midPoints.size() == 0) {
+								viewHandler.sendEmptyMessage(COMPLETEAAL);
+								ShowToast(R.string.go_end_success);
+								ShowLog("全部走完");
+								result = 55;
+							} else {
+								if (locateMyPoint.z < midPoints.getFirst().z) {
+									ShowToast(R.string.up_floor_ing);
+								} else if (locateMyPoint.z > midPoints.getFirst().z) {
+									ShowToast(R.string.down_floor_ing);
+								}
+//						即到达了其中一个中转点，那么给予用户良好的提示，并进行接下来的路径规划
+								else
+									ShowToast(R.string.go_mid_success);
+								ShowLog("到达第一个中转点");
+								result =1;
+							}
+						}
+						else {
+							result = 2;
+							ShowLog("正常规划");
+						}
+					}
+					else {
+						result = 2;
+						ShowLog("正常规划");
+						//正常规划}
+					}
+				}
+
+			if(result!=0) {//0为原地不动
+				if (midPoints.size() == 0) {
+					viewHandler.sendEmptyMessage(COMPLETEAAL);
+					return;
+				}
+				Message msg=new Message();
+//				Bundle bundle1=new Bundle();
+//				bundle1.putInt("ax",locateMyPoint.x);
+//				bundle1.putInt("ay",locateMyPoint.y);
+//				bundle1.putInt("az",locateMyPoint.z);
+//				bundle1.putInt("bx", midPoints.getFirst().x);
+//				bundle1.putInt("by", midPoints.getFirst().y);
+//				bundle1.putInt("bz", midPoints.getFirst().z);
+//				bundle1.putBoolean("isfirst",false);
+//				msg.setData(bundle1);
+				msg.what=MAKE_PATH_ALL;
+				viewHandler.sendMessage(msg);
+//				makePathAll(locateMyPoint, midPoints.getFirst(), false);
+			}
+		}
 	}
 	//获取广播数据
 	private class MyReceiver extends BroadcastReceiver {
@@ -568,27 +671,41 @@ public class MainActivity extends BaseActivity  {
 					}
 					Message msg=new Message();
 					msg.what=LOCATION_OK;
-					Bundle locateBundle = new Bundle();
-					bundle.putDouble("ax",ax);
-					bundle.putDouble("ay",ay);
-					bundle.putInt("az",az);
+//					Bundle locateBundle = new Bundle();
+//					bundle.putDouble("ax",ax);
+//					bundle.putDouble("ay",ay);
+//					bundle.putInt("az",az);
 					msg.setData(bundle);//mes利用Bundle传递数据
+					Point mapPoint = new Point(LocationToMapX(ax),LocationToMapY(ay));
+					MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),az);
 					viewHandler.sendMessage(msg);
+					if(locateMyPoint!=null&&newMyPoint.equal(locateMyPoint)){
+						Bundle addBundle = new Bundle();
+						addBundle.putBoolean("ischanged",true);
+						setResultExtras(addBundle);
+					}
+
 
 					break;
 				case LOCATION_NET_ERROR:
+//					abortBroadcast();
 					viewHandler.sendEmptyMessage(LOCATION_NET_ERROR);
 					break;
 				case LOCATION_NO_IN_MAP:
+//					abortBroadcast();
 					viewHandler.sendEmptyMessage(LOCATION_NO_IN_MAP);
 					break;
 				case LOCATION_LOCATION_IP_ERROR:
+//					abortBroadcast();
 					viewHandler.sendEmptyMessage(LOCATION_LOCATION_IP_ERROR);
 					break;
 				case LOCATION_LOCATION_IP_NOSET:
+//					abortBroadcast();
 					viewHandler.sendEmptyMessage(LOCATION_LOCATION_IP_NOSET);
 					break;
-				default:break;
+				default:
+//					abortBroadcast();
+					break;
 			}
 		}
 	}
@@ -913,6 +1030,7 @@ public class MainActivity extends BaseActivity  {
 		clearMid();
 		ClearTimeThread();
 		ClearAllGraphic();
+
 	}
 	public void ClearAllGra(View source){
 		tryClearAllGra();
@@ -967,6 +1085,7 @@ public class MainActivity extends BaseActivity  {
 				startService(new Intent(this, LocationService.class));
 				receiver=new MyReceiver();
 				IntentFilter filter = new IntentFilter();
+				filter.setPriority(30);
 				filter.addAction("com.example.amap.service.LocationService");
 				registerReceiver(receiver, filter);
 				isLocating=true;
@@ -1810,6 +1929,7 @@ public class MainActivity extends BaseActivity  {
 	@Override
 	protected void onDestroy() {
 		unregisterReceiver(receiver);
+		unregisterReceiver(receiver2);
 		//结束服务，如果想让服务一直运行就注销此句
 		stopService(new Intent(this, LocationService.class));
 		super.onDestroy();
@@ -1873,44 +1993,44 @@ public class MainActivity extends BaseActivity  {
 
 		super.onResume();
 		Log.i("zjx", "onResume");
-		this.doubleBackToExitPressedOnce = false;
-//		mMapView.unpause();
-		try {//点击好友分享的地址在此处做个判断
-			Intent i_getvalue = getIntent();
-			String action = i_getvalue.getAction();
-			Log.i("zjx","action:"+action);
-			if(Intent.ACTION_VIEW.equals(action)) {
-				Uri uri = i_getvalue.getData();
-				Log.i("zjx", "uri:" + uri);
-				if (uri.toString().startsWith("http://zjx.com/im?")) {
-					int x = Integer.parseInt(uri.getQueryParameter("x")); // "x"
-					int y = Integer.parseInt(uri.getQueryParameter("y")); // "y"
-					int z = Integer.parseInt(uri.getQueryParameter("z")); // "z"
-					Log.i("zjx", "x:" + x + ",y:" + y + ",z:" + z);
-
-					MyPoint firend = new MyPoint(x, y, z);
-					if (locateMyPoint != null) {
-						i_getvalue.setAction("android.intent.action.MAIN2");
-						endMyPoint = firend;
-						PictureMarkerSymbol endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-						Point endpoi= new Point(LocationToMapX(endMyPoint.x),LocationToMapY(endMyPoint.y));
-						Graphic gp = new Graphic(endpoi,endpic);
-						mGraphicsLayer[endMyPoint.z].addGraphic(gp);
-						Log.i("zjx", "try to find firend");
-						MakePath mp = new MakePath(getApplicationContext());
-						mp.execute(locateMyPoint, firend);
-						currentFloor = locateMyPoint.z;
-						showcurrentfloor();
-						Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-						mMapView.centerAt(poi2, true);
-						mMapView.setScale(7000.0);
-					}
-				}
-			}
-		}
-		catch (Exception e){
-			Log.i("zjx","fenx e:"+e);
-		}
+//		this.doubleBackToExitPressedOnce = false;
+////		mMapView.unpause();
+//		try {//点击好友分享的地址在此处做个判断
+//			Intent i_getvalue = getIntent();
+//			String action = i_getvalue.getAction();
+//			Log.i("zjx","action:"+action);
+//			if(Intent.ACTION_VIEW.equals(action)) {
+//				Uri uri = i_getvalue.getData();
+//				Log.i("zjx", "uri:" + uri);
+//				if (uri.toString().startsWith("http://zjx.com/im?")) {
+//					int x = Integer.parseInt(uri.getQueryParameter("x")); // "x"
+//					int y = Integer.parseInt(uri.getQueryParameter("y")); // "y"
+//					int z = Integer.parseInt(uri.getQueryParameter("z")); // "z"
+//					Log.i("zjx", "x:" + x + ",y:" + y + ",z:" + z);
+//
+//					MyPoint firend = new MyPoint(x, y, z);
+//					if (locateMyPoint != null) {
+//						i_getvalue.setAction("android.intent.action.MAIN2");
+//						endMyPoint = firend;
+//						PictureMarkerSymbol endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
+//						Point endpoi= new Point(LocationToMapX(endMyPoint.x),LocationToMapY(endMyPoint.y));
+//						Graphic gp = new Graphic(endpoi,endpic);
+//						mGraphicsLayer[endMyPoint.z].addGraphic(gp);
+//						Log.i("zjx", "try to find firend");
+//						MakePath mp = new MakePath(getApplicationContext());
+//						mp.execute(locateMyPoint, firend);
+//						currentFloor = locateMyPoint.z;
+//						showcurrentfloor();
+//						Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+//						mMapView.centerAt(poi2, true);
+//						mMapView.setScale(7000.0);
+//					}
+//				}
+//			}
+//		}
+//		catch (Exception e){
+//			Log.i("zjx","fenx e:"+e);
+//		}
 
 	}
 	//得到mapview的bitmap
