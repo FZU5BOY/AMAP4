@@ -8,8 +8,10 @@
     <string name="make_road_button">生成路径</string>
     <string name="your_position">请输入起点</string>
     <string name="location_success">定位成功.</string>
-    <string name="location_error_localerror">定位失败.您不在该建筑物内</string>
-    <string name="location_error_urlerror">定位失败.请开启wifi连接正确定位地址</string>
+    <string name="location_error_local_inmap">定位失败.您不在该建筑物内</string>
+    <string name="location_error_net_tips">当前网络不可用,请检查您的网络!</string>
+    <string name="location_error_url_no_set">定位失败.请在工具里面设置定位地址</string>
+    <string name="location_error_url_unfind">定位失败.定位接口不正确</string>
     <string name="churukou">出入口</string>
     <string name="dengjikou">登机口</string>
     <string name="anjian">安检</string>
@@ -52,6 +54,7 @@
     <string name="toast_register_pswlenth_error">密码应大于等于6位</string>
     <string name="toast_register_psw_unequal_error">两次输入密码不同</string>
     <string name="toast_register_success">注册成功，登录帐号为你的手机号</string>
+
     <!-- chat -->
     <!--<string name="app_name">Bmob_IM_test</string>-->
     <!--<string name="action_settings">Settings</string>-->

@@ -98,6 +98,7 @@ public class MainActivity extends BaseActivity  {
 	final int LOCATION_START=15;
 	final int UPDATEGP = 16;
 	final int LOCATION_CLOST=17;
+	final int LOCATION_ING= 18;
 	private final int LOCATION_OK = 1;
 	private final int LOCATION_NO_IN_MAP = 2;
 	private final int LOCATION_NET_ERROR = 3;
@@ -417,12 +418,42 @@ public class MainActivity extends BaseActivity  {
 						tryClearAllGra();
 						break;
 					case LOCATION_START:
+						dingwei.setText("定位中...");
 						dingwei.setVisibility(View.VISIBLE);
 						locateMyPoint = null;
 						loactionGraphicsLayer.removeAll();
 						break;
+					case LOCATION_ING:
+						dingwei.setVisibility(View.GONE);
+//						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
 					case LOCATION_CLOST:
 						dingwei.setVisibility(View.GONE);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_NET_ERROR:
+						dingwei.setText(getResources().getText(R.string.location_error_net_tips));
+						dingwei.setVisibility(View.VISIBLE);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_LOCATION_IP_ERROR:
+						dingwei.setText(getResources().getText(R.string.location_error_url_unfind));
+						dingwei.setVisibility(View.VISIBLE);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_LOCATION_IP_NOSET:
+						dingwei.setText(getResources().getText(R.string.location_error_url_no_set));
+						dingwei.setVisibility(View.VISIBLE);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_NO_IN_MAP:
+						dingwei.setText(getResources().getText(R.string.location_error_local_inmap));
+						dingwei.setVisibility(View.VISIBLE);
 						locateMyPoint = null;
 						loactionGraphicsLayer.removeAll();
 						break;
@@ -435,7 +466,12 @@ public class MainActivity extends BaseActivity  {
 						Point mapPoint = new Point(LocationToMapX(ax),LocationToMapY(ay));
 
 						Graphic gp = new Graphic(mapPoint,pic);
-						locateMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),az);
+						MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),az);
+						if(locateMyPoint!=null&&newMyPoint.equal(locateMyPoint)){
+							loactionGraphicsLayer.addGraphic(gp);
+							break;
+						}
+						locateMyPoint=newMyPoint;
 						if(az!=currentFloor){
 							currentFloor=az;
 							showcurrentfloor();
@@ -525,6 +561,11 @@ public class MainActivity extends BaseActivity  {
 			int astate=bundle.getInt("astate");
 			switch (astate){
 				case LOCATION_OK:
+					viewHandler.sendEmptyMessage(LOCATION_ING);
+					if (isFirstLocating) {
+						ShowToast(R.string.location_success);
+						isFirstLocating =false;
+					}
 					Message msg=new Message();
 					msg.what=LOCATION_OK;
 					Bundle locateBundle = new Bundle();
@@ -533,13 +574,21 @@ public class MainActivity extends BaseActivity  {
 					bundle.putInt("az",az);
 					msg.setData(bundle);//mes利用Bundle传递数据
 					viewHandler.sendMessage(msg);
-					if(isFirstLocating){
-						ShowToast(R.string.location_success);
-						isFirstLocating =false;
-					}
+
 					break;
 				case LOCATION_NET_ERROR:
+					viewHandler.sendEmptyMessage(LOCATION_NET_ERROR);
 					break;
+				case LOCATION_NO_IN_MAP:
+					viewHandler.sendEmptyMessage(LOCATION_NO_IN_MAP);
+					break;
+				case LOCATION_LOCATION_IP_ERROR:
+					viewHandler.sendEmptyMessage(LOCATION_LOCATION_IP_ERROR);
+					break;
+				case LOCATION_LOCATION_IP_NOSET:
+					viewHandler.sendEmptyMessage(LOCATION_LOCATION_IP_NOSET);
+					break;
+				default:break;
 			}
 		}
 	}
@@ -917,7 +966,7 @@ public class MainActivity extends BaseActivity  {
 				viewHandler.sendEmptyMessage(LOCATION_START);
 				startService(new Intent(this, LocationService.class));
 				receiver=new MyReceiver();
-				IntentFilter filter=new IntentFilter();
+				IntentFilter filter = new IntentFilter();
 				filter.addAction("com.example.amap.service.LocationService");
 				registerReceiver(receiver, filter);
 				isLocating=true;
@@ -927,6 +976,7 @@ public class MainActivity extends BaseActivity  {
 				unregisterReceiver(receiver);
 				//结束服务，如果想让服务一直运行就注销此句
 				stopService(new Intent(this, LocationService.class));
+				isLocating=false;
 				isFirstLocating=true;
 			}
 			new Handler().postDelayed(new Runnable() {
@@ -935,7 +985,7 @@ public class MainActivity extends BaseActivity  {
 				public void run() {
 					flag = true;
 				}
-			}, 1000);
+			}, 2000);
 		}
 
 
@@ -979,7 +1029,7 @@ public class MainActivity extends BaseActivity  {
 				int temp=(int)((double)jsonArray.get(2)+0.5);
 				locateMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),temp);
 				if(locateMyPoint.x>=su.SHANGESIZE-1||locateMyPoint.x<0||locateMyPoint.y>=su.SHANGESIZE-1||locateMyPoint.x<0||locateMyPoint.z>allfloor-1||locateMyPoint.z<0){
-						MyToast.makeText(getApplicationContext(), R.string.location_error_localerror, 1.5).show();
+						MyToast.makeText(getApplicationContext(), R.string.location_error_local_inmap, 1.5).show();
 
 
 					locateMyPoint=null;
@@ -998,7 +1048,7 @@ public class MainActivity extends BaseActivity  {
 			}
 			catch (Exception e){
 //			Toast.makeText(getApplicationContext(), R.string.location_error, Toast.LENGTH_SHORT).show();
-					toast = MyToast.makeText(getApplicationContext(), R.string.location_error_urlerror, 2.5);
+					toast = MyToast.makeText(getApplicationContext(), R.string.location_error_url_unfind, 2.5);
 					toast.show();
 
 			Log.e("zjx","e:"+e);
