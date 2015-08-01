@@ -172,6 +172,11 @@ public String getLocationIP(){
         }
         return aMapPoint;
     }
+    public MyPoint getMyPoint(){
+        Point mapPoint = new Point(LocationToMapX(aMapPoint.getX()),LocationToMapY(aMapPoint.getY()));
+        MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),aMapPoint.getZ());
+        return newMyPoint;
+    }
     //Point，MyPoint,Location转换
     /*
     Location:json得到的定位值

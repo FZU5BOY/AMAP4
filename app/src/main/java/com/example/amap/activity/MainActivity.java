@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity  {
 	Graphic main_gp;//临时变量
 	int     main_fl;//临时变量 handle用
 	boolean isloadok=true;//是否加载成功,判断是否正确引入地图包
-	final int OFFSET=1;//设置偏移量，即到达某点的大致范围就算到达;
+	final int OFFSET = 0;//设置偏移量，即到达某点的大致范围就算到达;之前设为1感觉效果不是很好
 	MapView mMapView;//地图
 	MapViewHelper mvHelper;//帮助类，某些操作更快捷
 	ShangeUtil su=new ShangeUtil();//栅格工具类
@@ -595,10 +595,11 @@ public class MainActivity extends BaseActivity  {
 					catch (Exception e){
 						e.printStackTrace();
 					}
-
+					//还有中间点
 					if (mi != null) {
-					//中间点还有
+						//当前点与队列中第一个点(第一个目标点)相近
 						if (Math.abs(locateMyPoint.x - mi.x) <= OFFSET && Math.abs(locateMyPoint.y - mi.y) <= OFFSET && locateMyPoint.z == mi.z) {
+							mGraphicsLayer[currentFloor].updateGraphic(pathId.getFirst(), new Graphic(new Polyline(),new SimpleLineSymbol(Color.argb(255,255,22,34), 10, SimpleLineSymbol.STYLE.SOLID)));
 							midPoints.removeFirst();
 							pathId.removeFirst();
 							paths.removeFirst();
@@ -614,8 +615,8 @@ public class MainActivity extends BaseActivity  {
 									ShowToast(R.string.down_floor_ing);
 								}
 //						即到达了其中一个中转点，那么给予用户良好的提示，并进行接下来的路径规划
-								else
-									ShowToast(R.string.go_mid_success);
+								else ShowToast(R.string.go_mid_success);
+
 								ShowLog("到达第一个中转点");
 								result =1;
 							}
@@ -633,23 +634,18 @@ public class MainActivity extends BaseActivity  {
 				}
 
 			if(result!=0) {//0为原地不动
-				if (midPoints.size() == 0) {
+				if (result == 55) {
 					viewHandler.sendEmptyMessage(COMPLETEAAL);
 					return;
 				}
 				Message msg=new Message();
-//				Bundle bundle1=new Bundle();
-//				bundle1.putInt("ax",locateMyPoint.x);
-//				bundle1.putInt("ay",locateMyPoint.y);
-//				bundle1.putInt("az",locateMyPoint.z);
-//				bundle1.putInt("bx", midPoints.getFirst().x);
-//				bundle1.putInt("by", midPoints.getFirst().y);
-//				bundle1.putInt("bz", midPoints.getFirst().z);
-//				bundle1.putBoolean("isfirst",false);
-//				msg.setData(bundle1);
 				msg.what=MAKE_PATH_ALL;
 				viewHandler.sendMessage(msg);
 //				makePathAll(locateMyPoint, midPoints.getFirst(), false);
+				showcurrentfloor();
+				Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+				mMapView.centerAt(poi2, true);
+				mMapView.setScale(7000.0);
 			}
 		}
 	}
@@ -678,13 +674,13 @@ public class MainActivity extends BaseActivity  {
 					msg.setData(bundle);//mes利用Bundle传递数据
 					Point mapPoint = new Point(LocationToMapX(ax),LocationToMapY(ay));
 					MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),az);
-					viewHandler.sendMessage(msg);
+
 					if(locateMyPoint!=null&&newMyPoint.equal(locateMyPoint)){
 						Bundle addBundle = new Bundle();
 						addBundle.putBoolean("ischanged",true);
 						setResultExtras(addBundle);
 					}
-
+					viewHandler.sendMessage(msg);
 
 					break;
 				case LOCATION_NET_ERROR:
@@ -940,10 +936,10 @@ public class MainActivity extends BaseActivity  {
 				astar = new PathFinding(MAP, HIT);//寻路类
 			} catch (Exception e) {
 				Log.i("zjx", "e1:" + e);
-
 			}
 			try {
-				if(isfirst){//若第一次 添加节点和路径数据
+				//若第一次规划（异步任务时去做的） 添加节点和路径数据
+				if(isfirst){
 					midPoints.addLast(OBJECT_POS);
 					Log.i("zjx2","开始寻找路径");
 					Date a=new Date();
@@ -951,22 +947,24 @@ public class MainActivity extends BaseActivity  {
 					Date b=new Date();
 					Log.i("zjx2","寻找路径成功，耗时"+(b.getTime()-a.getTime())+"ms");
 					paths.addLast(mylist);
-
 				}
-
+				//不是第一次规划
 				else{
-					if(midPoints.size()>0&&OBJECT_POS.equal(midPoints.getFirst())){//如果是走第一段
+					//如果是走第一段
+					if(midPoints.size()>0&&OBJECT_POS.equal(midPoints.getFirst())){
 						//那么就需要进行走偏等提示
 						Log.i("zjx","first point:"+midPoints.getFirst().toString());
 						int sub=isInPath(START_POS);//判断该点在首条路径的位置
 						int path_lenth=paths.getFirst().size();//首条路径的长度
+						//在原路径在 截取后半段即可
 						if(sub!=-1){
 							mylist=paths.getFirst().subList(sub,path_lenth);//重新切割list得到新的路径
 							Log.i("zjx","不需要重新规划");
 							paths.removeFirst();
 							paths.addFirst(mylist);
 						}
-						else{//偏移路径重新规划
+						//偏移路径重新规划
+						else{
 							mylist = astar.searchPath(START_POS, OBJECT_POS);
 							MyToast.makeText(getApplicationContext(),R.string.deviate_path,0.7).show();
 							paths.removeFirst();
@@ -974,16 +972,17 @@ public class MainActivity extends BaseActivity  {
 						}
 
 					}
-					else mylist = astar.searchPath(START_POS, OBJECT_POS);//走的路不是第一段
+					//规划的路不是第一段，为后面的
+					else mylist = astar.searchPath(START_POS, OBJECT_POS);
 
 				}
 				Log.i("zjx","midpoint.size"+midPoints.size());
 			} catch (Exception e) {
 				Log.i("zjx", "e2:" + e);
 			}
-			if (mylist != null) {//空的情况即路径规划失败，可能为无法到达的点
+			//mylist空的情况即路径规划失败，可能为无法到达的点
+			if (mylist != null) {
 				Polyline polyline = new Polyline();
-				//visit the position，describe the path
 				for (int i = 0; i < mylist.size(); i++) {
 					MyPoint pos = mylist.get(i)._Pos;
 					Point p = new Point((pos.x * 20.0 + 10.0), -pos.y * 20.0 - 10.0);
@@ -991,17 +990,22 @@ public class MainActivity extends BaseActivity  {
 					else polyline.lineTo(p);
 				}
 				SimpleLineSymbol simpleLineSymbol = new SimpleLineSymbol(Color.argb(255,255,22,34), 10, SimpleLineSymbol.STYLE.SOLID);
-//				simpleLineSymbol.setAlpha(80);
 				Graphic graphic1 = new Graphic(polyline, simpleLineSymbol);
-
-
+				//如果是第一次规划
 				if(isfirst) {
+					//uid表示每段规划路径的标识
 					int uid=mGraphicsLayer[curfloor].addGraphic(graphic1);
 					pathId.addLast(uid);
 					Log.i("zjx", "uid:" + uid);
 				}
 				else {
-					mGraphicsLayer[curfloor].updateGraphic(pathId.getFirst(), graphic1);
+					ShowLog(pathId.toString());
+					try {
+						mGraphicsLayer[curfloor].updateGraphic(pathId.getFirst(), graphic1);
+					}
+					catch (Exception e){
+						e.printStackTrace();
+					}
 				}
 
 			}
@@ -1928,8 +1932,18 @@ public class MainActivity extends BaseActivity  {
 	}
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(receiver);
-		unregisterReceiver(receiver2);
+		try {
+			unregisterReceiver(receiver);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		try {
+			unregisterReceiver(receiver2);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		//结束服务，如果想让服务一直运行就注销此句
 		stopService(new Intent(this, LocationService.class));
 		super.onDestroy();

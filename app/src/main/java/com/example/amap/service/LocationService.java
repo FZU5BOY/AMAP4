@@ -7,12 +7,13 @@ import android.util.Log;
 
 import com.example.amap.bean.AMapPoint;
 import com.example.amap.util.location.AnalogLocation;
+import com.example.amap.util.rount.MyPoint;
 
 public class LocationService extends Service {
     private AnalogLocation analogLocation=null;
     private boolean threadDisable=false;
     private final static String TAG=LocationService.class.getSimpleName();
-
+    private MyPoint lastMyPoint=null;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,17 +33,24 @@ public class LocationService extends Service {
                     if(analogLocation!=null){ //当结束服务时analogLocation为空
                         //获取经纬度
                         AMapPoint location=analogLocation.location();
-                        Log.i("zjx",location.toString());
-                        //发送广播
-                        Intent intent=new Intent();
-                        intent.putExtra("ax", location.getX());
-                        intent.putExtra("ay", location.getY());
-                        intent.putExtra("az", location.getZ());
-                        intent.putExtra("astate", location.getState());
-                        intent.putExtra("amapid", location.getAmapId());
-                        intent.putExtra("adetail", location.getDetailAddress());
-                        intent.setAction("com.example.amap.service.LocationService");
-                        sendOrderedBroadcast(intent,null);
+                        MyPoint newMyPoint=analogLocation.getMyPoint();
+//                        if(lastMyPoint!=null&&newMyPoint.equal(lastMyPoint)){
+//                            //什么都不做
+//                        }
+//                        else {
+                            lastMyPoint=newMyPoint;
+                            Log.i("zjx", location.toString());
+                            //发送广播
+                            Intent intent = new Intent();
+                            intent.putExtra("ax", location.getX());
+                            intent.putExtra("ay", location.getY());
+                            intent.putExtra("az", location.getZ());
+                            intent.putExtra("astate", location.getState());
+                            intent.putExtra("amapid", location.getAmapId());
+                            intent.putExtra("adetail", location.getDetailAddress());
+                            intent.setAction("com.example.amap.service.LocationService");
+                            sendOrderedBroadcast(intent, null);
+//                        }
                     }
 
                 }
