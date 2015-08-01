@@ -35,9 +35,12 @@ public class LocationService extends Service {
                         Log.i("zjx",location.toString());
                         //发送广播
                         Intent intent=new Intent();
-                        intent.putExtra("ax", location==null?"":location.getX()+"");
-                        intent.putExtra("ay", location==null?"":location.getY()+"");
-                        intent.putExtra("az", location==null?"":location.getZ()+"");
+                        intent.putExtra("ax", location.getX());
+                        intent.putExtra("ay", location.getY());
+                        intent.putExtra("az", location.getZ());
+                        intent.putExtra("astate", location.getState());
+                        intent.putExtra("amapid", location.getAmapId());
+                        intent.putExtra("adetail", location.getDetailAddress());
                         intent.setAction("com.example.amap.service.LocationService");
                         sendBroadcast(intent);
                     }

@@ -92,12 +92,24 @@ import cn.bmob.im.BmobChat;
 public class MainActivity extends BaseActivity  {
 	private static final int GO_HOME = 100;
 	private static final int GO_LOGIN = 200;
-	final int HIDECALLOUTANDALLINFO=2;//handle 消息值
-	final int SHOWCURRENTFLOOR=3;
-	final int COMPLETEAAL=4;
-	final int UPORDOWNFLOOR=5;
-	final int UPDATEGP = 6;
-    //test git
+	final int HIDECALLOUTANDALLINFO=12;//handle 消息值
+	final int SHOWCURRENTFLOOR=13;
+	final int COMPLETEAAL=14;
+	final int LOCATION_START=15;
+	final int UPDATEGP = 16;
+	final int LOCATION_CLOST=17;
+	private final int LOCATION_OK = 1;
+	private final int LOCATION_NO_IN_MAP = 2;
+	private final int LOCATION_NET_ERROR = 3;
+	private final int LOCATION_LOCATION_IP_NOSET = 4;
+	private final int LOCATION_LOCATION_IP_ERROR = 5;
+	private boolean flag = true;
+	private boolean isFirstLocating =true;
+	private boolean isLocating =false;
+	private synchronized void setFlag() {
+		flag = false;
+	}
+	//test git
 	Graphic main_gp;//临时变量
 	int     main_fl;//临时变量 handle用
 	boolean isloadok=true;//是否加载成功,判断是否正确引入地图包
@@ -379,51 +391,63 @@ public class MainActivity extends BaseActivity  {
 			@Override
 			public void handleMessage(Message msg)
 			{
-				if(msg.what == HIDECALLOUTANDALLINFO)
-				{
-					mMapView.getCallout().hide();
-					allinfo.setVisibility(View.GONE);
-				}
-				else if(msg.what ==SHOWCURRENTFLOOR)
-				{
-					font_middle.setText(floorname[currentFloor]);
-					// We will spin off the initialization in a new thread
-					for (int i = 0; i < allfloor; i++) {
-						if (i != currentFloor) {
-							mMapView.getLayer(i * 2).setVisible(false);
-							mMapView.getLayer(i * 2 + 1).setVisible(false);
-						} else {
-							mMapView.getLayer(i * 2).setVisible(true);
-							mMapView.getLayer(i * 2 + 1).setVisible(true);
+				switch (msg.what){
+					case HIDECALLOUTANDALLINFO:
+						mMapView.getCallout().hide();
+						allinfo.setVisibility(View.GONE);
+						break;
+					case SHOWCURRENTFLOOR:
+						font_middle.setText(floorname[currentFloor]);
+						// We will spin off the initialization in a new thread
+						for (int i = 0; i < allfloor; i++) {
+							if (i != currentFloor) {
+								mMapView.getLayer(i * 2).setVisible(false);
+								mMapView.getLayer(i * 2 + 1).setVisible(false);
+							} else {
+								mMapView.getLayer(i * 2).setVisible(true);
+								mMapView.getLayer(i * 2 + 1).setVisible(true);
+							}
 						}
-					}
-					if (locateMyPoint != null) {
-						if (locateMyPoint.z != currentFloor) loactionGraphicsLayer.setVisible(false);
-						else loactionGraphicsLayer.setVisible(true);
-					}
-				}
-				else if(msg.what ==COMPLETEAAL){
-					tryClearAllGra();
+						if (locateMyPoint != null) {
+							if (locateMyPoint.z != currentFloor) loactionGraphicsLayer.setVisible(false);
+							else loactionGraphicsLayer.setVisible(true);
+						}
+						break;
+					case COMPLETEAAL:
+						tryClearAllGra();
+						break;
+					case LOCATION_START:
+						dingwei.setVisibility(View.VISIBLE);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_CLOST:
+						dingwei.setVisibility(View.GONE);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_OK:
+						Bundle bundle=msg.getData();
+						double ax=bundle.getDouble("ax");
+						double ay=bundle.getDouble("ay");
+						int az=bundle.getInt("az");
+						PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
+						Point mapPoint = new Point(LocationToMapX(ax),LocationToMapY(ay));
 
-				}
-				else if(msg.what ==UPORDOWNFLOOR){
-//					if(timer!=null&&calThread!=null){
-//						try{
-//							Date a=new Date();
-////							timer.cancel();
-////							timer=null;
-//							calThread.wait(3000L);
-//							Date b=new Date();
-//							Log.i("zjx","really 3s?:"+(b.getTime()-a.getTime()));
-//						}
-//						catch (Exception e){
-//							Log.i("zjx","timer date e:"+e);
-//						}
-//
-//					}
-				}
-				else if(msg.what ==UPDATEGP){
-					mGraphicsLayer[main_fl].addGraphic(main_gp);
+						Graphic gp = new Graphic(mapPoint,pic);
+						locateMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),az);
+						if(az!=currentFloor){
+							currentFloor=az;
+							showcurrentfloor();
+						}
+						loactionGraphicsLayer.addGraphic(gp);
+						mMapView.centerAt(mapPoint, true);
+						mMapView.setScale(7000.0);
+						break;
+					case UPDATEGP:
+						mGraphicsLayer[main_fl].addGraphic(main_gp);
+						break;
+					default:break;
 				}
 			}
 		};
@@ -434,31 +458,31 @@ public class MainActivity extends BaseActivity  {
 				Log.i("zjx", "go there");
 				mMapView.getCallout().hide();
 				endFeature = currentFeature;
-				endMyPoint=currentMyPoint;
+				endMyPoint = currentMyPoint;
 				PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-				Point poi= new Point((double)endFeature.getAttributeValue("pointX"),(double)endFeature.getAttributeValue("pointy"));
-				Graphic gp = new Graphic(poi,pic);
+				Point poi = new Point((double) endFeature.getAttributeValue("pointX"), (double) endFeature.getAttributeValue("pointy"));
+				Graphic gp = new Graphic(poi, pic);
 				mGraphicsLayer[currentFloor].addGraphic(gp);
-				if ( endMyPoint != null) {
+				if (endMyPoint != null) {
 //					MyPoint endMyPoint=new MyPoint(MapToMyPointX(endFeature.getAttributeValue("x1")),MapToMyPointY(endFeature.getAttributeValue("y1")));
 
-					if(startMyPoint != null) {
-						rountstart=(String)startFeature.getAttributeValue("nickname");
-						rountend=(String)endFeature.getAttributeValue("nickname");
+					if (startMyPoint != null) {
+						rountstart = (String) startFeature.getAttributeValue("nickname");
+						rountend = (String) endFeature.getAttributeValue("nickname");
 						clearMid();
 						ClearTimeThread();
 //						startMyPoint =new MyPoint(MapToMyPointX(startFeature.getAttributeValue("x1")),MapToMyPointY(startFeature.getAttributeValue("y1")));
 						ClearAllGraphic();
 						MakePath mp = new MakePath(getApplicationContext());
 						mp.execute(startMyPoint, endMyPoint);
-						currentFloor=startMyPoint.z;
+						currentFloor = startMyPoint.z;
 						showcurrentfloor();
-						Point poi2= new Point(startMyPoint.x*20.0,-startMyPoint.y*20.0);
+						Point poi2 = new Point(startMyPoint.x * 20.0, -startMyPoint.y * 20.0);
 						mMapView.centerAt(poi2, true);
 						mMapView.setScale(7000.0);
-					} else if (locateMyPoint!=null){
-						rountstart=getResources().getString(R.string.mylocation);
-						rountend=(String)endFeature.getAttributeValue("nickname");
+					} else if (locateMyPoint != null) {
+						rountstart = getResources().getString(R.string.mylocation);
+						rountend = (String) endFeature.getAttributeValue("nickname");
 						clearMid();
 						ClearTimeThread();
 						ClearAllGraphic();
@@ -469,13 +493,14 @@ public class MainActivity extends BaseActivity  {
 						Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
 						mMapView.centerAt(poi2, true);
 						mMapView.setScale(7000.0);
-						if(calThread==null){
-						calThread = new CalThread();
-						// 启动新线程
-						calThread.start();
+						if (calThread == null) {
+							calThread = new CalThread();
+							// 启动新线程
+							calThread.start();
 						}
-						if(timer==null){
-						timer=new Timer();}
+						if (timer == null) {
+							timer = new Timer();
+						}
 						timer.schedule(new TimerTask() {
 							@Override
 							public void run() {
@@ -487,31 +512,35 @@ public class MainActivity extends BaseActivity  {
 				}
 			}
 		});
-		//启动服务
-		startService(new Intent(this, LocationService.class));
 
-		//注册广播
-		receiver=new MyReceiver();
-		IntentFilter filter=new IntentFilter();
-		filter.addAction("com.example.amap.service.LocationService");
-		registerReceiver(receiver, filter);
 	}
 	//获取广播数据
 	private class MyReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Bundle bundle=intent.getExtras();
-			String ax=bundle.getString("ax");
-			String ay=bundle.getString("ay");
-			String az=bundle.getString("az");
-//			if(lon!=null&&!"".equals(lon)&&lat!=null&&!"".equals(lat)){
-//				double distance=getDistance(Double.parseDouble(lat),
-//						Double.parseDouble(lon), homeLat, homeLon);
-//				editText.setText("目前经纬度\n经度："+lon+"\n纬度："+lat+"\n离宿舍距离："+java.lang.Math.abs(distance));
-//			}else{
-//				editText.setText("目前经纬度\n经度："+lon+"\n纬度："+lat);
-//			}
-			ShowLog("ax:"+ax+" ay:"+ay);
+			double ax=bundle.getDouble("ax");
+			double ay=bundle.getDouble("ay");
+			int az=bundle.getInt("az");
+			int astate=bundle.getInt("astate");
+			switch (astate){
+				case LOCATION_OK:
+					Message msg=new Message();
+					msg.what=LOCATION_OK;
+					Bundle locateBundle = new Bundle();
+					bundle.putDouble("ax",ax);
+					bundle.putDouble("ay",ay);
+					bundle.putInt("az",az);
+					msg.setData(bundle);//mes利用Bundle传递数据
+					viewHandler.sendMessage(msg);
+					if(isFirstLocating){
+						ShowToast(R.string.location_success);
+						isFirstLocating =false;
+					}
+					break;
+				case LOCATION_NET_ERROR:
+					break;
+			}
 		}
 	}
 	//清除中间元素
@@ -842,7 +871,7 @@ public class MainActivity extends BaseActivity  {
 	}
 	//清除timer和线程
 	public void ClearTimeThread(){
-		Log.i("zjx","ClearTimeThread");
+		Log.i("zjx", "ClearTimeThread");
 		if(calThread!=null) {
 			calThread.stopRequest();//通过信号量去正确关闭thread
 			calThread=null;
@@ -879,18 +908,36 @@ public class MainActivity extends BaseActivity  {
 	public double MapToLocationY(double y){
 		return y/1000.0+1;
 	}
-	//得到当前位置
+	//定位
 	public void GetLocation(View source) throws MalformedURLException
 	{
-		Location task = new Location(this);
-		URL ipurl=null;
-		try{
-			ipurl=new URL(getLocationIP());
-			task.execute(ipurl);
+		if(flag){
+			setFlag();
+			if(!isLocating){
+				viewHandler.sendEmptyMessage(LOCATION_START);
+				startService(new Intent(this, LocationService.class));
+				receiver=new MyReceiver();
+				IntentFilter filter=new IntentFilter();
+				filter.addAction("com.example.amap.service.LocationService");
+				registerReceiver(receiver, filter);
+				isLocating=true;
+			}
+			else{
+				viewHandler.sendEmptyMessage(LOCATION_CLOST);
+				unregisterReceiver(receiver);
+				//结束服务，如果想让服务一直运行就注销此句
+				stopService(new Intent(this, LocationService.class));
+				isFirstLocating=true;
+			}
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					flag = true;
+				}
+			}, 1000);
 		}
-		catch (Exception e){
-			Toast.makeText(getApplicationContext(), R.string.ip_error, Toast.LENGTH_SHORT).show();
-		}
+
 
 	}
 	//异步任务，定位
@@ -1731,12 +1778,13 @@ public class MainActivity extends BaseActivity  {
 		}
 		try{
 			if(isloadok){
-			GetLocation(button_dingwei);}
+//			GetLocation(button_dingwei);
+			}
 			else{
 				toast.makeText(getApplicationContext(),R.string.no_find_map,2.5).show();
 			}
 		}
-		catch (MalformedURLException e){
+		catch (Exception e){
 			Log.i("zjx", "e:" + e);
 		}
 		showcurrentfloor();
