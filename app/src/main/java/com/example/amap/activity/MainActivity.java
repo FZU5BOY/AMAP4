@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity  {
 	int     main_fl;//临时变量 handle用
 	boolean isloadok=true;//是否加载成功,判断是否正确引入地图包
 	final int OFFSET = 0;//设置偏移量，即到达某点的大致范围就算到达;之前设为1感觉效果不是很好
-	MapView mMapView;//地图
+	MapView mMapView =null;//地图
 	MapViewHelper mvHelper;//帮助类，某些操作更快捷
 	ShangeUtil su=new ShangeUtil();//栅格工具类
 	Deque<List<Node>> paths=new ArrayDeque<>();//多点路径规划时用到
@@ -643,9 +643,9 @@ public class MainActivity extends BaseActivity  {
 				viewHandler.sendMessage(msg);
 //				makePathAll(locateMyPoint, midPoints.getFirst(), false);
 				showcurrentfloor();
-				Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-				mMapView.centerAt(poi2, true);
-				mMapView.setScale(7000.0);
+//				Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+//				mMapView.centerAt(poi2, true);
+//				mMapView.setScale(7000.0);
 			}
 		}
 	}
@@ -1401,10 +1401,6 @@ public class MainActivity extends BaseActivity  {
 	}
 	//初始化数据图层
 	private void initializeRoutingAndGeocoding() {
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
 				for(int i=0;i<allfloor;i++) {
 					Geodatabase geodatabase = null;
 					try {
@@ -1426,8 +1422,6 @@ public class MainActivity extends BaseActivity  {
 					}
 				}
 				trygetDataName();
-//			}
-//		}).start();
 	}
 	//监听
 	class TouchListener extends MapOnTouchListener {
@@ -1932,6 +1926,8 @@ public class MainActivity extends BaseActivity  {
 	}
 	@Override
 	protected void onDestroy() {
+
+		mMapView.destroyDrawingCache();
 		try {
 			unregisterReceiver(receiver);
 		}
@@ -1945,9 +1941,14 @@ public class MainActivity extends BaseActivity  {
 			e.printStackTrace();
 		}
 		//结束服务，如果想让服务一直运行就注销此句
-		stopService(new Intent(this, LocationService.class));
+		try {
+			stopService(new Intent(this, LocationService.class));
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		super.onDestroy();
-		mMapView.destroyDrawingCache();
+
 	}
 	//create完回调
 	@Override
@@ -2007,45 +2008,6 @@ public class MainActivity extends BaseActivity  {
 
 		super.onResume();
 		Log.i("zjx", "onResume");
-//		this.doubleBackToExitPressedOnce = false;
-////		mMapView.unpause();
-//		try {//点击好友分享的地址在此处做个判断
-//			Intent i_getvalue = getIntent();
-//			String action = i_getvalue.getAction();
-//			Log.i("zjx","action:"+action);
-//			if(Intent.ACTION_VIEW.equals(action)) {
-//				Uri uri = i_getvalue.getData();
-//				Log.i("zjx", "uri:" + uri);
-//				if (uri.toString().startsWith("http://zjx.com/im?")) {
-//					int x = Integer.parseInt(uri.getQueryParameter("x")); // "x"
-//					int y = Integer.parseInt(uri.getQueryParameter("y")); // "y"
-//					int z = Integer.parseInt(uri.getQueryParameter("z")); // "z"
-//					Log.i("zjx", "x:" + x + ",y:" + y + ",z:" + z);
-//
-//					MyPoint firend = new MyPoint(x, y, z);
-//					if (locateMyPoint != null) {
-//						i_getvalue.setAction("android.intent.action.MAIN2");
-//						endMyPoint = firend;
-//						PictureMarkerSymbol endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-//						Point endpoi= new Point(LocationToMapX(endMyPoint.x),LocationToMapY(endMyPoint.y));
-//						Graphic gp = new Graphic(endpoi,endpic);
-//						mGraphicsLayer[endMyPoint.z].addGraphic(gp);
-//						Log.i("zjx", "try to find firend");
-//						MakePath mp = new MakePath(getApplicationContext());
-//						mp.execute(locateMyPoint, firend);
-//						currentFloor = locateMyPoint.z;
-//						showcurrentfloor();
-//						Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-//						mMapView.centerAt(poi2, true);
-//						mMapView.setScale(7000.0);
-//					}
-//				}
-//			}
-//		}
-//		catch (Exception e){
-//			Log.i("zjx","fenx e:"+e);
-//		}
-
 	}
 	//得到mapview的bitmap
 	private Bitmap getViewBitmap(MapView v) {
