@@ -67,7 +67,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
                                 EditText et = (EditText) view.findViewById(R.id.editText3);
                                 String s = et.getText().toString();
                                 if (s.length() == 0) {
-                                    Toast.makeText(getApplicationContext(), "Are U kidding me!Input something.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Input something.", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                                 FileInputStream fis = null;
@@ -120,6 +120,7 @@ public class ToolsActivity extends Activity implements View.OnClickListener {
                     while (fis.read(readBytes) != -1) {
                     }
                     String text = new String(readBytes);
+//                    if(text==null||"".equals(text))text="http://192.168.191.1:8001/loc";
                     et.setText(text);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

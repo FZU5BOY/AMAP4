@@ -1926,7 +1926,7 @@ public class MainActivity extends BaseActivity  {
 	}
 	@Override
 	protected void onDestroy() {
-
+		featureLayers.clear();
 		mMapView.destroyDrawingCache();
 		try {
 			unregisterReceiver(receiver);
