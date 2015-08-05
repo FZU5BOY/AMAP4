@@ -7,10 +7,11 @@
     <LinearLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -21,11 +22,11 @@
                 android:id="@+id/btn_message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/top_bar"
+                android:background="@color/white"
                 android:drawableTop="@drawable/tab_message_btn"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
-                android:paddingTop="7dip"
+                android:paddingTop="0dip"
                 android:scaleType="matrix"
                 android:text="@string/main_tab_recent"
                 android:textColor="@drawable/tab_textcolor"
@@ -56,11 +57,11 @@
                 android:id="@+id/btn_contract"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/top_bar"
+                android:background="@color/white"
                 android:drawableTop="@drawable/tab_contact_btn"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
-                android:paddingTop="7dip"
+                android:paddingTop="0dip"
                 android:scaleType="matrix"
                 android:text="@string/main_tab_contact"
                 android:textColor="@drawable/tab_textcolor"
@@ -87,11 +88,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/top_bar"
+            android:background="@color/white"
             android:drawableTop="@drawable/tab_set_btn"
             android:onClick="onTabSelect"
             android:paddingBottom="2dip"
-            android:paddingTop="7dip"
+            android:paddingTop="0dip"
             android:scaleType="matrix"
             android:text="@string/mian_tab_set"
             android:textColor="@drawable/tab_textcolor"
@@ -102,6 +103,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/main_bottom" />
+        android:layout_above="@id/main_bottom"
+        android:background="#dde0dd"/>
 
 </RelativeLayout>

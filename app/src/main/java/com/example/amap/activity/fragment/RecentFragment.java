@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.amap.R;
 import com.example.amap.activity.ChatActivity;
 import com.example.amap.activity.FragmentBase;
+import com.example.amap.activity.MainActivity;
 import com.example.amap.adapter.MessageRecentAdapter;
 import com.example.amap.view.ClearEditText;
 import com.example.amap.view.dialog.DialogTips;
@@ -34,7 +36,7 @@ import cn.bmob.im.db.BmobDB;
 public class RecentFragment extends FragmentBase implements OnItemClickListener,OnItemLongClickListener{
 
 	ClearEditText mClearEditText;
-
+	Button btnGoback;
 	ListView listview;
 
 	MessageRecentAdapter adapter;
@@ -56,7 +58,6 @@ public class RecentFragment extends FragmentBase implements OnItemClickListener,
 		listview.setOnItemLongClickListener(this);
 		adapter = new MessageRecentAdapter(getActivity(), R.layout.item_conversation, BmobDB.create(getActivity()).queryRecents());
 		listview.setAdapter(adapter);
-
 		mClearEditText = (ClearEditText)findViewById(R.id.et_msg_search);
 		mClearEditText.addTextChangedListener(new TextWatcher() {
 

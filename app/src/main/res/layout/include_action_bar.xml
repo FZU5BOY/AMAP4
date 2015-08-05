@@ -2,6 +2,7 @@
 <com.example.amap.view.HeaderLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/base_action_bar_height" >
+    android:layout_height="@dimen/base_action_bar_height"
+    android:background="@color/white">
 
 </com.example.amap.view.HeaderLayout >

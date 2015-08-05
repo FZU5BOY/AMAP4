@@ -129,4 +129,19 @@
     <string name="voice_seconds_tips">还可以说%1$s秒</string>
 
     <string name="voice_short_tips">录音时间太短</string>
+
+    <string name="hello">Hello World, ListViewDemoActivity!</string>
+    <string name="place_pic">地点图片</string>
+    <string name="place_name">福州大学生活三区玫瑰园公共厕所</string>
+    <string name="go_here">&#xe613; 到这里去</string>
+    <string name="mark_place">&#xe61f; 收藏</string>
+    <string name="marked_place">&#xe648; 已收藏</string>
+    <string name="write_comm">&#xe652; 写评论</string>
+    <string name="rate_stars">星级：</string>
+    <string name="submit_comm">提交</string>
+    <string name="comm_hint">请输入评论...</string>
+    <string name="write_comm_activity">writeCommActivity</string>
+    <string name="avatar">Avatar</string>
+    <string name="comm_time">7月29日</string>
+    <string name="comm_content">五星级厕所！！！</string>
 </resources>

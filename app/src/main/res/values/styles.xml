@@ -1,17 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-
-    -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!--android:Theme.Holo.Light.DarkActionBar android:Theme.Light
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-
-        -->
     </style>
     <style name="toast_anim_view">
         <item name="@android:windowEnterAnimation">@anim/toast_anim_in</item>
@@ -205,5 +193,16 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="roomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/room_rating_bar</item>
+        <item name="android:minHeight">32dp</item>
+        <item name="android:maxHeight">32dp</item>
+    </style>
+
+    <style name="roomRatingBar_indicator" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/room_rating_bar_indicator</item>
+        <item name="android:minHeight">16dp</item>
+        <item name="android:maxHeight">16dp</item>
     </style>
 </resources>

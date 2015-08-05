@@ -306,5 +306,4 @@ public class UserMainActivity extends ActivityBase implements EventListener{
 		//取消定时检测服务
 //		BmobChat.getInstance(this).stopPollService();
 	}
-
 }

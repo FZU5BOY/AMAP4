@@ -3,30 +3,17 @@ package com.example.amap.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esri.android.map.FeatureLayer;
-import com.esri.core.geometry.Point;
-import com.esri.core.map.CallbackListener;
-import com.esri.core.map.Feature;
-import com.esri.core.map.FeatureResult;
-import com.esri.core.map.Graphic;
-import com.esri.core.symbol.PictureMarkerSymbol;
-import com.esri.core.symbol.SimpleFillSymbol;
-import com.esri.core.tasks.query.QueryParameters;
 import com.example.amap.R;
-import com.example.amap.adapter.ListAdapter;
 import com.example.amap.custom.MyToast;
 import com.nhaarman.listviewanimations.ArrayAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
@@ -38,9 +25,6 @@ import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.Simple
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * Created by Zeashon on 2015/5/10.
