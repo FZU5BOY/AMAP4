@@ -425,6 +425,7 @@ public class MainActivity extends BaseActivity {
 
                         Graphic gp = new Graphic(mapPoint, pic);
                         MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), az);
+                        //在servicel里面控制了 所以这句基本不会运行
                         if (locateMyPoint != null && newMyPoint.equal(locateMyPoint)) {
                             loactionGraphicsLayer.addGraphic(gp);
                             break;
@@ -658,15 +659,11 @@ public class MainActivity extends BaseActivity {
                     }
                     Message msg = new Message();
                     msg.what = LOCATION_OK;
-//					Bundle locateBundle = new Bundle();
-//					bundle.putDouble("ax",ax);
-//					bundle.putDouble("ay",ay);
-//					bundle.putInt("az",az);
                     msg.setData(bundle);//mes利用Bundle传递数据
                     Point mapPoint = new Point(LocationToMapX(ax), LocationToMapY(ay));
                     MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), az);
 
-                    if (locateMyPoint != null && newMyPoint.equal(locateMyPoint)) {
+                    if (locateMyPoint!=null && !newMyPoint.equal(locateMyPoint)) {//注意是不等号= =
                         Bundle addBundle = new Bundle();
                         addBundle.putBoolean("ischanged", true);
                         setResultExtras(addBundle);

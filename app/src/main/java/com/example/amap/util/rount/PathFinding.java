@@ -1,5 +1,7 @@
 package com.example.amap.util.rount;
 
+import org.codehaus.jackson.map.util.LRUMap;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +17,8 @@ public class PathFinding {
     private Node endNode=null;
     private final int isOpened =2;
     private final int isClosed =3;
+//    LRUMap a =new LRUMap(2,4);
+
     private ShangeUtil su= ShangeUtil.getInstance();
     public PathFinding(int i) {
 //       _map=(int[][]) su.shapeList.get(i);//这样写不可取，是共享的
