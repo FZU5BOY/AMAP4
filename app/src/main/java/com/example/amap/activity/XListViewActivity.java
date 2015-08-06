@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.example.amap.R;
 import com.example.amap.view.xlist.XListView;
 import com.example.amap.view.xlist.XListView.IXListViewListener;
+import com.example.amap.activity.WriteComActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -211,15 +212,5 @@ public class XListViewActivity extends Activity implements IXListViewListener {
         }
     }
 
-    public static class WriteComActivity extends Activity{
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            // TODO Auto-generated method stub
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.write_comm);
-
-        }
-
-    }
 }
