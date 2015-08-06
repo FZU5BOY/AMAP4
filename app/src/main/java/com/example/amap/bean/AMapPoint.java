@@ -92,4 +92,8 @@ public class AMapPoint extends BmobObject {
 	public String toString(){
 		return "[amapId:"+amapId+",x:"+x+",y:"+y+",z:"+z+",state:"+state+",detailAddress:"+detailAddress+"}";
 	}
+	public boolean equal(AMapPoint a){
+		if(Math.abs(a.getX()-this.x)<0.005&&Math.abs(a.getY()-this.y)<0.005&&this.z==a.z)return true;
+		return false;
+	}
 }

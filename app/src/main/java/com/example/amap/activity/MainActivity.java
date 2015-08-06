@@ -1,7 +1,6 @@
 package com.example.amap.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,12 +11,10 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
@@ -83,7 +80,6 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Future;
 
 import cn.bmob.im.BmobChat;
@@ -120,7 +116,7 @@ public class MainActivity extends BaseActivity {
     final int OFFSET = 0;//设置偏移量，即到达某点的大致范围就算到达;之前设为1感觉效果不是很好
     MapView mMapView = null;//地图
     MapViewHelper mvHelper;//帮助类，某些操作更快捷
-    ShangeUtil su = new ShangeUtil();//栅格工具类
+    ShangeUtil su = ShangeUtil.getInstance();//栅格工具类
     Deque<List<Node>> paths = new ArrayDeque<>();//多点路径规划时用到
     Deque<Integer> pathId = new ArrayDeque<>();
     Deque<Integer> pointId = new ArrayDeque<>();
@@ -174,7 +170,6 @@ public class MainActivity extends BaseActivity {
     private MyReceiver receiver = null;
     private MyReceiver2 receiver2 = null;
     View calloutView;//地图的callout
-    CalThread calThread;//自定义线程 用于实时规划
     Timer timer;//timer
     private static List<PoiSearch> ls = null;
     private MyToast toast;//自定义toast控件
@@ -488,21 +483,6 @@ public class MainActivity extends BaseActivity {
                         filter.setPriority(20);
                         filter.addAction("com.example.amap.service.LocationService");
                         registerReceiver(receiver2, filter);
-//						if (calThread == null) {
-//							calThread = new CalThread();
-//							// 启动新线程
-//							calThread.start();
-//						}
-//						if (timer == null) {
-//							timer = new Timer();
-//						}
-//						timer.schedule(new TimerTask() {
-//							@Override
-//							public void run() {
-//								calThread.mHandler.sendEmptyMessage(0x123);
-//								Log.i("zjx", "haha");
-//							}
-//						}, 500, 500);
                     }
                 }
             }
@@ -732,60 +712,60 @@ public class MainActivity extends BaseActivity {
     };
 
 
-    //自定义线程类
-    class CalThread extends Thread {
-        private boolean stopRequested = false; // 状态变量，stop的一个替换
-        public Handler mHandler;
-
-        public void run() {
-            Looper.prepare();//保证每个线程最多只有一个looper对象
-            mHandler = new Handler() {
-                // 定义处理消息的方法
-                @Override
-                public void handleMessage(Message msg) {
-                    if (!stopRequested) {
-                        if (msg.what == 0x123) {
-                            try {
-                                URL ipurl = new URL(getLocationIP());
-                                String result = GetJSONString(ipurl);
-//								Log.i("zjx", "result" + result);
-                                int preresult = PreLocation(result);
-
-                                if (preresult != 0) {//0为原地不动
-//									locateMyPoint = null;//不能为null 用来与下一次的locateMyPoint2比较
-                                    if (midPoints.size() == 0) {
-                                        Log.i("zjx", "compelt");
-                                        viewHandler.sendEmptyMessage(COMPLETEAAL);
-//										Thread.currentThread().interrupt();
-                                        return;
-                                    }
-//									else if(preresult==1){
-                                    makePathAll(locateMyPoint, midPoints.getFirst(), false);
-//									}
-//									else{
-//									makePathAll(locateMyPoint, midPoints.getFirst(),false);}
-//									currentFloor = locateMyPoint.z;
-                                    showcurrentfloor();
-                                    Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-                                    mMapView.centerAt(poi2, true);
-                                    mMapView.setScale(7000.0);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                }
-            };
-            Looper.loop();
-        }
-
-        public void stopRequest() {
-            stopRequested = true;
-            Thread.currentThread().interrupt();
-        }
-    }
+//    //自定义线程类
+//    class CalThread extends Thread {
+//        private boolean stopRequested = false; // 状态变量，stop的一个替换
+//        public Handler mHandler;
+//
+//        public void run() {
+//            Looper.prepare();//保证每个线程最多只有一个looper对象
+//            mHandler = new Handler() {
+//                // 定义处理消息的方法
+//                @Override
+//                public void handleMessage(Message msg) {
+//                    if (!stopRequested) {
+//                        if (msg.what == 0x123) {
+//                            try {
+//                                URL ipurl = new URL(getLocationIP());
+//                                String result = GetJSONString(ipurl);
+////								Log.i("zjx", "result" + result);
+//                                int preresult = PreLocation(result);
+//
+//                                if (preresult != 0) {//0为原地不动
+////									locateMyPoint = null;//不能为null 用来与下一次的locateMyPoint2比较
+//                                    if (midPoints.size() == 0) {
+//                                        Log.i("zjx", "compelt");
+//                                        viewHandler.sendEmptyMessage(COMPLETEAAL);
+////										Thread.currentThread().interrupt();
+//                                        return;
+//                                    }
+////									else if(preresult==1){
+//                                    makePathAll(locateMyPoint, midPoints.getFirst(), false);
+////									}
+////									else{
+////									makePathAll(locateMyPoint, midPoints.getFirst(),false);}
+////									currentFloor = locateMyPoint.z;
+//                                    showcurrentfloor();
+//                                    Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+//                                    mMapView.centerAt(poi2, true);
+//                                    mMapView.setScale(7000.0);
+//                                }
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            };
+//            Looper.loop();
+//        }
+//
+//        public void stopRequest() {
+//            stopRequested = true;
+//            Thread.currentThread().interrupt();
+//        }
+//    }
 
     //上楼点击事件
     public void TurnUP(View source) {
@@ -928,13 +908,12 @@ public class MainActivity extends BaseActivity {
     //制作详细的路径 参数：起点 终点 操作楼层 是否第一次
     public void makePathDetail(MyPoint START_POS, MyPoint OBJECT_POS, int curfloor, boolean isfirst) {
         {
-//得到MAP节点数据
-            int[][] MAP = su.getMap(getResources().openRawResource(floorShange[curfloor]));
+            Date c = new Date();
             PathFinding astar = null;
-            int[] HIT = {1};//设置哪些值代表为障碍物
             List<Node> mylist = new ArrayList<>();
             try {
-                astar = new PathFinding(MAP, HIT);//寻路类
+                astar = new PathFinding(curfloor);//寻路类
+                Log.i("abc",astar.toString());
             } catch (Exception e) {
                 Log.i("zjx", "e1:" + e);
             }
@@ -947,6 +926,7 @@ public class MainActivity extends BaseActivity {
                     mylist = astar.searchPath(START_POS, OBJECT_POS);
                     Date b = new Date();
                     Log.i("zjx2", "寻找路径成功，耗时" + (b.getTime() - a.getTime()) + "ms");
+                    Log.i("zjx2", "从加载map到寻路成功，耗时" + (b.getTime() - c.getTime()) + "ms");
                     paths.addLast(mylist);
                 }
                 //不是第一次规划
@@ -979,13 +959,14 @@ public class MainActivity extends BaseActivity {
                 }
                 Log.i("zjx", "midpoint.size" + midPoints.size());
             } catch (Exception e) {
-                Log.i("zjx", "e2:" + e);
+                e.printStackTrace();
             }
             //mylist空的情况即路径规划失败，可能为无法到达的点
             if (mylist != null) {
                 Polyline polyline = new Polyline();
                 for (int i = 0; i < mylist.size(); i++) {
-                    MyPoint pos = mylist.get(i)._Pos;
+                    Node aaa=mylist.get(i);
+                    MyPoint pos = new MyPoint(aaa.X,aaa.Y);
                     Point p = new Point((pos.x * 20.0 + 10.0), -pos.y * 20.0 - 10.0);
                     if (i == 0) polyline.startPath(p);
                     else polyline.lineTo(p);
@@ -1014,7 +995,7 @@ public class MainActivity extends BaseActivity {
     //得到该点在list的位置
     public int isInPath(MyPoint myPoint) {
         for (int i = 0; i < paths.getFirst().size(); i++) {
-            if (myPoint.x == paths.getFirst().get(i)._Pos.x && myPoint.y == paths.getFirst().get(i)._Pos.y) {
+            if (myPoint.x == paths.getFirst().get(i).X && myPoint.y == paths.getFirst().get(i).Y) {
                 return i;
             }
         }
@@ -1046,10 +1027,10 @@ public class MainActivity extends BaseActivity {
     //清除timer和线程
     public void ClearTimeThread() {
         Log.i("zjx", "ClearTimeThread");
-        if (calThread != null) {
-            calThread.stopRequest();//通过信号量去正确关闭thread
-            calThread = null;
-        }
+//        if (calThread != null) {
+//            calThread.stopRequest();//通过信号量去正确关闭thread
+//            calThread = null;
+//        }
         if (timer != null) {
             timer.cancel();
             timer = null;
@@ -1220,7 +1201,7 @@ public class MainActivity extends BaseActivity {
     }
 
     //重新定位，用于实时路径规划
-    public int PreLocation(String result) {
+    public int PreLocation(String result){
         try {
             JSONArray jsonArray = new JSONArray(result);
             Log.i("zjx", "json:" + jsonArray.toString());
@@ -1254,14 +1235,14 @@ public class MainActivity extends BaseActivity {
                         Log.i("zjx", "COMPLETEAAL" + midPoints.size());
 //						viewHandler.sendEmptyMessage(COMPLETEAAL);
                         //在这边关闭！
-                        if (calThread != null) {
-                            calThread.stopRequest();//通过信号量去正确关闭thread
-                            calThread = null;
-                        }
-                        if (timer != null) {
-                            timer.cancel();
-                            timer = null;
-                        }
+//                        if (calThread != null) {
+//                            calThread.stopRequest();//通过信号量去正确关闭thread
+//                            calThread = null;
+//                        }
+//                        if (timer != null) {
+//                            timer.cancel();
+//                            timer = null;
+//                        }
                         MyToast.makeText(getApplicationContext(), R.string.go_end_success, 1).show();
 
                     } else {
@@ -1706,22 +1687,22 @@ public class MainActivity extends BaseActivity {
                     Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                     mMapView.centerAt(poi2, true);
                     mMapView.setScale(7000.0);
-                    if (calThread == null) {
-                        calThread = new CalThread();
-                        // 启动新线程
-                        calThread.start();
-                    }
-                    if (timer == null) {
-                        timer = new Timer();
-                    }
-                    timer.schedule(new TimerTask() {
-
-                        @Override
-                        public void run() {
-                            calThread.mHandler.sendEmptyMessage(0x123);
-                            Log.i("zjx", "haha");
-                        }
-                    }, 500, 500);
+//                    if (calThread == null) {
+//                        calThread = new CalThread();
+//                        // 启动新线程
+//                        calThread.start();
+//                    }
+//                    if (timer == null) {
+//                        timer = new Timer();
+//                    }
+//                    timer.schedule(new TimerTask() {
+//
+//                        @Override
+//                        public void run() {
+//                            calThread.mHandler.sendEmptyMessage(0x123);
+//                            Log.i("zjx", "haha");
+//                        }
+//                    }, 500, 500);
                 } else {
 
                     for (int i = 0; i < midlist.size() - 1; i++) {

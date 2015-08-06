@@ -1,19 +1,46 @@
 package com.example.amap.util.rount;
 
-import android.util.Log;
+import android.content.Context;
+
+import com.example.amap.CustomApplcation;
+import com.example.amap.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2015/5/19.
+ * 静态内部类 懒汉单例
  */
 public class ShangeUtil {
+    private final int floorShange[] = {R.raw.b1shange, R.raw.f1shange, R.raw.f2shange};
+    private static class LazyHolder {
+        private static final ShangeUtil INSTANCE = new ShangeUtil();
+    }
+    private ShangeUtil(){
+        for(int i=0;i<=2;i++)
+       shapeList.add(getMap(i));
+    }
+    public static final ShangeUtil getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+    public int[] HIT = {1}; //设置哪些值代表为障碍物
     public final int SHANGESIZE =50;
-    public  int[][] getMap(InputStream inputStream){
+    private   List shapeList=new ArrayList();
+    private static Context context = CustomApplcation.getInstance();
+
+    public List getShapeList() {
+        return shapeList;
+    }
+
+    //静态工厂方法
+    public  int[][] getMap(int floor){
+        InputStream inputStream=this.context.getResources().openRawResource(floorShange[floor]);
         String all="";
         all=getString(inputStream);
         String as[]=all.split("\\s");

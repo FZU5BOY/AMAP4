@@ -13,12 +13,13 @@ public class LocationService extends Service {
     private AnalogLocation analogLocation=null;
     private boolean threadDisable=false;
     private final static String TAG=LocationService.class.getSimpleName();
-    private MyPoint lastMyPoint=null;
+//    private MyPoint lastMyPoint=null;
+    private AMapPoint lastAMapPoint=new AMapPoint();
     @Override
     public void onCreate() {
         super.onCreate();
 
-        analogLocation=new AnalogLocation(LocationService.this);
+        analogLocation=new AnalogLocation();
 
         new Thread(new Runnable(){
             @Override
@@ -33,12 +34,12 @@ public class LocationService extends Service {
                     if(analogLocation!=null){ //当结束服务时analogLocation为空
                         //获取经纬度
                         AMapPoint location=analogLocation.location();
-                        MyPoint newMyPoint=analogLocation.getMyPoint();
-//                        if(lastMyPoint!=null&&newMyPoint.equal(lastMyPoint)){
-//                            //什么都不做
-//                        }
-//                        else {
-                            lastMyPoint=newMyPoint;
+//                        MyPoint newMyPoint=analogLocation.getMyPoint();
+                        if(lastAMapPoint.equal(location)){
+                            //什么都不做
+                        }
+                        else {
+                            lastAMapPoint=location;
                             Log.i("zjx", location.toString());
                             //发送广播
                             Intent intent = new Intent();
@@ -50,7 +51,7 @@ public class LocationService extends Service {
                             intent.putExtra("adetail", location.getDetailAddress());
                             intent.setAction("com.example.amap.service.LocationService");
                             sendOrderedBroadcast(intent, null);
-//                        }
+                        }
                     }
 
                 }

@@ -1,20 +1,11 @@
 package com.example.amap.util.location;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
-import android.view.View;
 
 import com.esri.core.geometry.Point;
-import com.esri.core.map.Graphic;
-import com.esri.core.symbol.PictureMarkerSymbol;
-import com.example.amap.R;
+import com.example.amap.CustomApplcation;
 import com.example.amap.bean.AMapPoint;
-import com.example.amap.custom.MyToast;
 import com.example.amap.util.CommonUtils;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.util.rount.ShangeUtil;
@@ -26,9 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -37,24 +26,24 @@ import java.net.URLConnection;
  */
 public class AnalogLocation {
     private AMapPoint aMapPoint = new AMapPoint();
-    private Context context = null;
-    ShangeUtil su=new ShangeUtil();//栅格工具类
+    private static Context context = CustomApplcation.getInstance();
+    ShangeUtil su= ShangeUtil.getInstance();//栅格工具类
     private int LOCATION_OK = 1;
     private int LOCATION_NO_IN_MAP = 2;
     private int LOCATION_NET_ERROR = 3;
     private int LOCATION_LOCATION_IP_NOSET = 4;
     private int LOCATION_LOCATION_IP_ERROR = 5;
-    /**
-     * 初始化
-     *
-     * @param ctx
-     */
-    public AnalogLocation(Context ctx) {
-        context=ctx;
-//        locationManager=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-//        location = locationManager.getLastKnownLocation(getProvider());
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
-    }
+//    /**
+//     * 初始化
+//     *
+//     * @param ctx
+//     */
+//    public AnalogLocation(Context ctx) {
+//        context=ctx;
+////        locationManager=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+////        location = locationManager.getLastKnownLocation(getProvider());
+////        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+//    }
 
 //得到定位ip
 public String getLocationIP(){
@@ -125,15 +114,16 @@ public String getLocationIP(){
    public AMapPoint location()
     {
 //        String locateIp = readFileByBytes("ip.txt");
+        AMapPoint bMapPoint=new AMapPoint();
         String locateIp = getLocationIP();
         if(locateIp==null||"".equals(locateIp)){
-            aMapPoint.setState(LOCATION_LOCATION_IP_NOSET);
-            return aMapPoint;
+            bMapPoint.setState(LOCATION_LOCATION_IP_NOSET);
+            return bMapPoint;
         }
         boolean isNetConnected = CommonUtils.isNetworkAvailable(this.context);
         if(!isNetConnected){
-            aMapPoint.setState(LOCATION_NET_ERROR);
-            return aMapPoint;
+            bMapPoint.setState(LOCATION_NET_ERROR);
+            return bMapPoint;
         }
         String jsonresult="";
         try {
@@ -144,8 +134,8 @@ public String getLocationIP(){
             }
         }
         catch (Exception e){
-            aMapPoint.setState(LOCATION_LOCATION_IP_ERROR);
-            return aMapPoint;
+            bMapPoint.setState(LOCATION_LOCATION_IP_ERROR);
+            return bMapPoint;
         }
 
         try{
@@ -156,21 +146,21 @@ public String getLocationIP(){
             Point mapPoint = new Point(LocationToMapX(tempx),LocationToMapY(tempy));
             MyPoint locateMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()),tempz);
             if(locateMyPoint.x>=su.SHANGESIZE-1||locateMyPoint.x<0||locateMyPoint.y>=su.SHANGESIZE-1||locateMyPoint.x<0||locateMyPoint.z>2||locateMyPoint.z<0){
-                aMapPoint.setState(LOCATION_NO_IN_MAP);
-                return aMapPoint;
+                bMapPoint.setState(LOCATION_NO_IN_MAP);
+                return bMapPoint;
             }
-            aMapPoint.setState(LOCATION_OK);
-            aMapPoint.setX(tempx);
-            aMapPoint.setY(tempy);
-            aMapPoint.setZ(tempz);
+            bMapPoint.setState(LOCATION_OK);
+            bMapPoint.setX(tempx);
+            bMapPoint.setY(tempy);
+            bMapPoint.setZ(tempz);
         }
         catch (Exception e){
 
             Log.e("zjx", "e:" + e);
-            aMapPoint.setState(LOCATION_NO_IN_MAP);
-            return aMapPoint;
+            bMapPoint.setState(LOCATION_NO_IN_MAP);
+            return bMapPoint;
         }
-        return aMapPoint;
+        return bMapPoint;
     }
     public MyPoint getMyPoint(){
         Point mapPoint = new Point(LocationToMapX(aMapPoint.getX()),LocationToMapY(aMapPoint.getY()));
