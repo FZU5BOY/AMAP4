@@ -46,7 +46,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <org.com.cctest.view.XListView
+    <com.example.amap.view.xlist.XListView
         android:id="@+id/xListView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -57,7 +57,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:scrollbars="none" >
-    </org.com.cctest.view.XListView>
+    </com.example.amap.view.xlist.XListView>
 
     <RelativeLayout
         android:layout_width="match_parent"

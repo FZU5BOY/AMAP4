@@ -323,7 +323,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/xiangqing"
+                android:id="@+id/poiDet"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginBottom="14dp"

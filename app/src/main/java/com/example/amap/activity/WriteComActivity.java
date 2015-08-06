@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.example.amap.R;
 
-public class writeCommActivity extends Activity{  
+public class WriteComActivity extends Activity{  
   
     @Override  
     protected void onCreate(Bundle savedInstanceState) {  

@@ -149,6 +149,7 @@ public class MainActivity extends BaseActivity {
     Button font_middle;
     Button button_dingwei;
     Button shut_photo;
+    Button poiDetBtn;
     int floorShange[] = {R.raw.b1shange, R.raw.f1shange, R.raw.f2shange};
     Button clear;
     TextView dingwei;
@@ -256,6 +257,15 @@ public class MainActivity extends BaseActivity {
                 }
 
                 startActivityForResult(intent, 2);
+            }
+        });
+        //点击进入详情页
+        poiDetBtn = (Button) findViewById(R.id.poiDet);
+        poiDetBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i("zjx", "click to shop detail");
+                Intent intent = new Intent(MainActivity.this, XListViewActivity.class);
+                startActivity(intent);
             }
         });
         person = (RelativeLayout) findViewById(R.id.person);//个人中心

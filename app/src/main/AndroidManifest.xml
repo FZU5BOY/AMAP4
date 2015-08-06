@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.amap" >
+    package="com.example.amap">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,9 +18,9 @@
     <!-- Push SDK权限 -->
     <permission
         android:name="cn.bmob.permission.push"
-        android:protectionLevel="normal" >
-    </permission>
-    <uses-permission android:name="cn.bmob.permission.push" /> <!-- 添加自定义的权限 -->
+        android:protectionLevel="normal"></permission>
+    <uses-permission android:name="cn.bmob.permission.push" />
+    <!-- 添加自定义的权限 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -33,11 +33,9 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE"></uses-permission>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -45,18 +43,14 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.CAMERA" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 来电消音 -->
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"></uses-permission>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <!-- 这个权限用于进行网络定位-->
@@ -77,11 +71,11 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
     <application
-        android:allowBackup="true"
-        android:label="@string/app_name"
-        android:icon="@drawable/logo"
         android:name=".CustomApplcation"
-        android:theme="@style/AppTheme" >
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.NaviActivity"
             android:screenOrientation="portrait">
@@ -90,23 +84,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:icon="@drawable/logo"
-            android:screenOrientation="portrait"
+        <activity
             android:name=".activity.SplashScreen"
+            android:icon="@drawable/logo"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
                 <!--<category android:name="android.intent.category.LAUNCHER"/>-->
                 <!--<category android:name="android.intent.category.DEFAULT" />-->
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
+            android:configChanges="orientation|screenSize|uiMode"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize|uiMode" >
+            android:screenOrientation="portrait">
             <intent-filter>
-                <data android:scheme="http" android:host="zjx.com"  android:pathPrefix="/im" />
+                <data
+                    android:host="zjx.com"
+                    android:pathPrefix="/im"
+                    android:scheme="http" />
                 <action android:name="android.intent.action.VIEW" />
                 <!--<category android:name="android.intent.category.DEFAULT" />-->
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -115,33 +113,34 @@
         <activity
             android:name=".activity.SearchActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.MakeRoadActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.ToolsActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.FixedSearchActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.PersonActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.RegiActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
+
+        <!--shop comment-->
+        <activity
+            android:name=".activity.XListViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WriteComActivity"
+            android:screenOrientation="portrait" />
         <!--chat-->
         <activity
             android:name=".activity.UserMainActivity"
@@ -176,30 +175,30 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="aHfqFtmZN2787iQnxCVgDG4c" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" >
+            android:process=":remote">
             <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2" >
-                </action>
+                <action android:name="com.baidu.location.service_v2.2"></action>
             </intent-filter>
         </service>
-        <service  android:name=".service.LocationService" />
+        <service android:name=".service.LocationService" />
         <!-- IM聊天所需的Push start-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"
             android:exported="true"
             android:label="PushService"
             android:permission="cn.bmob.permission.push"
-            android:process="cn.bmob.push" >
+            android:process="cn.bmob.push">
             <intent-filter>
                 <action android:name="cn.bmob.push.lib.service.PushService" />
             </intent-filter>
         </service>
 
-        <receiver android:name="cn.bmob.push.PushReceiver" >
-            <intent-filter android:priority="2147483647" > <!-- 优先级加最高 -->
+        <receiver android:name="cn.bmob.push.PushReceiver">
+            <intent-filter android:priority="2147483647"> <!-- 优先级加最高 -->
                 <!-- 系统启动完成后会调用 -->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <!-- 解锁完成后会调用 -->
@@ -208,7 +207,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".MyMessageReceiver" >
+        <receiver android:name=".MyMessageReceiver">
             <intent-filter>
                 <action android:name="cn.bmob.push.action.MESSAGE" />
             </intent-filter>
@@ -219,7 +218,7 @@
         <!-- 启动定时检测操作 -->
         <service android:name="cn.bmob.im.poll.BmobPollService">
             <intent-filter>
-                <action android:name="cn.bmob.im.service.BmobPollService"/>
+                <action android:name="cn.bmob.im.service.BmobPollService" />
             </intent-filter>
         </service>
     </application>
