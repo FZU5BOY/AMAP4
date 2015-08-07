@@ -55,17 +55,16 @@ import com.example.amap.config.Config;
 import com.example.amap.custom.MyToast;
 import com.example.amap.R;
 import com.example.amap.service.LocationService;
+import com.example.amap.util.rount.HeuryCache;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.util.rount.Node;
 import com.example.amap.util.rount.PathFinding;
 import com.example.amap.util.rount.PoiSearch;
 import com.example.amap.util.rount.ShangeUtil;
 
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -117,6 +116,7 @@ public class MainActivity extends BaseActivity {
     MapView mMapView = null;//地图
     MapViewHelper mvHelper;//帮助类，某些操作更快捷
     ShangeUtil su = ShangeUtil.getInstance();//栅格工具类
+    HeuryCache heuryCache = HeuryCache.getInstance();//h 缓存
     Deque<List<Node>> paths = new ArrayDeque<>();//多点路径规划时用到
     Deque<Integer> pathId = new ArrayDeque<>();
     Deque<Integer> pointId = new ArrayDeque<>();
@@ -453,54 +453,54 @@ public class MainActivity extends BaseActivity {
         go_there.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("zjx", "go there");
-                mMapView.getCallout().hide();
-                endFeature = currentFeature;
-                endMyPoint = currentMyPoint;
-                PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-                Point poi = new Point((double) endFeature.getAttributeValue("pointX"), (double) endFeature.getAttributeValue("pointy"));
-                Graphic gp = new Graphic(poi, pic);
-                mGraphicsLayer[currentFloor].addGraphic(gp);
-                if (endMyPoint != null) {
-                    if (startMyPoint != null) {
-                        rountstart = (String) startFeature.getAttributeValue("nickname");
-                        rountend = (String) endFeature.getAttributeValue("nickname");
-                        clearMid();
-                        ClearTimeThread();
-                        ClearAllGraphic();
-                        MakePath mp = new MakePath(getApplicationContext());
-                        mp.execute(startMyPoint, endMyPoint);
-                        currentFloor = startMyPoint.z;
-                        showcurrentfloor();
-                        Point poi2 = new Point(startMyPoint.x * 20.0, -startMyPoint.y * 20.0);
-                        mMapView.centerAt(poi2, true);
-                        mMapView.setScale(7000.0);
-                    } else if (locateMyPoint != null) {
-                        rountstart = getResources().getString(R.string.mylocation);
-                        rountend = (String) endFeature.getAttributeValue("nickname");
-                        clearMid();
-                        ClearTimeThread();
-                        ClearAllGraphic();
-                        MakePath mp = new MakePath(getApplicationContext());
-                        mp.execute(locateMyPoint, endMyPoint);
-                        currentFloor = locateMyPoint.z;
-                        showcurrentfloor();
-                        Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-                        mMapView.centerAt(poi2, true);
-                        mMapView.setScale(7000.0);
-                        //注册广播
-                        receiver2 = new MyReceiver2();
-                        IntentFilter filter = new IntentFilter();
-                        filter.setPriority(20);
-                        filter.addAction("com.example.amap.service.LocationService");
-                        registerReceiver(receiver2, filter);
-                    }
-                }
+                goThere();
             }
         });
 
     }
-
+    private void goThere(){
+        Log.i("zjx", "go there");
+        mMapView.getCallout().hide();
+        endFeature = currentFeature;
+        endMyPoint = currentMyPoint;
+        PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
+        Point poi = new Point((double) endFeature.getAttributeValue("pointX"), (double) endFeature.getAttributeValue("pointy"));
+        Graphic gp = new Graphic(poi, pic);
+        mGraphicsLayer[currentFloor].addGraphic(gp);
+        if (endMyPoint != null) {
+            if (startMyPoint != null) {
+                rountstart = (String) startFeature.getAttributeValue("nickname");
+                rountend = (String) endFeature.getAttributeValue("nickname");
+                clearMid();
+                ClearAllGraphic();
+                MakePath mp = new MakePath(getApplicationContext());
+                mp.execute(startMyPoint, endMyPoint);
+                currentFloor = startMyPoint.z;
+                showcurrentfloor();
+                Point poi2 = new Point(startMyPoint.x * 20.0, -startMyPoint.y * 20.0);
+                mMapView.centerAt(poi2, true);
+                mMapView.setScale(7000.0);
+            } else if (locateMyPoint != null) {
+                rountstart = getResources().getString(R.string.mylocation);
+                rountend = (String) endFeature.getAttributeValue("nickname");
+                clearMid();
+                ClearAllGraphic();
+                MakePath mp = new MakePath(getApplicationContext());
+                mp.execute(locateMyPoint, endMyPoint);
+                currentFloor = locateMyPoint.z;
+                showcurrentfloor();
+                Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+                mMapView.centerAt(poi2, true);
+                mMapView.setScale(7000.0);
+                //注册广播
+                receiver2 = new MyReceiver2();
+                IntentFilter filter = new IntentFilter();
+                filter.setPriority(20);
+                filter.addAction("com.example.amap.service.LocationService");
+                registerReceiver(receiver2, filter);
+            }
+        }
+    }
     private void ShutPhoto(View v) {
         String result = "";
         boolean isshutok = false;
@@ -541,7 +541,6 @@ public class MainActivity extends BaseActivity {
 
         }
     }
-
     private void fromHere() {
         Log.i("zjx", "from here");
         mMapView.getCallout().hide();
@@ -554,7 +553,6 @@ public class MainActivity extends BaseActivity {
         //如果都非空可规划一条路径
         if (startMyPoint != null && endMyPoint != null) {
             clearMid();
-            ClearTimeThread();
             ClearAllGraphic();
             rountstart = (String) startFeature.getAttributeValue("nickname");
             rountend = (String) endFeature.getAttributeValue("nickname");
@@ -563,7 +561,6 @@ public class MainActivity extends BaseActivity {
 //					makePathAll(startMyPoint, endMyPoint);
         }
     }
-
     private class MyReceiver2 extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -640,7 +637,6 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
-
     //获取广播数据
     private class MyReceiver extends BroadcastReceiver {
         @Override
@@ -718,65 +714,8 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-
-//    //自定义线程类
-//    class CalThread extends Thread {
-//        private boolean stopRequested = false; // 状态变量，stop的一个替换
-//        public Handler mHandler;
-//
-//        public void run() {
-//            Looper.prepare();//保证每个线程最多只有一个looper对象
-//            mHandler = new Handler() {
-//                // 定义处理消息的方法
-//                @Override
-//                public void handleMessage(Message msg) {
-//                    if (!stopRequested) {
-//                        if (msg.what == 0x123) {
-//                            try {
-//                                URL ipurl = new URL(getLocationIP());
-//                                String result = GetJSONString(ipurl);
-////								Log.i("zjx", "result" + result);
-//                                int preresult = PreLocation(result);
-//
-//                                if (preresult != 0) {//0为原地不动
-////									locateMyPoint = null;//不能为null 用来与下一次的locateMyPoint2比较
-//                                    if (midPoints.size() == 0) {
-//                                        Log.i("zjx", "compelt");
-//                                        viewHandler.sendEmptyMessage(COMPLETEAAL);
-////										Thread.currentThread().interrupt();
-//                                        return;
-//                                    }
-////									else if(preresult==1){
-//                                    makePathAll(locateMyPoint, midPoints.getFirst(), false);
-////									}
-////									else{
-////									makePathAll(locateMyPoint, midPoints.getFirst(),false);}
-////									currentFloor = locateMyPoint.z;
-//                                    showcurrentfloor();
-//                                    Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-//                                    mMapView.centerAt(poi2, true);
-//                                    mMapView.setScale(7000.0);
-//                                }
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            };
-//            Looper.loop();
-//        }
-//
-//        public void stopRequest() {
-//            stopRequested = true;
-//            Thread.currentThread().interrupt();
-//        }
-//    }
-
     //上楼点击事件
     public void TurnUP(View source) {
-        Log.i("zjx", "click up");
         if (currentFloor + 1 >= allfloor) {
             Log.i("zjx", "tai gao le");
         } else {
@@ -790,7 +729,6 @@ public class MainActivity extends BaseActivity {
     //下楼点击事件
     public void TurnDown(View source) {
         if (currentFloor <= 0) {
-            Log.i("zjx", "tai di le");
         } else {
             viewHandler.sendEmptyMessage(HIDECALLOUTANDALLINFO);
             currentFloor -= 1;
@@ -915,7 +853,8 @@ public class MainActivity extends BaseActivity {
     //制作详细的路径 参数：起点 终点 操作楼层 是否第一次
     public void makePathDetail(MyPoint START_POS, MyPoint OBJECT_POS, int curfloor, boolean isfirst) {
         {
-            Date c = new Date();
+            ShowLog("启动寻路程序----");
+            Date datea = new Date();
             PathFinding astar = null;
             List<Node> mylist = new ArrayList<>();
             try {
@@ -926,14 +865,11 @@ public class MainActivity extends BaseActivity {
             }
             try {
                 //若第一次规划（异步任务时去做的） 添加节点和路径数据
+                ShowLog("开始寻路----");
+                Date dateb = new Date();
                 if (isfirst) {
                     midPoints.addLast(OBJECT_POS);
-                    Log.i("zjx2", "开始寻找路径");
-                    Date a = new Date();
                     mylist = astar.searchPath(START_POS, OBJECT_POS);
-                    Date b = new Date();
-                    Log.i("zjx2", "寻找路径成功，耗时" + (b.getTime() - a.getTime()) + "ms");
-                    Log.i("zjx2", "从加载map到寻路成功，耗时" + (b.getTime() - c.getTime()) + "ms");
                     paths.addLast(mylist);
                 }
                 //不是第一次规划
@@ -964,19 +900,28 @@ public class MainActivity extends BaseActivity {
                     else mylist = astar.searchPath(START_POS, OBJECT_POS);
 
                 }
-                Log.i("zjx", "midpoint.size" + midPoints.size());
+                Date datec = new Date();
+                ShowLog("寻找路径成功，耗时" + (datec.getTime() - dateb.getTime()) + "ms");
+                ShowLog("从加载map到寻路成功，耗时" + (datec.getTime() - datea.getTime()) + "ms");
+                ShowLog("midpoint.size:" + midPoints.size());
             } catch (Exception e) {
                 e.printStackTrace();
             }
             //mylist空的情况即路径规划失败，可能为无法到达的点
             if (mylist != null) {
                 Polyline polyline = new Polyline();
-                for (int i = 0; i < mylist.size(); i++) {
+                int ls=mylist.size();
+                for (int i = 0; i < ls; i++) {
                     Node aaa=mylist.get(i);
                     MyPoint pos = new MyPoint(aaa.X,aaa.Y);
                     Point p = new Point((pos.x * 20.0 + 10.0), -pos.y * 20.0 - 10.0);
                     if (i == 0) polyline.startPath(p);
                     else polyline.lineTo(p);
+                    //放入cache
+//                    if(i>8){
+//                        int len=ls-i-1;
+//                        heuryCache.hashMap.put(aaa.X*100+aaa.Y,len);
+//                    }
                 }
                 SimpleLineSymbol simpleLineSymbol = new SimpleLineSymbol(Color.argb(255, 255, 22, 34), 10, SimpleLineSymbol.STYLE.SOLID);
                 Graphic graphic1 = new Graphic(polyline, simpleLineSymbol);
@@ -1021,7 +966,6 @@ public class MainActivity extends BaseActivity {
         rountend = null;
         rountmid.clear();
         clearMid();
-        ClearTimeThread();
         ClearAllGraphic();
 
     }
@@ -1031,18 +975,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    //清除timer和线程
-    public void ClearTimeThread() {
-        Log.i("zjx", "ClearTimeThread");
-//        if (calThread != null) {
-//            calThread.stopRequest();//通过信号量去正确关闭thread
-//            calThread = null;
-//        }
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
 
     //清除绘制图层
     public void ClearAllGraphic() {
@@ -1111,80 +1043,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    //异步任务，定位
-    class Location extends AsyncTask<URL, Integer, String> {
-//		ProgressDialog pdialog;
-
-        Context mContext;
-
-        public Location(Context ctx) {
-            mContext = ctx;
-        }
-
-        @Override
-        protected String doInBackground(URL... params) {
-//			try {
-////			Thread.sleep(200);
-//		}
-//			catch (Exception e){
-//
-//			}
-            return GetJSONString(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            dingwei.setVisibility(View.INVISIBLE);
-            try {
-                JSONArray jsonArray = new JSONArray(result);
-//				Log.i("zjx","json:"+jsonArray.toString());
-
-                PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
-                Point mapPoint = new Point(LocationToMapX((double) jsonArray.get(0)), LocationToMapY((double) jsonArray.get(1)));
-
-                Graphic gp = new Graphic(mapPoint, pic);
-                int temp = (int) ((double) jsonArray.get(2) + 0.5);
-                locateMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), temp);
-                if (locateMyPoint.x >= su.SHANGESIZE - 1 || locateMyPoint.x < 0 || locateMyPoint.y >= su.SHANGESIZE - 1 || locateMyPoint.x < 0 || locateMyPoint.z > allfloor - 1 || locateMyPoint.z < 0) {
-                    MyToast.makeText(getApplicationContext(), R.string.location_error_local_inmap, 1.5).show();
-
-
-                    locateMyPoint = null;
-                    return;
-                }
-                if (temp != currentFloor) {
-                    currentFloor = temp;
-                    showcurrentfloor();
-                }
-                loactionGraphicsLayer.addGraphic(gp);
-                mMapView.centerAt(mapPoint, true);
-                mMapView.setScale(7000.0);
-                toast = MyToast.makeText(getApplicationContext(), R.string.location_success, 1.5);
-                toast.show();
-
-            } catch (Exception e) {
-//			Toast.makeText(getApplicationContext(), R.string.location_error, Toast.LENGTH_SHORT).show();
-                toast = MyToast.makeText(getApplicationContext(), R.string.location_error_url_unfind, 2.5);
-                toast.show();
-
-                Log.e("zjx", "e:" + e);
-            }
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            dingwei.setVisibility(View.VISIBLE);
-            locateMyPoint = null;
-            loactionGraphicsLayer.removeAll();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-//			pdialog.setProgress(values[0]);
-        }
-    }
 
     //连接定位接口并得到json
     public String GetJSONString(URL url) {
@@ -1207,80 +1065,6 @@ public class MainActivity extends BaseActivity {
         return null;
     }
 
-    //重新定位，用于实时路径规划
-    public int PreLocation(String result){
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            Log.i("zjx", "json:" + jsonArray.toString());
-            int temp = (int) ((double) jsonArray.get(2) + 0.5);
-            Point mapPoint = new Point(LocationToMapX((double) jsonArray.get(0)), LocationToMapY((double) jsonArray.get(1)));
-            MyPoint locateMyPoint2 = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), (int) ((double) jsonArray.get(2) + 0.5));
-            if (locateMyPoint2.equal(locateMyPoint)) {
-                Log.i("zjx", "还在该点");
-                return 0;//还在该点
-            }
-            if (temp != currentFloor) {//切换楼层
-                currentFloor = temp;
-                showcurrentfloor();
-            }
-            loactionGraphicsLayer.removeAll();
-            locateMyPoint = locateMyPoint2;
-            PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
-            Graphic gp = new Graphic(mapPoint, pic);
-            loactionGraphicsLayer.addGraphic(gp);
-            mMapView.centerAt(mapPoint, true);
-            mMapView.setScale(7000.0);
-            MyPoint mi = midPoints.getFirst();
-            if (mi != null) {//中间点还有
-                Log.i("zjx", "locateMyPoint:" + locateMyPoint.toString());
-                Log.i("zjx", "mi:" + mi.toString());
-                if (Math.abs(locateMyPoint.x - mi.x) <= OFFSET && Math.abs(locateMyPoint.y - mi.y) <= OFFSET && locateMyPoint.z == mi.z) {
-                    midPoints.removeFirst();
-                    pathId.removeFirst();
-                    paths.removeFirst();
-                    if (midPoints.size() == 0) {//则提示路径规划结束，定时器关闭
-                        Log.i("zjx", "COMPLETEAAL" + midPoints.size());
-//						viewHandler.sendEmptyMessage(COMPLETEAAL);
-                        //在这边关闭！
-//                        if (calThread != null) {
-//                            calThread.stopRequest();//通过信号量去正确关闭thread
-//                            calThread = null;
-//                        }
-//                        if (timer != null) {
-//                            timer.cancel();
-//                            timer = null;
-//                        }
-                        MyToast.makeText(getApplicationContext(), R.string.go_end_success, 1).show();
-
-                    } else {
-                        Log.i("zjx", "midPoints.size():" + midPoints.size());
-//						与之前定位的z不同,说明
-// 当前到达了电梯口，下一个点为不同楼层。那么按照z的大
-// 小比较提示上楼下楼，短时间之后，用户应该走到相应楼层
-// 	，实时定位得到对应地址，继续进行路径规划。
-                        if (locateMyPoint.z < midPoints.getFirst().z) {
-//							viewHandler.sendEmptyMessage(UPORDOWNFLOOR);
-
-                            MyToast.makeText(getApplicationContext(), R.string.up_floor_ing, 1).show();
-                        } else if (locateMyPoint.z > midPoints.getFirst().z) {
-//							viewHandler.sendEmptyMessage(UPORDOWNFLOOR);
-                            MyToast.makeText(getApplicationContext(), R.string.down_floor_ing, 1).show();
-                        }
-//						即到达了其中一个中转点，那么给	予用户良好的提示，并进行接下来的路径规划
-                        else
-                            MyToast.makeText(getApplicationContext(), R.string.go_mid_success, 1).show();
-
-                    }
-                    return 1;//到达第一个中转点
-                }
-            }
-            return 2;//正常规划
-
-        } catch (Exception e1) {
-            Log.i("zjx", e1.toString());
-        }
-        return 0;//默认不动
-    }
 
     //异步类，其实可被替代，用于初期的路径规划
     class MakePath extends AsyncTask<MyPoint, Integer, String> {
@@ -1370,13 +1154,7 @@ public class MainActivity extends BaseActivity {
 
     //展示当前地图，隐藏其他楼层地图
     private void showcurrentfloor() {
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
         viewHandler.sendEmptyMessage(SHOWCURRENTFLOOR);
-//			}
-//			}).start();
     }
 
     //初始化数据图层
@@ -1533,27 +1311,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    //得到定位ip
-    public String getLocationIP() {
-        final String FILE_NAME = "ip.txt";
-        FileInputStream fis = null;
-        try {
-            fis = openFileInput(FILE_NAME);
-            if (fis.available() == 0) {
-                return "";
-            }
-            byte[] readBytes = new byte[fis.available()];
-            while (fis.read(readBytes) != -1) {
-            }
-            String text = new String(readBytes);
-            return text;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

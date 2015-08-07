@@ -1,6 +1,7 @@
 package com.example.amap.util.rount;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.amap.CustomApplcation;
 import com.example.amap.R;
@@ -23,6 +24,7 @@ public class ShangeUtil {
         private static final ShangeUtil INSTANCE = new ShangeUtil();
     }
     private ShangeUtil(){
+        Log.i("zjx","start to init");
         for(int i=0;i<=2;i++)
        shapeList.add(getMap(i));
     }

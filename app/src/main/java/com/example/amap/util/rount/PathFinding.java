@@ -1,5 +1,7 @@
 package com.example.amap.util.rount;
 
+import android.util.Log;
+
 import org.codehaus.jackson.map.util.LRUMap;
 
 import java.util.LinkedList;
@@ -17,6 +19,7 @@ public class PathFinding {
     private Node endNode=null;
     private final int isOpened =2;
     private final int isClosed =3;
+    HeuryCache heuryCache=HeuryCache.getInstance();
 //    LRUMap a =new LRUMap(2,4);
 
     private ShangeUtil su= ShangeUtil.getInstance();
@@ -49,6 +52,7 @@ public class PathFinding {
 //        initMap();
 
         openListInsert(startNode, 0, null);
+        int st=10;
         while (heapSize != 0)
         {
             // remove the initialized component
@@ -67,7 +71,9 @@ public class PathFinding {
                 // get the mobile area of firstNode
                 LinkedList _limit = firstNode.getLimit();
                 // visit
+
                 for (int i = 0; i < _limit.size(); i++){
+                    st=(i%2==1?14:10);
                     //get the adjacent node
                     Node neighborNode = (Node) _limit.get(i);
 //                    int OpenIndex =openedList.indexOf(neighborNode);
@@ -80,10 +86,10 @@ public class PathFinding {
 //                 if(isClosed||isHit)...else
                     if (!isClosed && !isHit) {
                         if(!isOpen){
-                            openListInsert(neighborNode, firstNode.g+1, firstNode);
+                            openListInsert(neighborNode, firstNode.g+st, firstNode);
                         }
                         else{
-                            int tmpG = firstNode.g+1;
+                            int tmpG = firstNode.g+st;
                             if (this.nodes[neighborNode.X][neighborNode.Y].g > tmpG) {
                                 this.nodes[neighborNode.X][neighborNode.Y].setG(tmpG);
                                 this.nodes[neighborNode.X][neighborNode.Y]._parentnode = firstNode;
@@ -148,23 +154,10 @@ public class PathFinding {
         }
         return false;
     }
-//    private class OpenedList extends LinkedList{
-//        private static final long serialVersionUID = 1L;
-//        public void add(Node node)
-//        {
-//            for(int i=0;i<size();i++)
-//            {
-//                if(node.compareTo(get(i))<=0)
-//                {
-//                    add(i,node);
-//                    return;
-//                }
-//            }
-//            addLast(node);
-//        }
-//    }
     public void openListInsert(Node a, int g, Node parent) {
-        this.nodes[a.X][a.Y] = new Node(a.X, a.Y, g, a.GetCost(endNode));
+//        Integer cacheH=heuryCache.hashMap.get(a.X*100+a.Y);
+//        Log.i("zjx","cacheH:"+cacheH);
+        this.nodes[a.X][a.Y] = new Node(a.X, a.Y, g,a.GetCost(endNode));
         this.nodes[a.X][a.Y]._parentnode = parent;
         heapInsert(this.nodes[a.X][a.Y]);
         this._mapToOC[a.Y][a.X] = isOpened;

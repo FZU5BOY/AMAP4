@@ -48,7 +48,7 @@ public Node _parentnode;
 //  int d2=4*(int)(Math.sqrt(2)*min)+3*(max-min);
 //  int d2=4*min+3*(max-min);
 //  return m+n;
-  return m+n;
+  return 10*(m+n);
  }
  //check if the node is the destination point
  public boolean equals(Object node)
@@ -59,18 +59,6 @@ public Node _parentnode;
   }
    return false;
  }
- //get the minist cost
-// public int compareTo(Object node)
-// {
-//  int a1=sourcePoint+destiPoint;
-//  int a2=((Node)node).sourcePoint+((Node)node).destiPoint;
-//  if(a1<a2){
-//   return -1;
-//  }else if(a1==a2)
-//  {return 0;}
-//  else return 1;
-//
-// }
  public LinkedList getLimit()
  {
   LinkedList limit=new LinkedList();
