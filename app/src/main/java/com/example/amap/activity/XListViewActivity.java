@@ -62,7 +62,15 @@ public class XListViewActivity extends Activity implements IXListViewListener {
         btn1.setTypeface(icons);
         btn2.setTypeface(icons);
         btn3.setTypeface(icons);
-
+//        back to index
+        Button btnGoBack = (Button) findViewById(R.id.detail_GoBack);
+        btnGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(XListViewActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
         btn2.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -202,7 +210,7 @@ public class XListViewActivity extends Activity implements IXListViewListener {
             TextView user = (TextView) convertView.findViewById(R.id.username);
             TextView time = (TextView) convertView.findViewById(R.id.comm_time);
             TextView content = (TextView) convertView.findViewById(R.id.comm_content);
-            int resID = getResources().getIdentifier(listItem.get(position).get("avatar").toString(), "drawable", "org.com.cctest");
+            int resID = getResources().getIdentifier(listItem.get(position).get("avatar").toString(), "drawable", "com.example.amap");
             avatar.setImageResource(resID);
             stars.setRating((float) Integer.parseInt(listItem.get(position).get("stars").toString()));
             user.setText(listItem.get(position).get("username").toString());

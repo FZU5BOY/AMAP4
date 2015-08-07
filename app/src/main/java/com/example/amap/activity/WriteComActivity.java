@@ -25,6 +25,15 @@ public class WriteComActivity extends Activity{
                 startActivity(intent);
             }
         });
+        Button btnCancel = (Button) findViewById(R.id.cancel_comm);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("zjx", "comment canceled,back to shop detail");
+                Intent intent = new Intent(WriteComActivity.this, XListViewActivity.class);
+                startActivity(intent);
+            }
+        });
     }  
       
 } 
