@@ -19,6 +19,8 @@ public class PathFinding {
     private Node endNode=null;
     private final int isOpened =2;
     private final int isClosed =3;
+    private int MINN=100000000;
+    private Node MinNode;
     HeuryCache heuryCache=HeuryCache.getInstance();
 //    LRUMap a =new LRUMap(2,4);
 
@@ -63,7 +65,8 @@ public class PathFinding {
             if (firstNode.X==destiPos.x&&firstNode.Y==destiPos.y) {
                 //
                 return makePath(firstNode);
-            } else {
+            }
+            else {
                 //
                 // add to the closedList
                 closedList.add(firstNode);
@@ -99,7 +102,14 @@ public class PathFinding {
                     }
                 }
             }
+            int FM=Math.abs(firstNode.X-destiPos.x)+Math.abs(firstNode.Y-destiPos.y);
+            if (FM<MINN) {
+                //
+                MinNode=firstNode;
+                MINN=FM;
+            }
         }
+        if(closedList.size()>500)return makePath(MinNode);
         closedList.clear();
         //
         return  null;
