@@ -141,6 +141,10 @@
         <activity
             android:name=".activity.WriteComActivity"
             android:screenOrientation="portrait" />
+        <!--FullSetWayActivity  推荐路线-->
+        <activity
+            android:name=".activity.FullSetWayActivity"
+            android:screenOrientation="portrait" />
         <!--chat-->
         <activity
             android:name=".activity.UserMainActivity"

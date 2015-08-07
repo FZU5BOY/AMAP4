@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/fsw_header"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="top"
+        android:background="#ff00a0e9" />
+
+    <Button
+        android:id="@+id/fsw_GoBack"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/iconfont_zuojiantou" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fsw_header"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="推荐路线"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="21sp" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/fsw_header"
+        android:layout_marginTop="0dp"
+        android:background="#ffe2e2e2"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/selector05"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw01"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:background="@color/transparency"/>
+
+                <TextView
+                    android:id="@+id/fsw_m01"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw01"
+                    android:layout_alignLeft="@+id/fsw01"
+                    android:layout_alignStart="@id/fsw01"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m01"
+                    android:layout_toRightOf="@+id/fsw_m01"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw02"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m02"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw02"
+                    android:layout_alignLeft="@+id/fsw02"
+                    android:layout_alignStart="@id/fsw02"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m02"
+                    android:layout_toRightOf="@+id/fsw_m02"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw03"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m03"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw03"
+                    android:layout_alignLeft="@+id/fsw03"
+                    android:layout_alignStart="@id/fsw03"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m03"
+                    android:layout_toRightOf="@+id/fsw_m03"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw04"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m04"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw04"
+                    android:layout_alignLeft="@+id/fsw04"
+                    android:layout_alignStart="@id/fsw04"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m04"
+                    android:layout_toRightOf="@+id/fsw_m04"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw05"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m05"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw05"
+                    android:layout_alignLeft="@+id/fsw05"
+                    android:layout_alignStart="@id/fsw05"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t05"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m05"
+                    android:layout_toRightOf="@+id/fsw_m05"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw06"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m06"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw06"
+                    android:layout_alignLeft="@+id/fsw06"
+                    android:layout_alignStart="@id/fsw06"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t06"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m06"
+                    android:layout_toRightOf="@+id/fsw_m06"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw07"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m07"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw07"
+                    android:layout_alignLeft="@+id/fsw07"
+                    android:layout_alignStart="@id/fsw07"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t07"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m07"
+                    android:layout_toRightOf="@+id/fsw_m07"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:onClick="true">
+
+                <Button
+                    android:id="@+id/fsw08"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/selector05"
+                    android:elevation="0dp"
+                    android:gravity="left"
+                    android:onClick="true"
+                    android:paddingLeft="60dp"
+                    android:paddingTop="5dp"
+                    android:text="登机流程"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/fsw_m08"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@+id/fsw08"
+                    android:layout_alignLeft="@+id/fsw08"
+                    android:layout_alignStart="@id/fsw08"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/iconfont_exit"
+                    android:elevation="10dp"
+                    android:onClick="false" />
+
+
+                <TextView
+                    android:id="@+id/fsw_t08"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="23dp"
+                    android:layout_toEndOf="@+id/fsw_m08"
+                    android:layout_toRightOf="@+id/fsw_m08"
+                    android:elevation="10dp"
+                    android:onClick="false"
+                    android:text="@string/abroading"
+                    android:textSize="13sp" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

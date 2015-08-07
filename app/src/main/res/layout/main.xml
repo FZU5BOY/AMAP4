@@ -428,5 +428,47 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_alignBottom="@+id/button_dingwei"
+        android:orientation="vertical"
+        android:layout_alignRight="@+id/search_main"
+        android:background="@drawable/shapesolid02"
+        android:id="@+id/zoomlinearlayout">
+
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/bigger_map"
+            android:layout_weight="1"
+            android:background="@drawable/map_zoom_big" />
+
+        <View
+            android:layout_width="32dp"
+            android:layout_height="0.6dp"
+            android:background="#d3e3e3" />
+
+        <Button
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/smaller_map"
+            android:layout_weight="1"
+            android:background="@drawable/map_zoom_small" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="32dp"
+        android:text="20m"
+        android:id="@+id/scale_map_num"
+        android:layout_alignBottom="@+id/button_dingwei"
+        android:layout_toEndOf="@id/button_dingwei"
+        android:layout_toRightOf="@id/button_dingwei"
+        android:gravity="top|center_horizontal"
+        android:textSize="15sp"
+        android:background="@drawable/scale_map" />
+
 
 </RelativeLayout>

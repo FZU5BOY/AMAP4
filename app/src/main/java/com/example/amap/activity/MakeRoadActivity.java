@@ -48,6 +48,15 @@ public class MakeRoadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.make_road);
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+//        fullSetWay page
+        Button fullSetWayBtn =(Button) findViewById(R.id.fullSetWay);
+        fullSetWayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MakeRoadActivity.this, FullSetWayActivity.class);
+                startActivity(intent);
+            }
+        });
         Button btn = (Button)findViewById(R.id.makeRoad_GoBack);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
