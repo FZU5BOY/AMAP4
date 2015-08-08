@@ -327,15 +327,16 @@
 
     <TextView
         android:id="@+id/scale_map_num"
-        android:layout_width="60dp"
-        android:layout_height="32dp"
+        android:layout_width="30dp"
+        android:layout_height="22dp"
         android:layout_alignBottom="@+id/button_dingwei"
         android:layout_toEndOf="@id/button_dingwei"
         android:layout_toRightOf="@id/button_dingwei"
         android:background="@drawable/scale_map"
         android:gravity="top|center_horizontal"
         android:text="20m"
-        android:textSize="15sp" />
+        android:textSize="12sp"
+        android:layout_marginLeft="8dp" />
 
     <RelativeLayout
         android:id="@+id/allinfo"

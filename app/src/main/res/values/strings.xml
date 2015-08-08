@@ -145,4 +145,9 @@
     <string name="comm_time">7月29日</string>
     <string name="comm_content">五星级厕所！！！</string>
     <string name="abroading">包含咨询处（换登机牌、托运行李等）、安检、商店（可能需要购物）、登机口（根据你的情况选择）等</string>
+    <string name="farewell">包含咨询处（换登机牌、托运行李等）、安检、商店（可能需要购物）、出入口（根据你的情况选择，离开机场）等</string>
+    <string name="spacial_shop">包含当地的特产商店 S17、S27、S32、S39、S24、</string>
+    <string name="fashion_shop">包含时尚时装和饰品等商店 S17、S27、S32、S39、S24、</string>
+    <string name="food_shop">包含美食商店 S17、S27、S32、S39、S24、一条龙让你吃个够</string>
+    <string name="waiting_shop">敬请期待</string>
 </resources>

@@ -66,7 +66,7 @@
                     android:layout_gravity="center_horizontal"
                     android:elevation="0dp"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
                     android:text="登机流程"
@@ -76,14 +76,14 @@
 
                 <TextView
                     android:id="@+id/fsw_m01"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw01"
                     android:layout_alignLeft="@+id/fsw01"
                     android:layout_alignStart="@id/fsw01"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -107,35 +107,36 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw02"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
+                    android:background="@color/transparency"
                     android:elevation="0dp"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="送别"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m02"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw02"
                     android:layout_alignLeft="@+id/fsw02"
                     android:layout_alignStart="@id/fsw02"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -151,42 +152,43 @@
                     android:layout_toRightOf="@+id/fsw_m02"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/farewell"
                     android:textSize="13sp" />
 
 
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw03"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
                     android:elevation="0dp"
+                    android:background="@color/transparency"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="特产商店"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m03"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw03"
                     android:layout_alignLeft="@+id/fsw03"
                     android:layout_alignStart="@id/fsw03"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -202,42 +204,43 @@
                     android:layout_toRightOf="@+id/fsw_m03"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/spacial_shop"
                     android:textSize="13sp" />
 
 
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw04"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
                     android:elevation="0dp"
+                    android:background="@color/transparency"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="时尚购物"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m04"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw04"
                     android:layout_alignLeft="@+id/fsw04"
                     android:layout_alignStart="@id/fsw04"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -253,42 +256,43 @@
                     android:layout_toRightOf="@+id/fsw_m04"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/fashion_shop"
                     android:textSize="13sp" />
 
 
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw05"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
                     android:elevation="0dp"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
+                    android:background="@color/transparency"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="美食一条龙"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m05"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw05"
                     android:layout_alignLeft="@+id/fsw05"
                     android:layout_alignStart="@id/fsw05"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -304,42 +308,43 @@
                     android:layout_toRightOf="@+id/fsw_m05"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/food_shop"
                     android:textSize="13sp" />
 
 
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw06"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
                     android:elevation="0dp"
+                    android:background="@color/transparency"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="生活服务"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m06"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw06"
                     android:layout_alignLeft="@+id/fsw06"
                     android:layout_alignStart="@id/fsw06"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -355,42 +360,43 @@
                     android:layout_toRightOf="@+id/fsw_m06"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/waiting_shop"
                     android:textSize="13sp" />
 
 
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw07"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
+                    android:background="@color/transparency"
                     android:elevation="0dp"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="潮流达人"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m07"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw07"
                     android:layout_alignLeft="@+id/fsw07"
                     android:layout_alignStart="@id/fsw07"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -406,42 +412,43 @@
                     android:layout_toRightOf="@+id/fsw_m07"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/waiting_shop"
                     android:textSize="13sp" />
 
 
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:onClick="true">
+                android:onClick="true"
+                android:background="@drawable/selector05">
 
                 <Button
                     android:id="@+id/fsw08"
                     android:layout_width="match_parent"
                     android:layout_height="66dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/selector05"
                     android:elevation="0dp"
                     android:gravity="left"
-                    android:onClick="true"
+                    android:background="@color/transparency"
+                    android:onClick="false"
                     android:paddingLeft="60dp"
                     android:paddingTop="5dp"
-                    android:text="登机流程"
+                    android:text="娱乐至上"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/fsw_m08"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignBottom="@+id/fsw08"
                     android:layout_alignLeft="@+id/fsw08"
                     android:layout_alignStart="@id/fsw08"
                     android:layout_marginBottom="35dp"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/iconfont_exit"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/iconfont_xingjijiage"
                     android:elevation="10dp"
                     android:onClick="false" />
 
@@ -457,7 +464,7 @@
                     android:layout_toRightOf="@+id/fsw_m08"
                     android:elevation="10dp"
                     android:onClick="false"
-                    android:text="@string/abroading"
+                    android:text="@string/waiting_shop"
                     android:textSize="13sp" />
 
 

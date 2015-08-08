@@ -45,15 +45,15 @@ public class ToolsActivity extends FragmentActivity {
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tools);
-//        mSharedUtil = mApplication.getSpUtil();
-//        Button btn = (Button) findViewById(R.id.makeRoad_GoBack);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ToolsActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        Button btn = (Button) findViewById(R.id.makeRoad_GoBack);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ToolsActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        //        mSharedUtil = mApplication.getSpUtil();
 //        Button changeIp = (Button) findViewById(R.id.button15);
 //        changeIp.setOnClickListener(new View.OnClickListener() {
 //            @Override
