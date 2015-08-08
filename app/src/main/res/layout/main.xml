@@ -13,7 +13,7 @@
             initExtent="-13042576 3854531 -13026007 3870439"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true">
+            >
 
         </com.esri.android.map.MapView>
 
@@ -334,7 +334,7 @@
         android:layout_toRightOf="@id/button_dingwei"
         android:background="@drawable/scale_map"
         android:gravity="top|center_horizontal"
-        android:text="20m"
+        android:text="50m"
         android:textSize="12sp"
         android:layout_marginLeft="8dp" />
 

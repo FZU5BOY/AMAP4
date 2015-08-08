@@ -37,6 +37,7 @@ import com.esri.android.map.MapOnTouchListener;
 import com.esri.android.map.MapView;
 import com.esri.android.map.TiledLayer;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
+import com.esri.android.map.event.OnZoomListener;
 import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.android.toolkit.map.MapViewHelper;
 import com.esri.core.geodatabase.Geodatabase;
@@ -95,6 +96,7 @@ public class MainActivity extends BaseActivity {
     final int LOCATION_CLOST = 17;
     final int LOCATION_ING = 18;
     final int MAKE_PATH_ALL = 19;
+    final int UPDATESCALE = 20;
     private final int LOCATION_OK = 1;
     private final int LOCATION_NO_IN_MAP = 2;
     private final int LOCATION_NET_ERROR = 3;
@@ -148,11 +150,11 @@ public class MainActivity extends BaseActivity {
     Button font_down;
     Button font_middle;
     Button button_dingwei;
-    Button shut_photo;
+    Button shut_photo,bigger_map,smaller_map;
     Button poiDetBtn;
     int floorShange[] = {R.raw.b1shange, R.raw.f1shange, R.raw.f2shange};
     Button clear;
-    TextView dingwei;
+    TextView dingwei,scaleText;
     RelativeLayout allinfo;
     LinearLayout from_here;
     LinearLayout go_there;
@@ -216,7 +218,23 @@ public class MainActivity extends BaseActivity {
         dingwei = (TextView) findViewById(R.id.dingwei);
         button_dingwei = (Button) findViewById(R.id.button_dingwei);
         mMapView.setOnTouchListener(new TouchListener(MainActivity.this, mMapView));
+        mMapView.setOnZoomListener(new OnZoomListener() {
+                //缩放之前自动调用的方法
+                @Override
+                public void preAction(float pivotX, float pivotY, double factor) {
+                    ShowLog("pre action");
+                }
+                //缩放之后自动调用的方法
+                @Override
+                public void postAction(float pivotX, float pivotY, double factor) {
+                    ShowLog("post action");
+                    viewHandler.sendEmptyMessage(UPDATESCALE);
+                }
+        });
         clear = (Button) findViewById(R.id.button_clear);
+        mMapView.setMaxScale(6500);//1：6500
+        mMapView.setMinScale(20000.0);//1：20000
+        mMapView.centerAt(new Point(500.0, -500.0), false);//
         search_main = (Button) findViewById(R.id.search_main);//进入搜索
         search_main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +244,21 @@ public class MainActivity extends BaseActivity {
                 startActivityForResult(intent, 0);
             }
         });
-
+        scaleText = (TextView)findViewById(R.id.scale_map_num);
+        bigger_map =(Button) findViewById(R.id.bigger_map);
+        smaller_map=(Button)findViewById(R.id.smaller_map);
+        bigger_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMapView.zoomin();
+            }
+        });
+        smaller_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMapView.zoomout();
+            }
+        });
         fixed = (RelativeLayout) findViewById(R.id.fixed);//寻找附近
         fixed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,12 +470,18 @@ public class MainActivity extends BaseActivity {
                         loactionGraphicsLayer.addGraphic(gp);
                         mMapView.centerAt(mapPoint, true);
                         mMapView.setScale(7000.0);
+//                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         break;
                     case UPDATEGP:
                         mGraphicsLayer[main_fl].addGraphic(main_gp);
                         break;
                     case MAKE_PATH_ALL:
                         makePathAll(locateMyPoint, midPoints.getFirst(), false);
+                        break;
+                    case UPDATESCALE:
+                        int relScale=(int) ((mMapView.getScale()+1.0)/400.0);
+                        scaleText.setText(relScale+"m");
+                        break;
                     default:
                         break;
                 }
@@ -480,6 +518,7 @@ public class MainActivity extends BaseActivity {
                 Point poi2 = new Point(startMyPoint.x * 20.0, -startMyPoint.y * 20.0);
                 mMapView.centerAt(poi2, true);
                 mMapView.setScale(7000.0);
+//                viewHandler.sendEmptyMessage(UPDATESCALE);
             } else if (locateMyPoint != null) {
                 rountstart = getResources().getString(R.string.mylocation);
                 rountend = (String) endFeature.getAttributeValue("nickname");
@@ -492,6 +531,7 @@ public class MainActivity extends BaseActivity {
                 Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                 mMapView.centerAt(poi2, true);
                 mMapView.setScale(7000.0);
+//                viewHandler.sendEmptyMessage(UPDATESCALE);
                 //注册广播
                 receiver2 = new MyReceiver2();
                 IntentFilter filter = new IntentFilter();
@@ -1185,7 +1225,6 @@ public class MainActivity extends BaseActivity {
     //监听
     class TouchListener extends MapOnTouchListener {
 
-
         @Override
         public void onLongPress(MotionEvent point) {
             // Our long press will clear the screen
@@ -1225,6 +1264,7 @@ public class MainActivity extends BaseActivity {
                                 Point poi = new Point((double) g.getAttributeValue("pointX"), (double) g.getAttributeValue("pointy"));
                                 mMapView.centerAt(poi, true);
                                 mMapView.setScale(7000.0);
+//                                viewHandler.sendEmptyMessage(UPDATESCALE);
                                 updateContent(R.drawable.ic_1, g.getAttributeValue("nickname").toString());
                                 Callout mapCallout = mMapView.getCallout();
                                 mapCallout.setCoordinates(poi);
@@ -1250,6 +1290,7 @@ public class MainActivity extends BaseActivity {
         public boolean onDoubleTap(MotionEvent point) {
 
             mMapView.zoomin();
+            ShowLog("scale:" + mMapView.getScale());
             return true;
         }
 
@@ -1257,7 +1298,6 @@ public class MainActivity extends BaseActivity {
             super(context, view);
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -1379,6 +1419,7 @@ public class MainActivity extends BaseActivity {
                     if (feature != null) {
                         mMapView.centerAt(poi, true);
                         mMapView.setScale(7000.0);
+//                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         //个人感觉搜索还是不要显示的好
                         TextView text = (TextView) findViewById(R.id.poiname);
                         text.setText(feature.getAttributeValue("nickname").toString());
@@ -1451,6 +1492,7 @@ public class MainActivity extends BaseActivity {
                     Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                     mMapView.centerAt(poi2, true);
                     mMapView.setScale(7000.0);
+//                    viewHandler.sendEmptyMessage(UPDATESCALE);
 //                    if (calThread == null) {
 //                        calThread = new CalThread();
 //                        // 启动新线程
@@ -1499,6 +1541,7 @@ public class MainActivity extends BaseActivity {
                     viewHandler.sendEmptyMessage(UPDATEGP);
                     mMapView.centerAt(poi2, true);
                     mMapView.setScale(7000.0);
+//                    viewHandler.sendEmptyMessage(UPDATESCALE);
                 }
 
             } else {
@@ -1559,6 +1602,7 @@ public class MainActivity extends BaseActivity {
                         Graphic gp = new Graphic(poi, pic);
                         mMapView.centerAt(poi, true);
                         mMapView.setScale(7000.0);
+//                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         mGraphicsLayer[currentFloor].updateGraphic(minpid, gp);
                         TextView text = (TextView) findViewById(R.id.poiname);
                         text.setText(mfeature.getAttributeValue("nickname").toString());
