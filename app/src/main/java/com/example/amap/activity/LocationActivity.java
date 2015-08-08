@@ -1,36 +1,34 @@
 package com.example.amap.activity;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import cn.bmob.im.util.BmobLog;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationConfigeration;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import cn.bmob.im.util.BmobLog;
+import com.esri.android.map.FeatureLayer;
+import com.esri.android.map.GraphicsLayer;
+import com.esri.android.map.MapView;
+import com.esri.android.map.TiledLayer;
+import com.esri.android.map.ags.ArcGISLocalTiledLayer;
+import com.esri.android.toolkit.map.MapViewHelper;
+import com.esri.core.geometry.Point;
+import com.esri.core.map.Graphic;
+import com.esri.core.symbol.PictureMarkerSymbol;
 import com.example.amap.R;
+import com.example.amap.service.LocationService;
+import com.example.amap.util.rount.MyPoint;
 import com.example.amap.view.HeaderLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用于发送位置的界面
@@ -40,45 +38,201 @@ import com.example.amap.view.HeaderLayout;
  * @author smile
  * @date 2014-6-23 下午3:17:05
  */
-public class LocationActivity extends BaseActivity implements
-		OnGetGeoCoderResultListener {
-
+	public class LocationActivity extends BaseActivity  {
 	// 定位相关
-	LocationClient mLocClient;
-	public MyLocationListenner myListener = new MyLocationListenner();
-	BitmapDescriptor mCurrentMarker;
+	private final int LOCATION_OK = 1;
+	private final int LOCATION_NO_IN_MAP = 2;
+	private final int LOCATION_NET_ERROR = 3;
+	private final int LOCATION_LOCATION_IP_NOSET = 4;
+	private final int LOCATION_LOCATION_IP_ERROR = 5;
+	MapView mMapView ;
+	MyReceiver receiver;
+	private static Handler viewHandler;//用于更新UI
+	MapViewHelper mvHelper;//帮助类，某些操作更快捷
+	final  int SHOWCURRENTFLOOR = 11;
+	final int allfloor =3 ;
+	private boolean service_is_run =false;
+	public static MyPoint locateMyPoint = null;//当前定位地址
+	final String extern = Environment.getExternalStorageDirectory().getPath();
+	//tpk文件地址
+	final String tpkPath[] = {"/arcgis/b1/b1.tpk", "/arcgis/f1/f1.tpk", "/arcgis/f2/f2.tpk"};
+	//geo文件地址
+	public static final String GEO_FILENAME[] =
+			{"/arcgis/b1/data/b1.geodatabase", "/arcgis/f1/data/f1.geodatabase", "/arcgis/f2/data/f2.geodatabase"};
+	int currentFloor = 1;//当前楼层 默认F1
+	String geofilename[] = {extern + GEO_FILENAME[0], extern + GEO_FILENAME[1], extern + GEO_FILENAME[2]};
+	String floorname[] = {"B1", "F1", "F2"};
+	List<TiledLayer> mTileLayers = new ArrayList<>();
+	GraphicsLayer loactionGraphicsLayer = new GraphicsLayer();
+	static List<FeatureLayer> featureLayers = new ArrayList<>();
+	//Point，MyPoint,Location转换
+	public int MapToMyPointX(Object x) {
+		return (int) ((double) x / 20.0);
+	}
 
-	MapView mMapView;
-	BaiduMap mBaiduMap;
+	public int MapToMyPointY(Object y) {
+		return (int) (-(double) y / 20.0);
+	}
 
-	private BaiduReceiver mReceiver;// 注册广播接收器，用于监听网络以及验证key
+	public double LocationToMapX(double x) {
+		return x * 1000.0;
+	}
 
-	GeoCoder mSearch = null; // 搜索模块，因为百度定位sdk能够得到经纬度，但是却无法得到具体的详细地址，因此需要采取反编码方式去搜索此经纬度代表的地址
-
-	static BDLocation lastLocation = null;
-
-	BitmapDescriptor bdgeo = BitmapDescriptorFactory.fromResource(R.drawable.icon_geo);
+	public double LocationToMapY(double y) {
+		return (y - 1.0) * 1000.0;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_location);
-		initBaiduMap();
+		viewHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				switch (msg.what) {
+					case SHOWCURRENTFLOOR:
+						for (int i = 0; i < allfloor; i++) {
+							if (i != currentFloor) {
+								mMapView.getLayer(i ).setVisible(false);
+							} else {
+								mMapView.getLayer(i).setVisible(true);
+							}
+						}
+						if (locateMyPoint != null) {
+							if (locateMyPoint.z != currentFloor)
+								loactionGraphicsLayer.setVisible(false);
+							else loactionGraphicsLayer.setVisible(true);
+						}
+						break;
+					case LOCATION_NET_ERROR:
+						ShowToast(R.string.location_error_net_tips);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_LOCATION_IP_ERROR:
+						ShowToast(R.string.location_error_url_unfind);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_LOCATION_IP_NOSET:
+						ShowToast(R.string.location_error_url_no_set);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_NO_IN_MAP:
+						ShowToast(R.string.location_error_local_inmap);
+						locateMyPoint = null;
+						loactionGraphicsLayer.removeAll();
+						break;
+					case LOCATION_OK:
+						loactionGraphicsLayer.removeAll();
+						Bundle bundle = msg.getData();
+						double ax = bundle.getDouble("ax");
+						double ay = bundle.getDouble("ay");
+						int az = bundle.getInt("az");
+						PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
+						Point mapPoint = new Point(LocationToMapX(ax), LocationToMapY(ay));
+						Graphic gp = new Graphic(mapPoint, pic);
+						MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), az);
+						locateMyPoint = newMyPoint;
+						if (az != currentFloor) {
+							currentFloor = az;
+							showcurrentfloor();
+						}
+						loactionGraphicsLayer.addGraphic(gp);
+						mMapView.centerAt(mapPoint, true);
+						mMapView.setScale(7000.0);
+						mHeaderLayout.getRightImageButton().setEnabled(true);
+						break;
+					default:
+						break;
+				}
+			}
+		};
+		initMap();
+
+	}
+	public static boolean isServiceRunning(Context context) {
+		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if ("com.example.amap.service.LocationService".equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	//create完回调
+	private void  startLocation(){
+		boolean ser =isServiceRunning(this);
+		if(ser){
+			service_is_run=true;
+			ShowLog("之前就启动service了");
+		}
+		else {
+			startService(new Intent(this, LocationService.class));
+		}
+		receiver = new MyReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.setPriority(30);
+		filter.addAction("com.example.amap.service.LocationService");
+		registerReceiver(receiver, filter);
+	}
+	private void showcurrentfloor() {
+		viewHandler.sendEmptyMessage(SHOWCURRENTFLOOR);
+	}
+	boolean isfirstLocation =true;
+	//获取广播数据
+	private class MyReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Bundle bundle = intent.getExtras();
+			double ax = bundle.getDouble("ax");
+			double ay = bundle.getDouble("ay");
+			int az = bundle.getInt("az");
+			int astate = bundle.getInt("astate");
+			switch (astate) {
+				case LOCATION_OK:
+					Message msg = new Message();
+					msg.what = LOCATION_OK;
+					msg.setData(bundle);//mes利用Bundle传递数据
+					viewHandler.sendMessage(msg);
+					if(isfirstLocation)ShowToast("定位成功");
+					break;
+				case LOCATION_NET_ERROR:
+					if(isfirstLocation)viewHandler.sendEmptyMessage(LOCATION_NET_ERROR);
+					break;
+				case LOCATION_NO_IN_MAP:
+					if(isfirstLocation)viewHandler.sendEmptyMessage(LOCATION_NO_IN_MAP);
+					break;
+				case LOCATION_LOCATION_IP_ERROR:
+					if(isfirstLocation)viewHandler.sendEmptyMessage(LOCATION_LOCATION_IP_ERROR);
+					break;
+				case LOCATION_LOCATION_IP_NOSET:
+					if(isfirstLocation)viewHandler.sendEmptyMessage(LOCATION_LOCATION_IP_NOSET);
+					break;
+				default:
+					break;
+			}
+			isfirstLocation=false;
+		}
 	}
 
-	private void initBaiduMap() {
-		// 地图初始化
-		mMapView = (MapView) findViewById(R.id.bmapView);
-		mBaiduMap = mMapView.getMap();
-		//设置缩放级别
-		mBaiduMap.setMaxAndMinZoomLevel(18, 13);
-		// 注册 SDK 广播监听者
-		IntentFilter iFilter = new IntentFilter();
-		iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
-		iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
-		mReceiver = new BaiduReceiver();
-		registerReceiver(mReceiver, iFilter);
-
+	private void initMap() {
+		mMapView =  (MapView) findViewById(R.id.map);
+		mvHelper = new MapViewHelper(mMapView);
+		mMapView.setMapBackground(0xeeeeee, 0xffffff, 0, 0);//设置地图网格，背景样式
+		//添加瓦片和绘制图层
+		try {
+			mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[0]));
+			mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[1]));
+			mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[2]));
+			mMapView.addLayer(mTileLayers.get(0));
+			mMapView.addLayer(mTileLayers.get(1));
+			mMapView.addLayer(mTileLayers.get(2));
+			mMapView.addLayer(loactionGraphicsLayer);
+		} catch (Exception e) {
+			Log.i("zjx", "未找到地图包");
+		}
 		Intent intent = getIntent();
 		String type = intent.getStringExtra("type");
 		if (type.equals("select")) {// 选择发送位置
@@ -92,19 +246,26 @@ public class LocationActivity extends BaseActivity implements
 						}
 					});
 			mHeaderLayout.getRightImageButton().setEnabled(false);
-			initLocClient();
+			startLocation();
+			showcurrentfloor();
 		} else {// 查看当前位置
 			initTopBarForLeft("位置");
 			Bundle b = intent.getExtras();
-			LatLng latlng = new LatLng(b.getDouble("latitude"), b.getDouble("longtitude"));//维度在前，经度在后
-			mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(latlng));
-			//显示当前位置图标
-			OverlayOptions ooA = new MarkerOptions().position(latlng).icon(bdgeo).zIndex(9);
-			mBaiduMap.addOverlay(ooA);
+			int x=b.getInt("x");
+			int y=b.getInt("y");
+			int z=b.getInt("z");
+			MyPoint newMyPoint = new MyPoint(x,y,z);
+			currentFloor = z;
+
+			PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
+			Point mapPoint = new Point(x*20.0,-y*20.0);
+			Graphic gp = new Graphic(mapPoint, pic);
+			loactionGraphicsLayer.addGraphic(gp);
+			showcurrentfloor();
+			mMapView.centerAt(mapPoint, true);
+			mMapView.setScale(7000.0);
 		}
 
-		mSearch = GeoCoder.newInstance();
-		mSearch.setOnGetGeoCodeResultListener(this);
 
 	}
 
@@ -117,158 +278,47 @@ public class LocationActivity extends BaseActivity implements
 	 * @throws
 	 */
 	private void gotoChatPage() {
-		if(lastLocation!=null){
+		if(locateMyPoint!=null){
 			Intent intent = new Intent();
-			intent.putExtra("y", lastLocation.getLongitude());// 经度
-			intent.putExtra("x", lastLocation.getLatitude());// 维度
-			intent.putExtra("address", lastLocation.getAddrStr());
+			intent.putExtra("x", locateMyPoint.x);// x
+			intent.putExtra("y", locateMyPoint.y);// y
+			intent.putExtra("z", locateMyPoint.z);//z
+			intent.putExtra("detail", "福建晋江国际机场" + locateMyPoint.z+"层大厅");
 			setResult(RESULT_OK, intent);
 			this.finish();
 		}else{
-			ShowToast("获取地理位置信息失败!");
+			ShowToast("获取室内位置信息失败!");
 		}
-	}
-
-	private void initLocClient() {
-//		 开启定位图层
-		mBaiduMap.setMyLocationEnabled(true);
-		mBaiduMap.setMyLocationConfigeration(new MyLocationConfigeration(
-				com.baidu.mapapi.map.MyLocationConfigeration.LocationMode.NORMAL, true, null));
-		// 定位初始化
-		mLocClient = new LocationClient(this);
-		mLocClient.registerLocationListener(myListener);
-		LocationClientOption option = new LocationClientOption();
-		option.setProdName("bmobim");// 设置产品线
-		option.setOpenGps(true);// 打开gps
-		option.setCoorType("bd09ll"); // 设置坐标类型
-		option.setScanSpan(1000);
-		option.setOpenGps(true);
-		option.setIsNeedAddress(true);
-		option.setIgnoreKillProcess(true);
-		mLocClient.setLocOption(option);
-		mLocClient.start();
-		if (mLocClient != null && mLocClient.isStarted())
-			mLocClient.requestLocation();
-
-		if (lastLocation != null) {
-			// 显示在地图上
-			LatLng ll = new LatLng(lastLocation.getLatitude(),
-					lastLocation.getLongitude());
-			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-			mBaiduMap.animateMapStatus(u);
-		}
-	}
-
-	/**
-	 * 定位SDK监听函数
-	 */
-	public class MyLocationListenner implements BDLocationListener {
-
-		@Override
-		public void onReceiveLocation(BDLocation location) {
-			// map view 销毁后不在处理新接收的位置
-			if (location == null || mMapView == null)
-				return;
-
-			if (lastLocation != null) {
-				if (lastLocation.getLatitude() == location.getLatitude()
-						&& lastLocation.getLongitude() == location
-						.getLongitude()) {
-					BmobLog.i("获取坐标相同");// 若两次请求获取到的地理位置坐标是相同的，则不再定位
-					mLocClient.stop();
-					return;
-				}
-			}
-			lastLocation = location;
-
-			BmobLog.i("lontitude = " + location.getLongitude() + ",latitude = "
-					+ location.getLatitude() + ",地址 = "
-					+ lastLocation.getAddrStr());
-
-			MyLocationData locData = new MyLocationData.Builder()
-					.accuracy(location.getRadius())
-							// 此处设置开发者获取到的方向信息，顺时针0-360
-					.direction(100).latitude(location.getLatitude())
-					.longitude(location.getLongitude()).build();
-			mBaiduMap.setMyLocationData(locData);
-			LatLng ll = new LatLng(location.getLatitude(),
-					location.getLongitude());
-			String address = location.getAddrStr();
-			if (address != null && !address.equals("")) {
-				lastLocation.setAddrStr(address);
-			} else {
-				// 反Geo搜索
-				mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(ll));
-			}
-			// 显示在地图上
-			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
-			mBaiduMap.animateMapStatus(u);
-			//设置按钮可点击
-			mHeaderLayout.getRightImageButton().setEnabled(true);
-		}
-
-	}
-
-	/**
-	 * 构造广播监听类，监听 SDK key 验证以及网络异常广播
-	 */
-	public class BaiduReceiver extends BroadcastReceiver {
-		public void onReceive(Context context, Intent intent) {
-			String s = intent.getAction();
-			if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
-				ShowToast("key 验证出错! 请在 AndroidManifest.xml 文件中检查 key 设置");
-			} else if (s
-					.equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
-				ShowToast("网络出错");
-			}
-		}
-	}
-
-	@Override
-	public void onGetGeoCodeResult(GeoCodeResult arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-		// TODO Auto-generated method stub
-		if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-			ShowToast("抱歉，未能找到结果");
-			return;
-		}
-		BmobLog.i("反编码得到的地址：" + result.getAddress());
-		lastLocation.setAddrStr(result.getAddress());
 	}
 
 	@Override
 	protected void onPause() {
-		mMapView.onPause();
+		mMapView.pause();
 		super.onPause();
-		lastLocation = null;
 	}
-
 	@Override
 	protected void onResume() {
-		mMapView.onResume();
+		mMapView.unpause();
 		super.onResume();
 	}
-
 	@Override
 	protected void onDestroy() {
-		if(mLocClient!=null && mLocClient.isStarted()){
-			// 退出时销毁定位
-			mLocClient.stop();
+		mMapView.destroyDrawingCache();
+		try {
+			unregisterReceiver(receiver);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		// 关闭定位图层
-		mBaiduMap.setMyLocationEnabled(false);
-		mMapView.onDestroy();
-		mMapView = null;
-		// 取消监听 SDK 广播
-		unregisterReceiver(mReceiver);
+		//结束服务，如果想让服务一直运行就注销此句
+		if(!service_is_run){
+			try {
+				ShowLog("结束 service");
+				stopService(new Intent(this, LocationService.class));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		super.onDestroy();
-		// 回收 bitmap 资源
-		bdgeo.recycle();
 	}
 
 }

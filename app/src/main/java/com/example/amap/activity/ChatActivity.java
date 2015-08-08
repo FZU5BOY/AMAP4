@@ -50,6 +50,7 @@ import com.example.amap.adapter.EmoViewPagerAdapter;
 import com.example.amap.adapter.EmoteAdapter;
 import com.example.amap.adapter.MessageChatAdapter;
 import com.example.amap.adapter.NewRecordPlayClickListener;
+import com.example.amap.bean.ChatMsg;
 import com.example.amap.bean.FaceText;
 import com.example.amap.config.BmobConstants;
 import com.example.amap.util.CommonUtils;
@@ -844,11 +845,12 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 					}
 					break;
 				case BmobConstants.REQUESTCODE_TAKE_LOCATION:// 地理位置
-					double latitude = data.getDoubleExtra("x", 0);// 维度
-					double longtitude = data.getDoubleExtra("y", 0);// 经度
-					String address = data.getStringExtra("address");
-					if (address != null && !address.equals("")) {
-						sendLocationMessage(address, latitude, longtitude);
+					int x=data.getIntExtra("x",0);
+					int y=data.getIntExtra("y",0);
+					int z=data.getIntExtra("z",0);
+					String detail=data.getStringExtra("detail");
+					if (detail != null && !detail.equals("")) {
+						sendLocationMessage(detail, x, y,z);
 					} else {
 						ShowToast("无法获取到您的位置信息!");
 					}
@@ -868,16 +870,15 @@ public class ChatActivity extends ActivityBase implements OnClickListener,
 	 * @return void
 	 * @throws
 	 */
-	private void sendLocationMessage(String address, double latitude,
-									 double longtitude) {
+	private void sendLocationMessage(String address, int x,int y,int z) {
 		if (layout_more.getVisibility() == View.VISIBLE) {
 			layout_more.setVisibility(View.GONE);
 			layout_add.setVisibility(View.GONE);
 			layout_emo.setVisibility(View.GONE);
 		}
 		// 组装BmobMessage对象
-		BmobMsg message = BmobMsg.createLocationSendMsg(this, targetId,
-				address, latitude, longtitude);
+		 BmobMsg message = ChatMsg.createLocationSendMsg(this, targetId,
+				address, x,y,z);//List myarray = new ArrayList();类似实例化
 		// 默认发送完成，将数据保存到本地消息表和最近会话表中
 		manager.sendTextMessage(targetUser, message);
 		// 刷新界面

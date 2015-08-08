@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/gray"
     android:layout_height="match_parent" >
 
      <include
@@ -10,11 +11,19 @@
         <!--android:id="@+id/common_actionbar"-->
         <!--android:layout_alignParentTop="true"-->
         <!--layout="@layout/include_action_bar" />-->
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
+    <!--<com.baidu.mapapi.map.MapView-->
+        <!--android:id="@+id/bmapView"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_below="@id/common_actionbar"-->
+        <!--android:clickable="true" />-->
+    <com.esri.android.map.MapView
+        android:id="@+id/map"
+        initExtent="-13042576 3854531 -13026007 3870439"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/common_actionbar"
-        android:clickable="true" />
+        >
 
+    </com.esri.android.map.MapView>
 </RelativeLayout>

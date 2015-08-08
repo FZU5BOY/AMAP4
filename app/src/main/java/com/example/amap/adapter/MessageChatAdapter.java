@@ -261,8 +261,11 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 				try {
 					if (text != null && !text.equals("")) {
 						String address  = text.split("&")[0];
-						final String latitude = text.split("&")[1];//维度
-						final String longtitude = text.split("&")[2];//经度
+//						final String latitude = text.split("&")[1];//维度
+//						final String longtitude = text.split("&")[2];//经度
+						final int x=Integer.valueOf(text.split("&")[1]);
+						final int y=Integer.valueOf(text.split("&")[2]);
+						final int z=Integer.valueOf(text.split("&")[3]);
 						tv_location.setText(address);
 						tv_location.setOnClickListener(new OnClickListener() {
 
@@ -271,8 +274,9 @@ public class MessageChatAdapter extends BaseListAdapter<BmobMsg> {
 								// TODO Auto-generated method stub
 								Intent intent = new Intent(mContext, LocationActivity.class);
 								intent.putExtra("type", "scan");
-								intent.putExtra("latitude", Double.parseDouble(latitude));//维度
-								intent.putExtra("longtitude", Double.parseDouble(longtitude));//经度
+								intent.putExtra("x", x);//
+								intent.putExtra("y", y);//
+								intent.putExtra("z", z);//
 								mContext.startActivity(intent);
 							}
 						});

@@ -1025,7 +1025,7 @@ public class MainActivity extends BaseActivity {
         allinfo.setVisibility(View.GONE);
     }
 
-    //Point，MyPoint,Location转换
+    //Point(Map 0~1000 -1000~0)，MyPoint(0~50),Location(模拟定位 0~1)转换
     public int MapToMyPointX(Object x) {
         return (int) ((double) x / 20.0);
     }

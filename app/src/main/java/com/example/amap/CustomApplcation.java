@@ -7,10 +7,6 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.mapapi.SDKInitializer;
 import com.example.amap.bean.AMapPoint;
 import com.example.amap.util.CollectionUtils;
 import com.example.amap.util.SharePreferenceUtil;
@@ -30,7 +26,6 @@ import cn.bmob.im.BmobChat;
 import cn.bmob.im.BmobUserManager;
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.db.BmobDB;
-import cn.bmob.v3.datatype.BmobGeoPoint;
 
 /**
  * 自定义全局Applcation类
