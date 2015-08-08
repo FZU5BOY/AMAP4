@@ -89,12 +89,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/white"
-            android:drawableTop="@drawable/tab_set_btn"
+            android:drawableTop="@drawable/tab_circle_btn"
             android:onClick="onTabSelect"
             android:paddingBottom="2dip"
             android:paddingTop="0dip"
             android:scaleType="matrix"
-            android:text="@string/mian_tab_set"
+            android:text="@string/mian_tab_circle"
             android:textColor="@drawable/tab_textcolor"
             android:textSize="12sp" />
     </LinearLayout>

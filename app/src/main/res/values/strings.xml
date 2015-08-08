@@ -73,7 +73,7 @@
 
     <string name="main_tab_recent">会话</string>
     <string name="main_tab_contact">联系人</string>
-    <string name="mian_tab_set">设置</string>
+    <string name="mian_tab_circle">动态</string>
 
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

@@ -15,6 +15,7 @@ import com.example.amap.CustomApplcation;
 import com.example.amap.MyMessageReceiver;
 import com.example.amap.R;
 import com.example.amap.activity.fragment.ContactFragment;
+import com.example.amap.activity.fragment.MyCircleFragment;
 import com.example.amap.activity.fragment.RecentFragment;
 import com.example.amap.activity.fragment.SettingsFragment;
 
@@ -40,7 +41,7 @@ public class UserMainActivity extends ActivityBase implements EventListener{
 	private Button[] mTabs;
 	private ContactFragment contactFragment;
 	private RecentFragment recentFragment;
-	private SettingsFragment settingFragment;
+	private MyCircleFragment circleFragment;
 	private Fragment[] fragments;
 	private int index;
 	private int currentTabIndex;
@@ -75,8 +76,8 @@ public class UserMainActivity extends ActivityBase implements EventListener{
 	private void initTab(){
 		contactFragment = new ContactFragment();
 		recentFragment = new RecentFragment();
-		settingFragment = new SettingsFragment();
-		fragments = new Fragment[] {recentFragment, contactFragment, settingFragment };
+		circleFragment = new MyCircleFragment();
+		fragments = new Fragment[] {recentFragment, contactFragment, circleFragment };
 		// 添加显示第一个fragment
 		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, recentFragment).
 				add(R.id.fragment_container, contactFragment).hide(contactFragment).show(recentFragment).commit();
