@@ -10,5 +10,6 @@
         android:id="@+id/textView11"
         android:layout_gravity="center_horizontal"
         android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="25dp" />
+        android:background="@color/white"
+        android:padding="25dp" />
 </LinearLayout>
