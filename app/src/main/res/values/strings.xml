@@ -33,6 +33,7 @@
     <string name="end_noset">未设置终点</string>
     <string name="atm">ATM</string>
     <string name="mylocation">我的位置</string>
+    <string name="firendlocation">好友位置</string>
     <string name="makepath_error">不能生成路径.请检查输入</string>
     <string name="go_end_success">成功到达终点.</string>
     <string name="go_mid_success">到达目前第一个目的地</string>

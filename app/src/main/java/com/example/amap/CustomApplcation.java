@@ -93,7 +93,7 @@ public class CustomApplcation extends Application {
 //		mLocationClient = new LocationClient(this.getApplicationContext());
 //		mMyLocationListener = new MyLocationListener();
 //		mLocationClient.registerLocationListener(mMyLocationListener);
-		
+
 //	}
 
 //	/**

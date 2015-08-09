@@ -51,7 +51,7 @@ import java.util.List;
 	MapViewHelper mvHelper;//帮助类，某些操作更快捷
 	final  int SHOWCURRENTFLOOR = 11;
 	final int allfloor =3 ;
-	private boolean service_is_run =false;
+	private boolean service_is_run =true;
 	public static MyPoint locateMyPoint = null;//当前定位地址
 	final String extern = Environment.getExternalStorageDirectory().getPath();
 	//tpk文件地址
@@ -169,6 +169,7 @@ import java.util.List;
 			ShowLog("之前就启动service了");
 		}
 		else {
+			service_is_run=false;
 			startService(new Intent(this, LocationService.class));
 		}
 		receiver = new MyReceiver();
@@ -233,10 +234,10 @@ import java.util.List;
 		} catch (Exception e) {
 			Log.i("zjx", "未找到地图包");
 		}
-		Intent intent = getIntent();
+		final Intent intent = getIntent();
 		String type = intent.getStringExtra("type");
 		if (type.equals("select")) {// 选择发送位置
-			initTopBarForBoth("位置", R.drawable.base_action_bar_true_bg_selector,
+			initTopBarForBoth("分享位置", R.drawable.base_action_bar_true_bg_selector,
 					new HeaderLayout.onRightImageButtonClickListener() {
 
 						@Override
@@ -248,15 +249,23 @@ import java.util.List;
 			mHeaderLayout.getRightImageButton().setEnabled(false);
 			startLocation();
 			showcurrentfloor();
-		} else {// 查看当前位置
-			initTopBarForLeft("位置");
+		} else {// 查看当前位置并到这儿去
+//			initTopBarForLeft("位置");
+			initTopBarForBoth("到这儿去", R.drawable.base_action_bar_true_bg_selector,
+					new HeaderLayout.onRightImageButtonClickListener() {
+						@Override
+						public void onClick() {
+							// TODO Auto-generated method stub
+							gotoMainPage(intent.getExtras());
+						}
+					});
+			mHeaderLayout.getRightImageButton().setEnabled(false);
 			Bundle b = intent.getExtras();
 			int x=b.getInt("x");
 			int y=b.getInt("y");
 			int z=b.getInt("z");
 			MyPoint newMyPoint = new MyPoint(x,y,z);
 			currentFloor = z;
-
 			PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
 			Point mapPoint = new Point(x*20.0,-y*20.0);
 			Graphic gp = new Graphic(mapPoint, pic);
@@ -264,11 +273,11 @@ import java.util.List;
 			showcurrentfloor();
 			mMapView.centerAt(mapPoint, true);
 			mMapView.setScale(7000.0);
+			mHeaderLayout.getRightImageButton().setEnabled(true);
 		}
 
 
 	}
-
 	/**
 	 * 回到聊天界面
 	 * @Title: gotoChatPage
@@ -283,12 +292,35 @@ import java.util.List;
 			intent.putExtra("x", locateMyPoint.x);// x
 			intent.putExtra("y", locateMyPoint.y);// y
 			intent.putExtra("z", locateMyPoint.z);//z
-			intent.putExtra("detail", "福建晋江国际机场" + locateMyPoint.z+"层大厅");
+			intent.putExtra("detail", "福建晋江国际机场" + locateMyPoint.z + "层大厅");
 			setResult(RESULT_OK, intent);
 			this.finish();
 		}else{
 			ShowToast("获取室内位置信息失败!");
 		}
+	}
+	/**
+	 * 回到地图主页
+	 * @Title: gotoChatPage
+	 * @Description: TODO
+	 * @param
+	 * @return void
+	 * @throws
+	 */
+	private void gotoMainPage(Bundle bundle) {
+//			int x=b.getInt("x");
+//			int y=b.getInt("y");
+//			int z=b.getInt("z");
+			bundle.putString("fromActivity", "LocationActivity");
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.putExtras(bundle);
+//		 	intent.putExtra("fromActivity", "LocationActivity");
+//			intent.putExtra("x", x);// x
+//			intent.putExtra("y", y);// y
+//			intent.putExtra("z", z);//z
+//			startAnimActivity(MainActivity.class);
+		    startActivity(intent);
+			this.finish();
 	}
 
 	@Override
@@ -307,7 +339,6 @@ import java.util.List;
 		try {
 			unregisterReceiver(receiver);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		//结束服务，如果想让服务一直运行就注销此句
 		if(!service_is_run){

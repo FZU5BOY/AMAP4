@@ -59,7 +59,17 @@ public class LocationService extends Service {
         }).start();
 
     }
+//    如果一个 Service 已经被启动，
+//    其他代码再试图调用 startService() 方法，
+//    是不会执行 onCreate() 的，
+//    但会重新执行一次 onStart() 。
 
+    //不用bindService()启动的原因，多个activity会启动service 不能以为某个调用Activity退出就也退出service了，手动stop
+    @Override
+    public void onStart(Intent intent, int startId){
+        Log.i("zjx","LocationService onStart");
+        super.onStart(intent, startId);
+    }
     @Override
     public void onDestroy() {
         threadDisable=true;

@@ -97,6 +97,7 @@ public class MainActivity extends BaseActivity {
     final int LOCATION_ING = 18;
     final int MAKE_PATH_ALL = 19;
     final int UPDATESCALE = 20;
+    final int FINDFIREND = 21;
     private final int LOCATION_OK = 1;
     private final int LOCATION_NO_IN_MAP = 2;
     private final int LOCATION_NET_ERROR = 3;
@@ -403,7 +404,7 @@ public class MainActivity extends BaseActivity {
                         try {
                             unregisterReceiver(receiver2);
                         } catch (Exception e) {
-                            e.printStackTrace();
+//                            e.printStackTrace();
                         }
                         tryClearAllGra();
                         break;
@@ -482,6 +483,10 @@ public class MainActivity extends BaseActivity {
                         int relScale=(int) ((mMapView.getScale()+1.0)/400.0);
                         scaleText.setText(relScale+"m");
                         break;
+                    case FINDFIREND:{
+
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -494,6 +499,7 @@ public class MainActivity extends BaseActivity {
                 goThere();
             }
         });
+
 
     }
     private void goThere(){
@@ -594,8 +600,13 @@ public class MainActivity extends BaseActivity {
         if (startMyPoint != null && endMyPoint != null) {
             clearMid();
             ClearAllGraphic();
-            rountstart = (String) startFeature.getAttributeValue("nickname");
-            rountend = (String) endFeature.getAttributeValue("nickname");
+            try {
+                rountstart = (String) startFeature.getAttributeValue("nickname");
+                rountend = (String) endFeature.getAttributeValue("nickname");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
             MakePath mp = new MakePath(from_here.getContext());
             mp.execute(startMyPoint, endMyPoint);
 //					makePathAll(startMyPoint, endMyPoint);
@@ -1011,8 +1022,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void ClearAllGra(View source) {
-        tryClearAllGra();
-
+//        tryClearAllGra();
+        viewHandler.sendEmptyMessage(COMPLETEAAL);
     }
 
 
@@ -1024,7 +1035,11 @@ public class MainActivity extends BaseActivity {
         mMapView.getCallout().hide();
         allinfo.setVisibility(View.GONE);
     }
-
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ShowLog("onStart");
+    }
     //Point(Map 0~1000 -1000~0)，MyPoint(0~50),Location(模拟定位 0~1)转换
     public int MapToMyPointX(Object x) {
         return (int) ((double) x / 20.0);
@@ -1084,26 +1099,6 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    //连接定位接口并得到json
-    public String GetJSONString(URL url) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            URLConnection conn = url.openConnection();
-            conn.setConnectTimeout(2000);//设置超时时间
-            conn.setReadTimeout(2000);
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream()
-                            , "utf-8"));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            return sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 
     //异步类，其实可被替代，用于初期的路径规划
@@ -1120,6 +1115,7 @@ public class MainActivity extends BaseActivity {
 
             MyPoint START_POS = params[0];
             MyPoint OBJECT_POS = params[1];
+            if(START_POS==null||OBJECT_POS==null)return "fail";
             if (START_POS.z != OBJECT_POS.z) {
                 Feature fea = findClostedESOrELFeature(START_POS, OBJECT_POS.z == 0);
                 if (fea == null) {
@@ -1178,10 +1174,11 @@ public class MainActivity extends BaseActivity {
                 Point endpoi = new Point((double) endFeature.getAttributeValue("pointX"), (double) endFeature.getAttributeValue("pointy"));
                 Graphic gp = new Graphic(endpoi, endpic);
                 mGraphicsLayer[endMyPoint.z].addGraphic(gp);
-            } else if (endMyPoint != null) {
-                PictureMarkerSymbol endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-                Point endpoi = new Point(LocationToMapX(endMyPoint.x), LocationToMapY(endMyPoint.y));
-                Graphic gp = new Graphic(endpoi, endpic);
+            }
+            else if (endMyPoint != null) {
+                PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
+                Point poi = new Point((double) (endMyPoint.x*20.0), (double)  (-endMyPoint.y*20.0));
+                Graphic gp = new Graphic(poi, pic);
                 mGraphicsLayer[endMyPoint.z].addGraphic(gp);
             }
 
@@ -1753,13 +1750,93 @@ public class MainActivity extends BaseActivity {
             Log.i("zjx", "e:" + e);
         }
         showcurrentfloor();
+        processExtraData();
 
 //		GetSearchPOITask getSearchPOITask=new GetSearchPOITask(this);//在这边另开任务会和initializeRoutingAndGeocoding冲突
 // 可能还没加载完
         //所以我们把要做的放initializeRoutingAndGeocoding里面去
 //		getSearchPOITask.execute();
     }
+    protected void onNewIntent(Intent intent) {
 
+        super.onNewIntent(intent);
+
+        setIntent(intent);//must store the new intent unless getIntent() will return the old one
+        processExtraData();
+    }
+
+    private void processExtraData(){
+        ShowLog("processExtraData");
+        Intent intent = getIntent();
+        Bundle bundle=intent.getExtras();
+        if(bundle!=null){
+//            Bundle bundle=intent.getExtras();
+            String fromActivity = bundle.getString("fromActivity");
+            if("LocationActivity".equals(fromActivity)) {
+//                viewHandler.sendEmptyMessage(COMPLETEAAL); //handler 里面去取消receiver2的注册 会出错
+                tryClearAllGra();//所以要这样写才对 <-
+                Message msg = new Message();
+                msg.setData(bundle);
+                msg.what = FINDFIREND;
+                viewHandler.handleMessage(msg);
+                Bundle bundle2 = msg.getData();
+                int x=bundle2.getInt("x");
+                int y=bundle2.getInt("y");
+                int z=bundle2.getInt("z");
+                ShowLog("try start to find firend");
+                ShowLog("start to find firend");
+                Log.i("zjx", "go there 2");
+                mMapView.getCallout().hide();
+                endMyPoint = new MyPoint(x,y,z);
+                PictureMarkerSymbol pic5 = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
+                Point poi5 = new Point((double) (endMyPoint.x*20.0), (double)  (-endMyPoint.y*20.0));
+                Graphic gp5 = new Graphic(poi5, pic5);
+                mGraphicsLayer[endMyPoint.z].addGraphic(gp5);
+                if (locateMyPoint == null) {
+//                    receiver = new MyReceiver();
+//                    IntentFilter filter = new IntentFilter();
+//                    filter.setPriority(30);
+//                    filter.addAction("com.example.amap.service.LocationService");
+//                    registerReceiver(receiver, filter);
+//                    isLocating = true;
+//                    try {
+//                        MakePath mp = new MakePath(MainActivity.this);
+//                        mp.execute(locateMyPoint, endMyPoint);
+//                    }
+//                    catch(Exception e){
+//                        e.printStackTrace();
+//                    }
+
+                    Point poi = new Point(x*20.0,-y*20.0);
+                    currentFloor=z;
+                    showcurrentfloor();
+                    mMapView.centerAt(poi, true);
+                    mMapView.setScale(7000.0);
+                    ShowToast("您尚未开启定位，请开启定位后重试");
+                }
+                if (locateMyPoint != null) {
+                    rountstart = getResources().getString(R.string.mylocation);
+                    MakePath mp = new MakePath(MainActivity.this);
+                    mp.execute(locateMyPoint, endMyPoint);
+                    currentFloor = locateMyPoint.z;
+                    showcurrentfloor();
+                    Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+                    mMapView.centerAt(poi2, true);
+                    mMapView.setScale(7000.0);
+                    //注册广播
+//                    if(receiver2==null)receiver2 = new MyReceiver2();
+                    receiver2 = new MyReceiver2();
+                    IntentFilter filter = new IntentFilter();
+                    filter.setPriority(5);
+                    filter.addAction("com.example.amap.service.LocationService");
+                    registerReceiver(receiver2, filter);
+
+                }
+            }
+        }
+        //use the data received here
+
+    }
     @Override
     protected void onStop() {
 
@@ -1783,14 +1860,16 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-
+        ShowLog("onRestart");
     }
 
     @Override
     protected void onResume() {
 
+
+        ShowLog("onResume");
         super.onResume();
-        Log.i("zjx", "onResume");
+
     }
 
     //得到mapview的bitmap
