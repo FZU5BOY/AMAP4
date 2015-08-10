@@ -15,12 +15,12 @@ import android.widget.Toast;
 import com.example.amap.CustomApplcation;
 import com.example.amap.R;
 import com.example.amap.bean.User;
+import cn.bmob.im.MyBmobUserManager;
 import com.example.amap.util.CollectionUtils;
 import com.example.amap.view.HeaderLayout;
 import com.example.amap.view.dialog.DialogTips;
 
 import cn.bmob.im.BmobChatManager;
-import cn.bmob.im.BmobUserManager;
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.im.config.BmobConfig;
 import cn.bmob.v3.listener.FindListener;
@@ -35,7 +35,7 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class BaseActivity extends FragmentActivity {
 
-	BmobUserManager userManager;
+	MyBmobUserManager userManager;
 	BmobChatManager manager;
 
 	CustomApplcation mApplication;
@@ -48,7 +48,7 @@ public class BaseActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		userManager = BmobUserManager.getInstance(this);
+		userManager = MyBmobUserManager.getInstance(this);
 		manager = BmobChatManager.getInstance(this);
 		mApplication = CustomApplcation.getInstance();
 		DisplayMetrics metric = new DisplayMetrics();

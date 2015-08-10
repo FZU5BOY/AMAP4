@@ -78,58 +78,68 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 			progress.setCanceledOnTouchOutside(true);
 			progress.show();
 		}
-		ShowLog(mApplication.getAmapx()+"$$$$"+mApplication.getAmapy());
+
 		if(!mApplication.getAmapx().equals("")&&!mApplication.getAmapy().equals("")){
+
 			double x = Double.parseDouble(mApplication.getAmapx());
 			double y = Double.parseDouble(mApplication.getAmapy());
-			double z = Double.parseDouble(mApplication.getAmapy());
+			int z = Integer.parseInt(mApplication.getAmapz());
+			ShowLog("y:"+y);
 			//封装的查询方法，当进入此页面时 isUpdate为false，当下拉刷新的时候设置为true就行。
 			//此方法默认每页查询10条数据,若想查询多于10条，可在查询之前设置BRequest.QUERY_LIMIT_COUNT，如：BRequest.QUERY_LIMIT_COUNT=20
 			// 此方法是新增的查询指定10公里内的性别为女性的用户列表，默认包含好友列表
 			//如果你不想查询性别为女的用户，可以将equalProperty设为null或者equalObj设为null即可
 //			userManager.queryKiloMetersListByPage(isUpdate,0,"location", x, y, true,QUERY_KILOMETERS,"sex",false,new FindListener<User>() {
-				//此方法默认查询所有带地理位置信息的且性别为女的用户列表，如果你不想包含好友列表的话，将查询条件中的isShowFriends设置为false就行
-			userManager.queryNearByListByPage(isUpdate,0,"location", x, y, true,"sex",false,new FindListener<User>() {
+//				//此方法默认查询所有带地理位置信息的且性别为女的用户列表，如果你不想包含好友列表的话，将查询条件中的isShowFriends设置为false就行
+//			userManager.queryNearByListByPage(isUpdate, 0, "location", x, y, true, "sex", false, new FindListener<User>() {
+				//此方法默认查询所有带地理位置信息用户列表，如果你不想包含好友列表的话，将查询条件中的isShowFriends设置为false就行
+			userManager.queryNearAllByListByPage(isUpdate,0,"aMapPoint",x,y,z,true,new FindListener<User>()
 
-				@Override
-				public void onSuccess(List<User> arg0) {
+				{
+
+					@Override
+					public void onSuccess (List < User > arg0) {
 					// TODO Auto-generated method stub
 					if (CollectionUtils.isNotNull(arg0)) {
-						if(isUpdate){
+						if (isUpdate) {
 							nears.clear();
 						}
 						adapter.addAll(arg0);
-						if(arg0.size()<BRequest.QUERY_LIMIT_COUNT){
+						if (arg0.size() < BRequest.QUERY_LIMIT_COUNT) {
 							mListView.setPullLoadEnable(false);
 							ShowToast("附近的人搜索完成!");
-						}else{
+						} else {
 							mListView.setPullLoadEnable(true);
 						}
-					}else{
+					} else {
 						ShowToast("暂无附近的人!");
+						ShowLog("暂无附近的人!");
 					}
 
-					if(!isUpdate){
+					if (!isUpdate) {
 						progress.dismiss();
-					}else{
+					} else {
 						refreshPull();
 					}
 				}
 
-				@Override
-				public void onError(int arg0, String arg1) {
+					@Override
+					public void onError ( int arg0, String arg1){
 					// TODO Auto-generated method stub
 					ShowToast("暂无附近的人!");
+					ShowLog("查询失败"+arg0+"$$"+arg1);
 					mListView.setPullLoadEnable(false);
-					if(!isUpdate){
+					if (!isUpdate) {
 						progress.dismiss();
-					}else{
+					} else {
 						refreshPull();
 					}
 				}
 
-			});
-		}else{
+				}
+
+				);
+			}else{
 			ShowToast("暂无附近的人!");
 			progress.dismiss();
 			refreshPull();
@@ -145,12 +155,19 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 	 * @throws
 	 */
 	private void queryMoreNearList(int page){
-		double latitude = Double.parseDouble(mApplication.getAmapx());
-		double longtitude = Double.parseDouble(mApplication.getAmapy());
+		ShowLog("page:"+page);
+		double x = Double.parseDouble(mApplication.getAmapx());
+		double y = Double.parseDouble(mApplication.getAmapy());
+		int z = Integer.parseInt(mApplication.getAmapz());
+//		double x = Double.parseDouble(mApplication.getAmapx());
+//		double y = Double.parseDouble(mApplication.getAmapy());
 		//查询10公里范围内的性别为女的用户列表
-		userManager.queryKiloMetersListByPage(true,page,"location", longtitude, latitude, true,QUERY_KILOMETERS,"sex",false,new FindListener<User>() {
-			//查询全部地理位置信息且性别为女性的用户列表
+//		userManager.queryKiloMetersListByPage(true,page,"location", longtitude, latitude, true,QUERY_KILOMETERS,"sex",false,new FindListener<User>() {
+//			//查询全部地理位置信息且性别为女性的用户列表
 //		userManager.queryNearByListByPage(true,page, "location", longtitude, latitude, true,"sex",false,new FindListener<User>() {
+//查询全部地理位置信息的用户列表
+
+		userManager.queryNearAllByListByPage(true, 0, "aMapPoint", x, y, z, true, new FindListener<User>() {
 
 			@Override
 			public void onSuccess(List<User> arg0) {
@@ -164,7 +181,7 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 			@Override
 			public void onError(int arg0, String arg1) {
 				// TODO Auto-generated method stub
-				ShowLog("查询更多附近的人出错:"+arg1);
+				ShowLog("查询更多附近的人出错:" + arg1);
 				mListView.setPullLoadEnable(false);
 				refreshLoad();
 			}
@@ -202,12 +219,16 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 	@Override
 	public void onLoadMore() {
 		// TODO Auto-generated method stub
-		double latitude = Double.parseDouble(mApplication.getAmapx());
-		double longtitude = Double.parseDouble(mApplication.getAmapy());
-		//这是查询10公里范围内的性别为女用户总数
-		userManager.queryKiloMetersTotalCount(User.class, "location", longtitude, latitude, true,QUERY_KILOMETERS,"sex",false,new CountListener() {
-			//这是查询附近的人且性别为女性的用户总数
-//		userManager.queryNearTotalCount(User.class, "location", longtitude, latitude, true,"sex",false,new CountListener() {
+		double x = Double.parseDouble(mApplication.getAmapx());
+		double y = Double.parseDouble(mApplication.getAmapy());
+		int z = Integer.parseInt(mApplication.getAmapz());
+
+//		//这是查询10公里范围内的 用户总数
+//		userManager.queryKiloMetersTotalCount(User.class, "location", longtitude, latitude, true,QUERY_KILOMETERS,"sex",true,new CountListener() {
+//			这是查询附近的人且的用户总数
+// userManager.queryNearAllByListByPage(true, 0, "aMapPoint", x, y, z, true, new FindListener<User>() {
+
+		userManager.queryNearAllTotalCount(User.class, "aMapPoint", x, y,z, true,new CountListener() {
 
 			@Override
 			public void onSuccess(int arg0) {
