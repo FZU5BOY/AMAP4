@@ -83,7 +83,9 @@ public class UserFriendAdapter extends BaseAdapter implements SectionIndexer {
 		}
 
 		User friend = data.get(position);
-		final String name = friend.getUsername();
+//		final String name = friend.getUsername();
+//		zeashon 改变显示昵称
+		final String name = friend.getNick();
 		final String avatar = friend.getAvatar();
 
 		if (!TextUtils.isEmpty(avatar)) {

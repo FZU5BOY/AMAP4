@@ -61,8 +61,8 @@ public class MessageRecentAdapter extends ArrayAdapter<BmobRecent> implements Fi
 		}else{
 			iv_recent_avatar.setImageResource(R.drawable.head);
 		}
-
-		tv_recent_name.setText(item.getUserName());
+//		zeashon 显示昵称
+		tv_recent_name.setText(item.getNick());
 		tv_recent_time.setText(TimeUtil.getChatTime(item.getTime()));
 		//显示内容
 		if(item.getType()==BmobConfig.TYPE_TEXT){
