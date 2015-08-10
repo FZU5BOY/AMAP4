@@ -232,5 +232,4 @@ public class MyMessageReceiver extends BroadcastReceiver {
 			BmobNotifyManager.getInstance(context).showNotify(isAllowVoice,isAllowVibrate,R.drawable.logo, ticker,username, ticker.toString(),NewFriendActivity.class);
 		}
 	}
-
 }

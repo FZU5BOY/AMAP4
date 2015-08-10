@@ -60,7 +60,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/button6"
@@ -102,6 +102,18 @@
                 android:elevation="30dp" />
 
         </RelativeLayout>
+        <!--<ListView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+            <com.example.amap.view.xlist.XListView
+                android:id="@+id/mycirclexListView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#f0f0f0"
+                android:cacheColorHint="#00000000"
+                android:scrollbars="none" >
+            </com.example.amap.view.xlist.XListView>
+        <!--</ListView>-->
     </LinearLayout>
 
 

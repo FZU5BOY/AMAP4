@@ -8,16 +8,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +37,7 @@ import com.example.amap.activity.SetMyInfoActivity;
 import com.example.amap.util.CircularImage;
 import com.example.amap.util.SharePreferenceUtil;
 import com.example.amap.util.rount.MyPoint;
+import com.example.amap.view.xlist.XListView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,25 +45,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import cn.bmob.im.BmobUserManager;
 import jcifs.https.Handler;
 
 
-public class MyCircleFragment extends FragmentBase{
-
-//    Button btn_logout,btnGoback,changeIp;
-//    TextView tv_set_name;
+public class MyCircleFragment extends FragmentBase implements XListView.IXListViewListener  {
     TextView user_set_name;
     ImageView cover_user_photo;
-//    RelativeLayout layout_info, rl_switch_notification, rl_switch_voice,
-//            rl_switch_vibrate, layout_blacklist;
-//
-//    ImageView iv_open_notification, iv_close_notification, iv_open_voice,
-//            iv_close_voice, iv_open_vibrate, iv_close_vibrate;
-//
-//    View view1, view2;
-//    SharePreferenceUtil mSharedUtil;
+    private android.os.Handler mHandler;
+    MyAdapter mAdapter;
+    private final String TAG = "PersonActivity";
+    private int j = 1;
+    ArrayList<HashMap<String, Object>> listItem;
+    private XListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,12 +73,9 @@ public class MyCircleFragment extends FragmentBase{
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-//        mSharedUtil = mApplication.getSpUtil();
-
     }
-
 
 
     @Override
@@ -89,276 +89,224 @@ public class MyCircleFragment extends FragmentBase{
     private void initView() {
         user_set_name = (TextView) findViewById(R.id.user_name);
         cover_user_photo = (ImageView) findViewById(R.id.cover_user_photo);
+        geneItems();
+        mListView = (XListView) findViewById(R.id.mycirclexListView);
+        mListView.setPullLoadEnable(true);
+//		List<Map<String, Object>> list = geneItems();
+        mAdapter = new MyAdapter(getActivity());
+        mListView.setAdapter(mAdapter);
+//		mAdapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
+//		mListView.setAdapter(mAdapter);
+//		mListView.setPullLoadEnable(false);
+//		mListView.setPullRefreshEnable(false);
+        mListView.setXListViewListener(this);
+        mHandler = new android.os.Handler();
+        cover_user_photo.setImageResource(R.drawable.head);
     }
+
     @SuppressLint("NewApi")
-    private void initData(){
+    private void initData() {
         user_set_name.setText(BmobUserManager.getInstance(getActivity())
                 .getCurrentUser().getUsername().trim());
-//        Toast.makeText(getActivity(),BmobUserManager.getInstance(getActivity())
-//                .getCurrentUser().getAvatar(),Toast.LENGTH_SHORT);
-//        Log.i("zeashon",BmobUserManager.getInstance(getActivity())
-//                .getCurrentUser().getAvatar());
-        URL picUrl = null;
-        try {
-            picUrl = new URL(BmobUserManager.getInstance(getActivity())
-                    .getCurrentUser().getAvatar());
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+//        new AnotherTask().execute("My Avata");
+
+    }
+//    public Bitmap loadDrawable()
+//    {
+//        final Handler handler = new Handler()
+//        {
+//            public void handleMessage(Message message)
+//            {
+//                imageCallback.imageLoaded((Bitmap) message.obj, imageUrl);
+//            }
+//        };
+//        new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                if (bmUserImage == null) {
+//                    cover_user_photo.setImageResource(R.drawable.head);
+//                } else {
+//                    cover_user_photo.setImageBitmap(bmUserImage);
+//                }
+//            }
+//        }.start();
+//        return null;
+//    }
+    private class AnotherTask extends AsyncTask<String, Void, String>{
+        @Override
+        protected void onPostExecute(String result) {
+            //对UI组件的更新操作
+            URL picUrl = null;
+            try {
+                picUrl = new URL(BmobUserManager.getInstance(getActivity())
+                        .getCurrentUser().getAvatar());
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Bitmap bmUserImage = null;
+            try {
+                bmUserImage = BitmapFactory.decodeStream(picUrl.openStream());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (bmUserImage == null) {
+                cover_user_photo.setImageResource(R.drawable.head);
+            } else {
+                cover_user_photo.setImageBitmap(bmUserImage);
+            }
         }
-        Bitmap bmUserImage = null;
-        try {
-            bmUserImage = BitmapFactory.decodeStream(picUrl.openStream());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        if(bmUserImage == null)
-        {
-            cover_user_photo.setImageResource(R.drawable.head);
-        }
-        else
-        {
-            cover_user_photo.setImageBitmap(bmUserImage);
+        @Override
+        protected String doInBackground(String... params) {
+            //耗时的操作
+            try
+            {
+                //线程睡眠5秒，模拟耗时操作，这里面的内容Android系统会自动为你启动一个新的线程执行
+                Thread.sleep(3000);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            return params[0];
         }
     }
+    private ArrayList<HashMap<String, Object>> geneItems() {
+        listItem = new ArrayList<HashMap<String, Object>>();
+        /**为动态数组添加数据*/
+//		int j=i+30;
+        for (int i = 1; i < 30; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            String user = "天下第"+i*j+"帅";
+            map.put("avatar", "cat");
+            map.put("likePic", "z_like");
+            map.put("likedPic", "z_liked");
+//            map.put("stars", "4");
+            map.put("username", user);
+            map.put("comm_time", "8月1日");
+            map.put("comm_content", "来来来，搞个大新闻。");
+            listItem.add(map);
+        }
+        return listItem;
+    }
 
+    private ArrayList<HashMap<String, Object>> addItems() {
+//		listItem = new ArrayList<HashMap<String,Object>>();
+        /**为动态数组添加数据*/
+//		int j=i+30;
+        for (int i = 1; i < 30; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            String user = "天下第"+i+"帅";
+            map.put("avatar", "cat");
+            map.put("likePic", "z_like");
+            map.put("likedPic", "z_liked");
+//            map.put("stars", "3");
+            map.put("username", user);
+            map.put("comm_time", "8月3日");
+            map.put("comm_content", "今天去优衣库逛了一圈。就这样。");
+            listItem.add(map);
+        }
+        return listItem;
+    }
+
+    private void onLoad() {
+        mListView.stopRefresh();
+        mListView.stopLoadMore();
+//		mListView.setRefreshTime("刚刚");  不知道为什么合并这里会报错、暂时注释、
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.i(TAG, "刷新最新");
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//				start = ++refreshCnt;
+//				items.clear();
+                j++;
+                geneItems();
+                mAdapter.notifyDataSetChanged();
+//				mAdapter = new ArrayAdapter<String>(XListViewActivity.this, R.layout.list_item, items);
+//				MyAdapter mAdapter = new MyAdapter(XListViewActivity.this);
+//				mListView.setAdapter(mAdapter);
+                onLoad();
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void onLoadMore() {
+        Log.i(TAG, "加载更多");
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                j++;
+                addItems();
+                mAdapter.notifyDataSetChanged();
+                onLoad();
+            }
+        }, 2000);
+    }
+
+    private class MyAdapter extends BaseAdapter {
+        private LayoutInflater mInflater = null;
+
+        private MyAdapter(Context context) {
+            //根据context上下文加载布局，这里的是Demo17Activity本身，即this
+            this.mInflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return listItem.size();
+        }
+
+        @Override
+        public Object getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.circlelistview, null);
+            }
+            ImageView avatar = (ImageView) convertView.findViewById(R.id.avatar);
+//            RatingBar stars = (RatingBar) convertView.findViewById(R.id.stars);
+            TextView user = (TextView) convertView.findViewById(R.id.username);
+            TextView time = (TextView) convertView.findViewById(R.id.comm_time);
+            TextView content = (TextView) convertView.findViewById(R.id.comm_content);
+            final ImageButton circle_like = (ImageButton) convertView.findViewById(R.id.circle_like);
+            int resID = getResources().getIdentifier(listItem.get(position).get("avatar").toString(), "drawable", "com.example.amap");
+            int likedPicID = getResources().getIdentifier(listItem.get(position).get("likePic").toString(), "drawable", "com.example.amap");
+            avatar.setImageResource(resID);
+            circle_like.setImageResource(likedPicID);
+//            stars.setRating((float) Integer.parseInt(listItem.get(position).get("stars").toString()));
+            user.setText(listItem.get(position).get("username").toString());
+            time.setText(listItem.get(position).get("comm_time").toString());
+            content.setText(listItem.get(position).get("comm_content").toString());
+            circle_like.setTag(position);
+            circle_like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int posi = Integer.parseInt(v.getTag().toString());
+                    int likedPicID = getResources().getIdentifier(listItem.get(posi).get("likedPic").toString(), "drawable", "com.example.amap");
+                    circle_like.setImageResource(likedPicID);
+                }
+            });
+            return convertView;
+        }
+    }
 }
-//		initTopBarForOnlyTitle("设置");
-        //黑名单列表
-//        layout_blacklist = (RelativeLayout) findViewById(R.id.layout_blacklist);
-//
-//        layout_info = (RelativeLayout) findViewById(R.id.layout_info);
-//        rl_switch_notification = (RelativeLayout) findViewById(R.id.rl_switch_notification);
-//        rl_switch_voice = (RelativeLayout) findViewById(R.id.rl_switch_voice);
-//        rl_switch_vibrate = (RelativeLayout) findViewById(R.id.rl_switch_vibrate);
-//        rl_switch_notification.setOnClickListener(this);
-//        rl_switch_voice.setOnClickListener(this);
-//        rl_switch_vibrate.setOnClickListener(this);
-//
-//        iv_open_notification = (ImageView) findViewById(R.id.iv_open_notification);
-//        iv_close_notification = (ImageView) findViewById(R.id.iv_close_notification);
-//        iv_open_voice = (ImageView) findViewById(R.id.iv_open_voice);
-//        iv_close_voice = (ImageView) findViewById(R.id.iv_close_voice);
-//        iv_open_vibrate = (ImageView) findViewById(R.id.iv_open_vibrate);
-//        iv_close_vibrate = (ImageView) findViewById(R.id.iv_close_vibrate);
-//        view1 = (View) findViewById(R.id.view1);
-//        view2 = (View) findViewById(R.id.view2);
-
-//        user_set_name = (TextView) findViewById(R.id.user_name);
-//        btn_logout = (Button) findViewById(R.id.btn_logout);
-//
-//        // 初始化
-//        boolean isAllowNotify = mSharedUtil.isAllowPushNotify();
-//
-//        if (isAllowNotify) {
-//            iv_open_notification.setVisibility(View.VISIBLE);
-//            iv_close_notification.setVisibility(View.INVISIBLE);
-//        } else {
-//            iv_open_notification.setVisibility(View.INVISIBLE);
-//            iv_close_notification.setVisibility(View.VISIBLE);
-//        }
-//        boolean isAllowVoice = mSharedUtil.isAllowVoice();
-//        if (isAllowVoice) {
-//            iv_open_voice.setVisibility(View.VISIBLE);
-//            iv_close_voice.setVisibility(View.INVISIBLE);
-//        } else {
-//            iv_open_voice.setVisibility(View.INVISIBLE);
-//            iv_close_voice.setVisibility(View.VISIBLE);
-//        }
-//        boolean isAllowVibrate = mSharedUtil.isAllowVibrate();
-//        if (isAllowVibrate) {
-//            iv_open_vibrate.setVisibility(View.VISIBLE);
-//            iv_close_vibrate.setVisibility(View.INVISIBLE);
-//        } else {
-//            iv_open_vibrate.setVisibility(View.INVISIBLE);
-//            iv_close_vibrate.setVisibility(View.VISIBLE);
-//        }
-//        btn_logout.setOnClickListener(this);
-//        layout_info.setOnClickListener(this);
-//        layout_blacklist.setOnClickListener(this);
-//        changeIp = (Button) findViewById(R.id.button15);
-//        changeIp.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final View view = View.inflate(getActivity(), R.layout.a_editor, null);
-//                final String FILE_NAME = "ip.txt";
-//                Dialog abc = new AlertDialog.Builder(getActivity())
-//                        .setView(view)
-//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                EditText et = (EditText) view.findViewById(R.id.editText3);
-//                                String s = et.getText().toString();
-//                                if (s.length() == 0) {
-//                                    Toast.makeText(getActivity(), "Input something.", Toast.LENGTH_SHORT).show();
-//                                    return;
-//                                }
-//                                FileInputStream fis = null;
-//                                FileOutputStream fos = null;
-//                                try {
-//                                    fos = getActivity().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-//                                    String text = et.getText().toString();
-//                                    fos.write(text.getBytes());
-////                                    Toast.makeText(getApplicationContext(), "success!", Toast.LENGTH_SHORT).show();
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                } finally {
-//                                    if (fos != null) {
-//                                        try {
-//                                            fos.flush();
-//                                            fos.close();
-//                                        } catch (IOException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                    }
-//                                }
-//                                try {
-//                                    fis = getActivity().openFileInput(FILE_NAME);
-//                                    if (fis.available() == 0) {
-//                                        return;
-//                                    }
-//                                    byte[] readBytes = new byte[fis.available()];
-//                                    while (fis.read(readBytes) != -1) {
-//                                    }
-//                                    String text = new String(readBytes);
-////                                    Toast.makeText(getApplicationContext(),text, Toast.LENGTH_SHORT).show();
-//                                } catch (FileNotFoundException e) {
-//                                    e.printStackTrace();
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        })
-//                        .setNegativeButton("cancel", null)
-//                        .create();
-//                abc.show();
-//                EditText et = (EditText) view.findViewById(R.id.editText3);
-//                FileInputStream fis = null;
-//                try {
-//                    fis = getActivity().openFileInput(FILE_NAME);
-//                    if (fis.available() == 0) {
-//                        return;
-//                    }
-//                    byte[] readBytes = new byte[fis.available()];
-//                    while (fis.read(readBytes) != -1) {
-//                    }
-//                    String text = new String(readBytes);
-////                    if(text==null||"".equals(text))text="http://192.168.191.1:8001/loc";
-//                    et.setText(text);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        });
-//        Button suggest = (Button) findViewById(R.id.button5);
-//        suggest.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final View view = View.inflate(getActivity(), R.layout.emailtext, null);
-//                new AlertDialog.Builder(getActivity())
-//                        .setView(view)
-//                        .setPositiveButton("OK", null)
-//                        .setNegativeButton("cancel", null)
-//                        .create()
-//                        .show();
-//            }
-//        });
-//
-//        Button share = (Button) findViewById(R.id.button4);
-//        share.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String shareMsg = getResources().getString(R.string.imlocation);
-//                String shareMsg2 = "http://zjx.com/im?";
-//                MyPoint sb = MainActivity.locateMyPoint;
-//                if (sb != null) shareMsg2 += "x=" + sb.x + "&y=" + sb.y + "&z=" + sb.z;
-//                Log.i("zjx", "shareMsg2:" + shareMsg2);
-//                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//                shareIntent.setType("image/*");
-//                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMsg + "  " + shareMsg2);
-//                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(shareIntent.createChooser(shareIntent, getActivity().getTitle()));
-//            }
-//        });
-//    }
-//
-//    private void initData() {
-//        tv_set_name.setText(BmobUserManager.getInstance(getActivity())
-//                .getCurrentUser().getUsername());
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        // TODO Auto-generated method stub
-//        super.onResume();
-//    }
-//
-//    @Override
-//    public void onClick(View v) {
-//        // TODO Auto-generated method stub
-//        switch (v.getId()) {
-//            case R.id.layout_blacklist:// 启动到黑名单页面
-//                startAnimActivity(new Intent(getActivity(), BlackListActivity.class));
-//                break;
-//            case R.id.layout_info:// 启动到个人资料页面
-//                Intent intent = new Intent(getActivity(), SetMyInfoActivity.class);
-//                intent.putExtra("from", "me");
-//                startActivity(intent);
-//                break;
-//            case R.id.btn_logout:
-//                CustomApplcation.getInstance().logout();
-//                getActivity().finish();
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
-//                break;
-//            case R.id.rl_switch_notification:
-//                if (iv_open_notification.getVisibility() == View.VISIBLE) {
-//                    iv_open_notification.setVisibility(View.INVISIBLE);
-//                    iv_close_notification.setVisibility(View.VISIBLE);
-//                    mSharedUtil.setPushNotifyEnable(false);
-//                    rl_switch_vibrate.setVisibility(View.GONE);
-//                    rl_switch_voice.setVisibility(View.GONE);
-//                    view1.setVisibility(View.GONE);
-//                    view2.setVisibility(View.GONE);
-//                } else {
-//                    iv_open_notification.setVisibility(View.VISIBLE);
-//                    iv_close_notification.setVisibility(View.INVISIBLE);
-//                    mSharedUtil.setPushNotifyEnable(true);
-//                    rl_switch_vibrate.setVisibility(View.VISIBLE);
-//                    rl_switch_voice.setVisibility(View.VISIBLE);
-//                    view1.setVisibility(View.VISIBLE);
-//                    view2.setVisibility(View.VISIBLE);
-//                }
-//
-//                break;
-//            case R.id.rl_switch_voice:
-//                if (iv_open_voice.getVisibility() == View.VISIBLE) {
-//                    iv_open_voice.setVisibility(View.INVISIBLE);
-//                    iv_close_voice.setVisibility(View.VISIBLE);
-//                    mSharedUtil.setAllowVoiceEnable(false);
-//                } else {
-//                    iv_open_voice.setVisibility(View.VISIBLE);
-//                    iv_close_voice.setVisibility(View.INVISIBLE);
-//                    mSharedUtil.setAllowVoiceEnable(true);
-//                }
-//
-//                break;
-//            case R.id.rl_switch_vibrate:
-//                if (iv_open_vibrate.getVisibility() == View.VISIBLE) {
-//                    iv_open_vibrate.setVisibility(View.INVISIBLE);
-//                    iv_close_vibrate.setVisibility(View.VISIBLE);
-//                    mSharedUtil.setAllowVibrateEnable(false);
-//                } else {
-//                    iv_open_vibrate.setVisibility(View.VISIBLE);
-//                    iv_close_vibrate.setVisibility(View.INVISIBLE);
-//                    mSharedUtil.setAllowVibrateEnable(true);
-//                }
-//                break;
-//
-//        }
-//    }
-
-//}
