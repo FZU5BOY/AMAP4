@@ -43,7 +43,7 @@ public class LocationService extends Service {
                         else {
 //                            customApplcation.setAmapx(lastAMapPoint.getX().toString());
                             lastAMapPoint=location;
-                            customApplcation.GeoPoint(lastAMapPoint);
+                           if(location.getState()==1) customApplcation.GeoPoint(lastAMapPoint);
                             Log.i("zjx", location.toString());
                             //发送广播
                             Intent intent = new Intent();
