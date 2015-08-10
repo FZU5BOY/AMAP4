@@ -1,5 +1,7 @@
 package com.example.amap.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.im.bean.BmobChatUser;
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -11,7 +13,8 @@ import cn.bmob.v3.datatype.BmobRelation;
  * @author smile
  * @date 2014-5-29 下午6:15:45
  */
-public class AMapPoint extends BmobObject {
+public class AMapPoint implements Serializable {
+	private static final long serialVersionUID = -2527515194340586771L;
 	private String amapId =String.valueOf("amapid");
 	private Double x = Double.valueOf(0.0D);
 	private Double y = Double.valueOf(0.0D);

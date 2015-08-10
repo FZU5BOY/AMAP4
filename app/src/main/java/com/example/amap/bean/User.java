@@ -37,7 +37,7 @@ public class User extends BmobChatUser {
 	/**
 	 * 地理坐标
 	 */
-	private AMapPoint location;//
+	private AMapPoint aMapPoint;//
 
 	private Integer hight;
 
@@ -60,12 +60,6 @@ public class User extends BmobChatUser {
 	public void setBlogs(BmobRelation blogs) {
 		this.blogs = blogs;
 	}
-	public AMapPoint getLocation() {
-		return location;
-	}
-	public void setLocation(AMapPoint location) {
-		this.location = location;
-	}
 	public Boolean getSex() {
 		return sex;
 	}
@@ -79,4 +73,11 @@ public class User extends BmobChatUser {
 		this.sortLetters = sortLetters;
 	}
 
+	public AMapPoint getaMapPoint() {
+		return aMapPoint;
+	}
+
+	public void setaMapPoint(AMapPoint aMapPoint) {
+		this.aMapPoint = aMapPoint;
+	}
 }

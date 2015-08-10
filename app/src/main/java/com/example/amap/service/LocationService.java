@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.amap.CustomApplcation;
 import com.example.amap.bean.AMapPoint;
 import com.example.amap.util.location.AnalogLocation;
 import com.example.amap.util.rount.MyPoint;
 
 public class LocationService extends Service {
+    CustomApplcation customApplcation;
     private AnalogLocation analogLocation=null;
     private boolean threadDisable=false;
     private final static String TAG=LocationService.class.getSimpleName();
@@ -18,7 +20,7 @@ public class LocationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        customApplcation=CustomApplcation.getInstance();
         analogLocation=new AnalogLocation();
 
         new Thread(new Runnable(){
@@ -39,7 +41,9 @@ public class LocationService extends Service {
                             //什么都不做
                         }
                         else {
+//                            customApplcation.setAmapx(lastAMapPoint.getX().toString());
                             lastAMapPoint=location;
+                            customApplcation.GeoPoint(lastAMapPoint);
                             Log.i("zjx", location.toString());
                             //发送广播
                             Intent intent = new Intent();

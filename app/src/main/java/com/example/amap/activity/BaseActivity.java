@@ -239,24 +239,24 @@ public class BaseActivity extends FragmentActivity {
 			String savex  = mApplication.getAmapx();
 			String savey = mApplication.getAmapy();
 			String savez  = mApplication.getAmapz();
-			String newMapID =String.valueOf(CustomApplcation.lastPoint.getAmapId());
 			String newX = String.valueOf(CustomApplcation.lastPoint.getX());
 			String newY = String.valueOf(CustomApplcation.lastPoint.getY());
 			String newZ = String.valueOf(CustomApplcation.lastPoint.getZ());
 //			ShowLog("saveLatitude ="+saveLatitude+",saveLongtitude = "+saveLongtitude);
 //			ShowLog("newLat ="+newLat+",newLong = "+newLong);
+			ShowLog("try to update location:"+ mApplication.getAmapx()+"&"+CustomApplcation.lastPoint);
 			if(!savex.equals(newX)|| !savey.equals(newY)|| !savez.equals(newZ)){//只有位置有变化就更新当前位置，达到实时更新的目的
 				User u = (User) userManager.getCurrentUser(User.class);
 				final User user = new User();
-				user.setLocation(CustomApplcation.lastPoint);
+				user.setaMapPoint(CustomApplcation.lastPoint);
 				user.setObjectId(u.getObjectId());
 				user.update(this,new UpdateListener() {
 					@Override
 					public void onSuccess() {
 						// TODO Auto-generated method stub
-						CustomApplcation.getInstance().setAmapx(String.valueOf(user.getLocation().getX()));
-						CustomApplcation.getInstance().setAmapy(String.valueOf(user.getLocation().getY()));
-						CustomApplcation.getInstance().setAmapz(String.valueOf(user.getLocation().getZ()));
+						CustomApplcation.getInstance().setAmapx(String.valueOf(user.getaMapPoint().getX()));
+						CustomApplcation.getInstance().setAmapy(String.valueOf(user.getaMapPoint().getY()));
+						CustomApplcation.getInstance().setAmapz(String.valueOf(user.getaMapPoint().getZ()));
 //						ShowLog("经纬度更新成功");
 					}
 					@Override

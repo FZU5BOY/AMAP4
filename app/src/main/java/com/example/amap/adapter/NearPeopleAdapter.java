@@ -52,12 +52,12 @@ public class NearPeopleAdapter extends BaseListAdapter<User> {
 		} else {
 			iv_avatar.setImageResource(R.drawable.default_head);
 		}
-		AMapPoint location = contract.getLocation();
+		AMapPoint location = contract.getaMapPoint();
 		String currentLat = CustomApplcation.getInstance().getAmapx();
 		String currentLong = CustomApplcation.getInstance().getAmapy();
 		if(location!=null && !currentLat.equals("") && !currentLong.equals("")){
-			double distance = DistanceOfTwoPoints(Double.parseDouble(currentLat),Double.parseDouble(currentLong),contract.getLocation().getX(),
-					contract.getLocation().getY());
+			double distance = DistanceOfTwoPoints(Double.parseDouble(currentLat),Double.parseDouble(currentLong),contract.getaMapPoint().getX(),
+					contract.getaMapPoint().getY());
 			tv_distance.setText(String.valueOf(distance)+"米");
 		}else{
 			tv_distance.setText("未知");

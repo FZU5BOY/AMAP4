@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.amap.bean.AMapPoint;
 import com.example.amap.util.CollectionUtils;
@@ -53,6 +54,7 @@ public class CustomApplcation extends Application {
 	}
 
 	private void init() {
+		Log.i("zjx","application init");
 		mMediaPlayer = MediaPlayer.create(this, R.raw.notify);
 		mNotificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
 		initImageLoader(getApplicationContext());
@@ -117,7 +119,12 @@ public class CustomApplcation extends Application {
 //			lastPoint = new BmobGeoPoint(amapx, latitude);
 //		}
 //	}
-
+	public void GeoPoint(AMapPoint aMapPoint){
+		lastPoint=aMapPoint;
+//		setAmapx(aMapPoint.getX().toString());
+//		setAmapy(aMapPoint.getY().toString());
+//		setAmapz(aMapPoint.getZ().toString());
+	}
 	/** 初始化ImageLoader */
 	public static void initImageLoader(Context context) {
 		File cacheDir = StorageUtils.getOwnCacheDirectory(context,
