@@ -1,6 +1,5 @@
 package com.example.amap.activity.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -104,20 +103,26 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
         cover_user_photo.setImageResource(R.drawable.head);
     }
 
-    @SuppressLint("NewApi")
     private void initData() {
         user_set_name.setText(BmobUserManager.getInstance(getActivity())
                 .getCurrentUser().getUsername().trim());
-//        new AnotherTask().execute("My Avata");
-
+        new AnotherTask().execute("My Avata");
+//        URL picUrl = null;
+//        try {
+//            picUrl = new URL(BmobUserManager.getInstance(getActivity())
+//                    .getCurrentUser().getAvatar());
+//        } catch (MalformedURLException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
-//    public Bitmap loadDrawable()
+//    public Bitmap loadDrawable(URL imageUrl)
 //    {
 //        final Handler handler = new Handler()
 //        {
 //            public void handleMessage(Message message)
 //            {
-//                imageCallback.imageLoaded((Bitmap) message.obj, imageUrl);
+//
 //            }
 //        };
 //        new Thread()
@@ -165,7 +170,7 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
             try
             {
                 //线程睡眠5秒，模拟耗时操作，这里面的内容Android系统会自动为你启动一个新的线程执行
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             }
             catch (InterruptedException e)
             {
@@ -174,6 +179,8 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
             return params[0];
         }
     }
+
+
     private ArrayList<HashMap<String, Object>> geneItems() {
         listItem = new ArrayList<HashMap<String, Object>>();
         /**为动态数组添加数据*/

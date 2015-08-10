@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.example.amap.activity.MainActivity;
 import com.example.amap.activity.NewFriendActivity;
+import com.example.amap.activity.UserMainActivity;
 import com.example.amap.util.CollectionUtils;
 import com.example.amap.util.CommonUtils;
 
@@ -210,7 +211,7 @@ public class MyMessageReceiver extends BroadcastReceiver {
 		CharSequence tickerText = msg.getBelongUsername() + ":" + trueMsg;
 		String contentTitle = msg.getBelongUsername()+ " (" + mNewNum + "条新消息)";
 
-		Intent intent = new Intent(context, MainActivity.class);
+		Intent intent = new Intent(context, UserMainActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		boolean isAllowVoice = CustomApplcation.getInstance().getSpUtil().isAllowVoice();
