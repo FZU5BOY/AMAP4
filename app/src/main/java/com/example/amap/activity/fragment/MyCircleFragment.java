@@ -33,10 +33,13 @@ import com.example.amap.activity.FragmentBase;
 import com.example.amap.activity.LoginActivity;
 import com.example.amap.activity.MainActivity;
 import com.example.amap.activity.SetMyInfoActivity;
+import com.example.amap.bean.User;
 import com.example.amap.util.CircularImage;
+import com.example.amap.util.ImageLoadOptions;
 import com.example.amap.util.SharePreferenceUtil;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.view.xlist.XListView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -106,7 +109,12 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
     private void initData() {
         user_set_name.setText(BmobUserManager.getInstance(getActivity())
                 .getCurrentUser().getUsername().trim());
-        new AnotherTask().execute("My Avata");
+        //对UI组件的更新操作
+        ShowLog("photo:" + BmobUserManager.getInstance(getActivity())
+                .getCurrentUser().getAvatar());
+        String photo=BmobUserManager.getInstance(getActivity()).getCurrentUser().getAvatar();
+        refreshAvatar(photo);
+        ShowLog("photo:" + photo);
 //        URL picUrl = null;
 //        try {
 //            picUrl = new URL(BmobUserManager.getInstance(getActivity())
@@ -139,45 +147,14 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
 //        }.start();
 //        return null;
 //    }
-    private class AnotherTask extends AsyncTask<String, Void, String>{
-        @Override
-        protected void onPostExecute(String result) {
-            //对UI组件的更新操作
-            URL picUrl = null;
-            try {
-                picUrl = new URL(BmobUserManager.getInstance(getActivity())
-                        .getCurrentUser().getAvatar());
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            Bitmap bmUserImage = null;
-            try {
-                bmUserImage = BitmapFactory.decodeStream(picUrl.openStream());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            if (bmUserImage == null) {
-                cover_user_photo.setImageResource(R.drawable.head);
-            } else {
-                cover_user_photo.setImageBitmap(bmUserImage);
-            }
-        }
-        @Override
-        protected String doInBackground(String... params) {
-            //耗时的操作
-            try
-            {
-                //线程睡眠5秒，模拟耗时操作，这里面的内容Android系统会自动为你启动一个新的线程执行
-                Thread.sleep(5000);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-            return params[0];
-        }
+
+    private void refreshAvatar(String avatar) {
+    if (avatar != null && !avatar.equals("")) {
+        ImageLoader.getInstance().displayImage(avatar, cover_user_photo,
+                ImageLoadOptions.getOptions());
+    } else {
+        cover_user_photo.setImageResource(R.drawable.default_head);
+    }
     }
 
 
