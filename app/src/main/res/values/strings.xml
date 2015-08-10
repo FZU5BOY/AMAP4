@@ -133,7 +133,7 @@
 
     <string name="hello">Hello World, ListViewDemoActivity!</string>
     <string name="place_pic">地点图片</string>
-    <string name="place_name">福州大学生活三区玫瑰园公共厕所</string>
+    <string name="place_name">福建晋江国际机场一楼大厅商店11</string>
     <string name="go_here">&#xe613; 到这里去</string>
     <string name="mark_place">&#xe61f; 收藏</string>
     <string name="marked_place">&#xe648; 已收藏</string>

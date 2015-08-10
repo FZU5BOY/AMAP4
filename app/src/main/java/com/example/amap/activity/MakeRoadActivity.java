@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by Zeashon on 2015/5/10.
  */
-public class MakeRoadActivity extends Activity {
+public class MakeRoadActivity extends BaseActivity {
     Button search;
     Button search2;
     Button rount;
@@ -54,7 +54,7 @@ public class MakeRoadActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MakeRoadActivity.this, FullSetWayActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
         Button btn = (Button)findViewById(R.id.makeRoad_GoBack);
@@ -195,7 +195,6 @@ public class MakeRoadActivity extends Activity {
         if(requestCode==1&&resultCode==0){
             String search=bundle.getString("searchkey");
             int currentedit=intent.getIntExtra("currentnum",-2);
-//            Log.i("zjx","currentnum:"+currentedit);
             if(currentedit==-2){
                 editText.setText(search);
                 if(getResources().getString(R.string.mylocation).equals(search)){
@@ -220,6 +219,23 @@ public class MakeRoadActivity extends Activity {
 //                adapter.add(currentedit, search);
                 listView.insert(currentedit, search);
 
+            }
+        }
+        else if(resultCode==3){
+            String strList=bundle.getString("strList");
+            ShowToast("仅当参考，按需调整");
+            if(strList!=null&&!"".equals(strList)){
+                String[] str2=strList.split("!");
+                adapter.clear();
+                mNewItemCount=0;
+//                for (int position : reverseSortedPositions) {
+//                    mAdapter.remove(position);
+//                }
+                for(int i=0;i<=str2.length-2;i++){
+                    adapter.add(str2[i]);
+                    mNewItemCount++;
+                }
+                editText2.setText(str2[str2.length-1]);
             }
         }
     }

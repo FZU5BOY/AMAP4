@@ -106,12 +106,12 @@ public class XListViewActivity extends Activity implements IXListViewListener {
 //		int j=i+30;
         for (int i = 1; i < 30; i++) {
             HashMap<String, Object> map = new HashMap<String, Object>();
-            String user = "大帅比" + j;
+            String user = "匿名用户";
             map.put("avatar", "dsb");
             map.put("stars", "4");
             map.put("username", user);
             map.put("comm_time", "8月1日");
-            map.put("comm_content", "hahahahaha");
+            map.put("comm_content", "不错");
             listItem.add(map);
         }
         return listItem;
@@ -123,12 +123,12 @@ public class XListViewActivity extends Activity implements IXListViewListener {
 //		int j=i+30;
         for (int i = 1; i < 30; i++) {
             HashMap<String, Object> map = new HashMap<String, Object>();
-            String user = "大帅比" + j;
+            String user = "匿名用户";
             map.put("avatar", "dsb");
             map.put("stars", "3");
             map.put("username", user);
             map.put("comm_time", "8.1");
-            map.put("comm_content", "hahahahaha");
+            map.put("comm_content", "挺好的");
             listItem.add(map);
         }
         return listItem;
