@@ -46,7 +46,7 @@
                 style="@style/chat_content_date_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/location_zzx"
+                android:background="@drawable/location_default"
                 android:gravity="center"
                 android:textColor="@android:color/white" />
         </LinearLayout>
