@@ -120,7 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     }
                 });
                 //更新用户的地理位置以及好友的资料
-                //updateUserInfos();
+                updateUserInfos();
                 progress.dismiss();
                 ShowLog("正在准备进入usermain");
                 Intent intent = new Intent(LoginActivity.this,UserMainActivity.class);
