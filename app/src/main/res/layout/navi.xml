@@ -56,26 +56,48 @@
             android:layout_height="10dp"
             android:layout_gravity="center"
             android:background="@drawable/iconfont_dot" />
+
     </LinearLayout>
 
     <Button
         android:id="@+id/useapp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="true"
-        android:background="@android:color/transparent"
-        android:gravity="center_vertical|center_horizontal"
-        android:paddingBottom="28dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="28dp"
-        android:paddingTop="5dp"
-
-        android:text="开始使用"
-        android:textColor="@color/white"
+        android:layout_height="45dp"
+        android:background="@drawable/shapesolid"
+        android:text="直接开启"
+        android:textColor="@color/myblue1"
         android:textSize="14sp"
-        android:visibility="gone" />
+        android:visibility="visible"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_reg_btn_layout_navi"
+        android:layout_alignBottom="@+id/linearLayout3"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:padding="15dp"
+        android:layout_alignParentTop="false">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="登录"
+            android:id="@+id/loginBtn_navi"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shapesolid"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="注册"
+            android:id="@+id/registerBtn_navi"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/shapesolid"
+            android:layout_weight="0.618"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

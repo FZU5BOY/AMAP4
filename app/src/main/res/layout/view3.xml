@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     style="@android:style/Animation"
-    android:background="@drawable/navi_nearby">
+    android:scaleType="centerInside"
+    android:background="@drawable/splash">
 
     <TextView
         android:id="@+id/textView1"
