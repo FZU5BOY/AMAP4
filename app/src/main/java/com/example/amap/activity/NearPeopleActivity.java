@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.example.amap.CustomApplcation;
 import com.example.amap.R;
 import com.example.amap.adapter.NearPeopleAdapter;
 import com.example.amap.bean.User;
@@ -48,6 +49,13 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 
 	private void initView() {
 		initTopBarForLeft("附近的人");
+		String currentLat = CustomApplcation.getInstance().getAmapx();
+		String currentLong = CustomApplcation.getInstance().getAmapy();
+		if("".equals(currentLat)||currentLat==null)
+		{
+			ShowToast("您尚未定位，无法获知您的距离");
+			return ;
+		}
 		initXListView();
 	}
 
@@ -93,7 +101,8 @@ public class NearPeopleActivity extends ActivityBase implements XListView.IXList
 //				//此方法默认查询所有带地理位置信息的且性别为女的用户列表，如果你不想包含好友列表的话，将查询条件中的isShowFriends设置为false就行
 //			userManager.queryNearByListByPage(isUpdate, 0, "location", x, y, true, "sex", false, new FindListener<User>() {
 				//此方法默认查询所有带地理位置信息用户列表，如果你不想包含好友列表的话，将查询条件中的isShowFriends设置为false就行
-			userManager.queryNearAllByListByPage(isUpdate,0,"aMapPoint",x,y,z,true,new FindListener<User>()
+//			userManager.queryMyKiloMetersListByPage();
+			userManager.queryMyKiloMetersListByPage(isUpdate,0,"aMapPoint",x,y,z,true,5.0,new FindListener<User>()
 
 				{
 

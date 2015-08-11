@@ -15,6 +15,7 @@ import com.example.amap.bean.User;
 import com.example.amap.util.ImageLoadOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobGeoPoint;
@@ -56,13 +57,13 @@ public class NearPeopleAdapter extends BaseListAdapter<User> {
 		String currentLat = CustomApplcation.getInstance().getAmapx();
 		String currentLong = CustomApplcation.getInstance().getAmapy();
 		if(location!=null && !currentLat.equals("") && !currentLong.equals("")){
-			double distance = DistanceOfTwoPoints(Double.parseDouble(currentLat),Double.parseDouble(currentLong),contract.getaMapPoint().getX(),
+			String distance = DistanceOfTwoPoints(Double.parseDouble(currentLat),Double.parseDouble(currentLong),contract.getaMapPoint().getX(),
 					contract.getaMapPoint().getY());
-			tv_distance.setText(String.valueOf(distance)+"米");
+			tv_distance.setText(distance+"米");
 		}else{
 			tv_distance.setText("未知");
 		}
-		tv_name.setText(contract.getUsername());
+		tv_name.setText(contract.getNick());
 		tv_logintime.setText("最近登录时间:"+contract.getUpdatedAt());
 		return convertView;
 	}
@@ -81,17 +82,20 @@ public class NearPeopleAdapter extends BaseListAdapter<User> {
 	 * @param lng2
 	 * @return 距离：单位为米
 	 */
-	public static double DistanceOfTwoPoints(double lat1, double lng1,double lat2, double lng2) {
-		double radLat1 = rad(lat1);
-		double radLat2 = rad(lat2);
-		double a = radLat1 - radLat2;
-		double b = rad(lng1) - rad(lng2);
-		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
-				+ Math.cos(radLat1) * Math.cos(radLat2)
-				* Math.pow(Math.sin(b / 2), 2)));
-		s = s * EARTH_RADIUS;
-		s = Math.round(s * 10000) / 10000;
-		return s;
+	public static String DistanceOfTwoPoints(double lat1, double lng1,double lat2, double lng2) {
+//		double radLat1 = rad(lat1);
+//		double radLat2 = rad(lat2);
+//		double a = radLat1 - radLat2;
+//		double b = rad(lng1) - rad(lng2);
+//		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+//				+ Math.cos(radLat1) * Math.cos(radLat2)
+//				* Math.pow(Math.sin(b / 2), 2)));
+//		s = s * EARTH_RADIUS;
+//		s = Math.round(s * 10000) / 10000;
+//		return s;
+		double x=Math.abs(lat1-lat2)*500;
+		double y=Math.abs(lng1-lng2)*500;
+		return new DecimalFormat("#.00").format(Math.sqrt(x * x + y * y));
 	}
 
 }

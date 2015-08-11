@@ -49,8 +49,7 @@ public class MyBFindTask<T> extends MyBmobQuery<T> {
                             this.addWhereContains(var10.getTableFiled(), (String)var10.getTableFiledValue()[0]);
                         } else if(var6.getType() == 4) {
                             this.addWhereRelatedTo(var10.getTableFiled(), (BmobPointer)var10.getTableFiledValue()[0]);
-                        }
-                        else if(var6.getType() == 5) {
+                        } else if(var6.getType() == 5) {
                             this.addWhereNear(var10.getTableFiled(), (AMapPoint)var10.getTableFiledValue()[0]);
                         } else if(var6.getType() == 6) {
                             this.addWhereWithinKilometers(var10.getTableFiled(), (AMapPoint)var10.getTableFiledValue()[0], ((Double)var10.getTableFiledValue()[1]).doubleValue());
