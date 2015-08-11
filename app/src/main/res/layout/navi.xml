@@ -67,7 +67,7 @@
         android:text="直接开启"
         android:textColor="@color/myblue1"
         android:textSize="14sp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         android:layout_centerInParent="true" />
