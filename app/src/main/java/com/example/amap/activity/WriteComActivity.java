@@ -2,6 +2,7 @@ package com.example.amap.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +32,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import com.example.amap.R;
 
-public class WriteComActivity extends Activity{
+public class WriteComActivity extends BaseActivity{
     private Button submit_commBtn;
     @Override  
     protected void onCreate(Bundle savedInstanceState) {  
@@ -45,9 +46,8 @@ public class WriteComActivity extends Activity{
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                HttpClient httpClient = new DefaultHttpClient();
-                String url = "http://192.168.191.1/write_comm.php";
-                uploadData(url, httpClient);
+                new WhiteComment().execute("");
+
             }
         });
 //        cancel event
@@ -62,6 +62,15 @@ public class WriteComActivity extends Activity{
         });
     }
 //    data upload
+    class WhiteComment extends AsyncTask{
+    @Override
+    protected Object doInBackground(Object[] params) {
+        HttpClient httpClient = new DefaultHttpClient();
+        String url = "http://192.168.191.1/AMap/write_comm.php";
+        uploadData(url, httpClient);
+        return null;
+    }
+}
     private void uploadData(String url, HttpClient httpClient) {
         EditText comm_content = (EditText) findViewById(R.id.comm_content);
         RatingBar rate_stars = (RatingBar) findViewById(R.id.rate_stars);
@@ -82,12 +91,14 @@ public class WriteComActivity extends Activity{
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 //String httpResult = EntityUtils.toString(
                 //	httpResponse.getEntity(), "utf-8");
-                Toast.makeText(getApplicationContext(), "评论成功！",
-                        Toast.LENGTH_SHORT).show();
+                ShowToast("评论成功!");
+//                Toast.makeText(WriteComActivity.this, "评论成功！",
+//                        Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(getApplicationContext(), "网络错误",
-                        Toast.LENGTH_SHORT).show();
+                ShowToast("网络错误");
+//                Toast.makeText(WriteComActivity.this, "网络错误",
+//                        Toast.LENGTH_SHORT).show();
             }
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block

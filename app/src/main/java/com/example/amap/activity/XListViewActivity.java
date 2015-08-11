@@ -14,6 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 
 import com.example.amap.R;
+import com.example.amap.util.rount.MyPoint;
 import com.example.amap.view.xlist.XListView;
 import com.example.amap.view.xlist.XListView.IXListViewListener;
 import com.example.amap.activity.WriteComActivity;
@@ -26,6 +27,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -52,17 +54,18 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-public class XListViewActivity extends Activity implements IXListViewListener {
+public class XListViewActivity extends BaseActivity implements IXListViewListener {
     private final String TAG = "XListViewActivity";
     private XListView mListView;
     // private ArrayAdapter<String> mAdapter;
     // private ArrayList<String> items = new ArrayList<String>();
     private Handler mHandler;
-    ArrayList<HashMap<String, Object>> listItem;
+    ArrayList<HashMap<String, Object>> listItem = new ArrayList<>();
     private int addMoreLmtS = 10;
     MyAdapter mAdapter;
     private boolean marked = false;
-    String url = "http://192.168.191.1/get_comm.php";
+    String url = "http://192.168.191.1/AMap/get_comm.php";
+
 
     // private static int refreshCnt = 0;
 
@@ -73,17 +76,18 @@ public class XListViewActivity extends Activity implements IXListViewListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xlistview);
-        HttpClient httpClient = new DefaultHttpClient();
-        geneItems(url, httpClient);
         mListView = (XListView) findViewById(R.id.xListView);
         mListView.setPullLoadEnable(true);
         // List<Map<String, Object>> list = geneItems();
         mAdapter = new MyAdapter(this);
         mListView.setAdapter(mAdapter);
+        LoadCommennt loadCommennt=new LoadCommennt();
+        loadCommennt.execute(true);
         // mAdapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
         // mListView.setAdapter(mAdapter);
         // mListView.setPullLoadEnable(false);
         // mListView.setPullRefreshEnable(false);
+
         mListView.setXListViewListener(this);
         mHandler = new Handler();
         Typeface icons = Typeface.createFromAsset(getAssets(),
@@ -118,17 +122,35 @@ public class XListViewActivity extends Activity implements IXListViewListener {
                 Intent intent = new Intent();
                 intent.setClass(XListViewActivity.this, WriteComActivity.class);
                 startActivity(intent);
-                // finish();//停止当前的Activity,如果不写,则按返回键会跳转回原来的Activity
             }
 
         });
     }
+    class LoadCommennt extends AsyncTask<Boolean,String,String>{
+        @Override
+        protected String doInBackground(Boolean... params) {
+            boolean isFirst=params[0];
+            HttpClient httpClient = new DefaultHttpClient();
+            if(isFirst)
+            geneItems(url, httpClient);
+            else addItems(url, httpClient);
+            return null;
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+    }
+
 
     private ArrayList<HashMap<String, Object>> geneItems(String url,
                                                          HttpClient httpClient) {
-        getComms(url, httpClient, true, "0");
         addMoreLmtS = 10;
-        return listItem;
+        return getComms(url, httpClient, true, "0");
+
+//        return listItem;
     }
 
     private ArrayList<HashMap<String, Object>> addItems(String url,
@@ -136,9 +158,10 @@ public class XListViewActivity extends Activity implements IXListViewListener {
         // listItem = new ArrayList<HashMap<String,Object>>();
         String lmtS = String.valueOf(addMoreLmtS);
         /** 为动态数组添加数据 */
-        getComms(url, httpClient, false, lmtS);
         addMoreLmtS += 10;
-        return listItem;
+        return getComms(url, httpClient, false, lmtS);
+
+//        return listItem;
     }
 
     private ArrayList<HashMap<String, Object>> getComms(String url,
@@ -162,8 +185,10 @@ public class XListViewActivity extends Activity implements IXListViewListener {
                 try {
                     JSONArray result = new JSONArray(httpResult);
                     if (result.length() == 0) {
-                        Toast.makeText(getApplicationContext(), "已加载全部评论",
-                                Toast.LENGTH_SHORT).show();
+                        ShowToast("已加载全部评论");
+//                        ShowT
+//                        Toast.makeText(getApplicationContext(), "已加载全部评论",
+//                                Toast.LENGTH_SHORT).show();
                         return null;
                     }
                     /** 为动态数组添加数据 */
@@ -208,35 +233,55 @@ public class XListViewActivity extends Activity implements IXListViewListener {
     @Override
     public void onRefresh() {
         Log.i(TAG, "刷新最新");
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // start = ++refreshCnt;
-                // items.clear();
-                HttpClient httpClient = new DefaultHttpClient();
-                geneItems(url, httpClient);
-                mAdapter.notifyDataSetChanged();
-                // mAdapter = new ArrayAdapter<String>(XListViewActivity.this,
-                // R.layout.list_item, items);
-                // MyAdapter mAdapter = new MyAdapter(XListViewActivity.this);
-                // mListView.setAdapter(mAdapter);
-                onLoad();
-            }
-        }, 2000);
+//        HttpClient httpClient = new DefaultHttpClient();
+//        geneItems(url, httpClient);
+        LoadCommennt loadCommennt=new LoadCommennt();
+                loadCommennt.execute(true);
+        mAdapter.notifyDataSetChanged();
+        // mAdapter = new ArrayAdapter<String>(XListViewActivity.this,
+        // R.layout.list_item, items);
+        // MyAdapter mAdapter = new MyAdapter(XListViewActivity.this);
+        // mListView.setAdapter(mAdapter);
+        onLoad();
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // start = ++refreshCnt;
+//                // items.clear();
+////                LoadCommennt loadCommennt=new LoadCommennt();
+////                loadCommennt.execute(true);
+//                HttpClient httpClient = new DefaultHttpClient();
+//                geneItems(url, httpClient);
+//                mAdapter.notifyDataSetChanged();
+//                // mAdapter = new ArrayAdapter<String>(XListViewActivity.this,
+//                // R.layout.list_item, items);
+//                // MyAdapter mAdapter = new MyAdapter(XListViewActivity.this);
+//                // mListView.setAdapter(mAdapter);
+//                onLoad();
+//            }
+//        }, 2000);
     }
 
     @Override
     public void onLoadMore() {
         Log.i(TAG, "加载更多");
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                HttpClient httpClient = new DefaultHttpClient();
-                addItems(url, httpClient);
-                mAdapter.notifyDataSetChanged();
-                onLoad();
-            }
-        }, 2000);
+//        HttpClient httpClient = new DefaultHttpClient();
+//        addItems(url, httpClient);
+        LoadCommennt loadCommennt=new LoadCommennt();
+        loadCommennt.execute(false);
+        mAdapter.notifyDataSetChanged();
+        onLoad();
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+////                HttpClient httpClient = new DefaultHttpClient();
+////                addItems(url, httpClient);
+//                HttpClient httpClient = new DefaultHttpClient();
+//                addItems(url, httpClient);
+//                mAdapter.notifyDataSetChanged();
+//                onLoad();
+//            }
+//        }, 2000);
     }
 
     private class MyAdapter extends BaseAdapter {
