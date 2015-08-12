@@ -64,7 +64,7 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
     private int addMoreLmtS = 10;
     MyAdapter mAdapter;
     private boolean marked = false;
-    String url = "";
+    String url = "http://192.168.191.1/AMap/get_comm.php";
 
 
     // private static int refreshCnt = 0;
@@ -81,8 +81,7 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
         // List<Map<String, Object>> list = geneItems();
         mAdapter = new MyAdapter(this);
         mListView.setAdapter(mAdapter);
-        LoadCommennt loadCommennt=new LoadCommennt();
-        loadCommennt.execute(true);
+
         // mAdapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
         // mListView.setAdapter(mAdapter);
         // mListView.setPullLoadEnable(false);
@@ -129,6 +128,13 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
     }
     class LoadCommennt extends AsyncTask<Boolean,String,String>{
         @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            mAdapter.notifyDataSetChanged();
+            onLoad();
+        }
+
+        @Override
         protected String doInBackground(Boolean... params) {
             boolean isFirst=params[0];
             HttpClient httpClient = new DefaultHttpClient();
@@ -145,7 +151,8 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
+        LoadCommennt loadCommennt=new LoadCommennt();
+        loadCommennt.execute(true);
     }
 
 
@@ -241,12 +248,6 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
 //        geneItems(url, httpClient);
         LoadCommennt loadCommennt=new LoadCommennt();
                 loadCommennt.execute(true);
-        mAdapter.notifyDataSetChanged();
-        // mAdapter = new ArrayAdapter<String>(XListViewActivity.this,
-        // R.layout.list_item, items);
-        // MyAdapter mAdapter = new MyAdapter(XListViewActivity.this);
-        // mListView.setAdapter(mAdapter);
-        onLoad();
 //        mHandler.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -273,8 +274,8 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
 //        addItems(url, httpClient);
         LoadCommennt loadCommennt=new LoadCommennt();
         loadCommennt.execute(false);
-        mAdapter.notifyDataSetChanged();
-        onLoad();
+//        mAdapter.notifyDataSetChanged();
+//        onLoad();
 //        mHandler.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {

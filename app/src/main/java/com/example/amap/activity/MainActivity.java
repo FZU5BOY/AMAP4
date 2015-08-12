@@ -1486,23 +1486,12 @@ public class MainActivity extends BaseActivity {
                     Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                     mMapView.centerAt(poi2, true);
                     mMapView.setScale(7000.0);
-//                    viewHandler.sendEmptyMessage(UPDATESCALE);
-//                    if (calThread == null) {
-//                        calThread = new CalThread();
-//                        // 启动新线程
-//                        calThread.start();
-//                    }
-//                    if (timer == null) {
-//                        timer = new Timer();
-//                    }
-//                    timer.schedule(new TimerTask() {
-//
-//                        @Override
-//                        public void run() {
-//                            calThread.mHandler.sendEmptyMessage(0x123);
-//                            Log.i("zjx", "haha");
-//                        }
-//                    }, 500, 500);
+
+                    receiver2 = new MyReceiver2();
+                    IntentFilter filter = new IntentFilter();
+                    filter.setPriority(20);
+                    filter.addAction("com.example.amap.service.LocationService");
+                    registerReceiver(receiver2, filter);
                 } else {
 
                     for (int i = 0; i < midlist.size() - 1; i++) {
@@ -1666,7 +1655,7 @@ public class MainActivity extends BaseActivity {
         return ms;
     }
 
-    //根据搜索名得到最近的要素距离(此处采用曼哈顿，与真是数据较拟合)
+    //根据搜索名得到最近的要素距离(此处采用曼哈顿，与zhenshi数据较拟合)
     public double getCloestfeature(String msearch) {
         QueryParameters qParameters = new QueryParameters();
         String whereClause = "nickname like '%" + msearch + "%'";
