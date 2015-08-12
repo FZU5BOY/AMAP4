@@ -122,6 +122,7 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
                 Intent intent = new Intent();
                 intent.setClass(XListViewActivity.this, WriteComActivity.class);
                 startActivity(intent);
+                //
             }
 
         });
