@@ -108,7 +108,7 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
 
     private void initData() {
         user_set_name.setText(BmobUserManager.getInstance(getActivity())
-                .getCurrentUser().getUsername().trim());
+                .getCurrentUser().getNick().trim());
         //对UI组件的更新操作
         ShowLog("photo:" + BmobUserManager.getInstance(getActivity())
                 .getCurrentUser().getAvatar());
