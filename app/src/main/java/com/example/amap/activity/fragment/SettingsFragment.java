@@ -25,6 +25,7 @@ import com.example.amap.activity.BlackListActivity;
 import com.example.amap.activity.FragmentBase;
 import com.example.amap.activity.LoginActivity;
 import com.example.amap.activity.MainActivity;
+import com.example.amap.activity.NaviActivity;
 import com.example.amap.activity.SetMyInfoActivity;
 import com.example.amap.util.SharePreferenceUtil;
 import com.example.amap.util.rount.MyPoint;
@@ -235,6 +236,15 @@ public class SettingsFragment extends FragmentBase implements OnClickListener {
                 startActivity(shareIntent.createChooser(shareIntent, getActivity().getTitle()));
             }
         });
+
+//        Button btnNavi = (Button) findViewById(R.id.go_navi_btn_set);
+//        btnNavi.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), NaviActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     private void initData() {

@@ -92,8 +92,8 @@
 
         <ImageView
             android:id="@+id/iv_open_notification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
@@ -102,8 +102,8 @@
 
         <ImageView
             android:id="@+id/iv_close_notification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
@@ -137,8 +137,8 @@
 
         <ImageView
             android:id="@+id/iv_open_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
@@ -147,8 +147,8 @@
 
         <ImageView
             android:id="@+id/iv_close_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
@@ -182,8 +182,8 @@
 
         <ImageView
             android:id="@+id/iv_open_vibrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
@@ -192,8 +192,8 @@
 
         <ImageView
             android:id="@+id/iv_close_vibrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
@@ -303,19 +303,19 @@
             android:layout_marginLeft="10dp"
             />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="使用引导"
-            android:id="@+id/button17"
-            android:paddingLeft="10dp"
-            android:gravity="left|center_vertical"
-            android:textSize="16sp"
-            android:background="@drawable/selector05"
-            android:layout_below="@+id/button16"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="1dp"/>
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:text="使用引导"-->
+            <!--android:id="@+id/go_navi_btn_set"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:gravity="left|center_vertical"-->
+            <!--android:textSize="16sp"-->
+            <!--android:background="@drawable/selector05"-->
+            <!--android:layout_below="@+id/button16"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_marginTop="1dp"/>-->
     </RelativeLayout>
 
     <View
