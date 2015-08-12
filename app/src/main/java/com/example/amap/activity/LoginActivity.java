@@ -43,9 +43,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         IntentFilter filter = new IntentFilter();
         filter.addAction(BmobConstants.ACTION_REGISTER_SUCCESS_FINISH);
         registerReceiver(receiver, filter);
-
-
-
+    }
+    @Override
+    public void onBackPressed() {
+        startAnimActivity(MainActivity.class);
+        LoginActivity.this.finish();
     }
     public class MyBroadcastReceiver extends BroadcastReceiver {
 

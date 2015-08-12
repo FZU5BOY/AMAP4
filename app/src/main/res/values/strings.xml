@@ -151,4 +151,7 @@
     <string name="fashion_shop">包含时尚时装和饰品等商店 S17、S27、S32、S39、S24、</string>
     <string name="food_shop">包含美食商店 S17、S27、S32、S39、S24、一条龙让你吃个够</string>
     <string name="waiting_shop">敬请期待</string>
+
+    <string name="write_comm_to_w2">http://192.168.191.1/AMap/write_comm.php</string>
+    <string name="get_comm_from_w2">http://192.168.191.1/AMap/get_comm.php</string>
 </resources>

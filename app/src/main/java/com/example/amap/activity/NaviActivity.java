@@ -21,11 +21,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.amap.R;
+import com.example.amap.config.Config;
 import com.example.amap.util.UnzipAssets;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import cn.bmob.im.BmobChat;
 
 /**
  * Created by Zeashon on 2015/5/10.
@@ -47,6 +50,9 @@ public class NaviActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setting = this.getSharedPreferences("check", MODE_PRIVATE);
+//        BmobChat.DEBUG_MODE = true;
+        //BmobIM SDK初始化--只需要这一段代码即可完成初始化
+        BmobChat.getInstance(this).init(Config.applicationId);
         boolean fristload = setting.getBoolean("fristload", true);
         if (!fristload) {
             Intent intent = new Intent(NaviActivity.this, SplashScreen.class);
@@ -63,14 +69,15 @@ public class NaviActivity extends Activity {
             setContentView(R.layout.navi);
             Button useapp = (Button) findViewById(R.id.useapp);
             useapp.setOnClickListener(new View.OnClickListener() {
-                ProgressDialog dialog = new ProgressDialog(NaviActivity.this);
 
                 @Override
                 public void onClick(View v) {
 //                dialog.setTitle("提示");
-                    dialog.setMessage("初次使用，正在导入地图文件！");
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();//显示对话框
+                    final ProgressDialog progress = new ProgressDialog(
+                            NaviActivity.this);
+                    progress.setMessage("初次使用，正在导入地图文件！");
+                    progress.setCanceledOnTouchOutside(false);
+                    progress.show();
                     new Thread() {
                         public void run() {
                             //在新线程中以同名覆盖方式解压
@@ -78,12 +85,12 @@ public class NaviActivity extends Activity {
                                 while (!iszipok) {
                                     Thread.sleep(100);
                                 }
-                                dialog.setMessage("导入成功...");
+                                progress.setMessage("导入成功...");
                             } catch (Exception e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
-                            dialog.cancel();//解压完成后关闭对话框
+                            progress.cancel();//解压完成后关闭对话框
                             setting = getApplicationContext().getSharedPreferences("check", MODE_PRIVATE);
                             setting.edit().putBoolean("fristload", false).commit();
                             Intent intent = new Intent(NaviActivity.this, MainActivity.class);

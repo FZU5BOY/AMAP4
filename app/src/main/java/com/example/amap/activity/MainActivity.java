@@ -190,9 +190,6 @@ public class MainActivity extends BaseActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         ArcGISRuntime.setClientId("uK0DxqYT0om1UXa9");
         setContentView(R.layout.main);
-        BmobChat.DEBUG_MODE = true;
-        //BmobIM SDK初始化--只需要这一段代码即可完成初始化
-        BmobChat.getInstance(this).init(Config.applicationId);
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         currentFloor = 1;//默认为F1
         mMapView = (MapView) findViewById(R.id.map);

@@ -64,7 +64,7 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
     private int addMoreLmtS = 10;
     MyAdapter mAdapter;
     private boolean marked = false;
-    String url = "http://192.168.191.1/AMap/get_comm.php";
+    String url = "";
 
 
     // private static int refreshCnt = 0;
@@ -87,7 +87,7 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
         // mListView.setAdapter(mAdapter);
         // mListView.setPullLoadEnable(false);
         // mListView.setPullRefreshEnable(false);
-
+        url=getResources().getString(R.string.get_comm_from_w2);
         mListView.setXListViewListener(this);
         mHandler = new Handler();
         Typeface icons = Typeface.createFromAsset(getAssets(),
@@ -137,7 +137,10 @@ public class XListViewActivity extends BaseActivity implements IXListViewListene
             return null;
         }
     }
-
+    public void goMain(View v){
+        startAnimActivity(MainActivity.class);
+        this.finish();
+    }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

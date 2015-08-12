@@ -56,8 +56,10 @@ public class WriteComActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
                 Log.i("zjx", "comment canceled,back to shop detail");
-                Intent intent = new Intent(WriteComActivity.this, XListViewActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(WriteComActivity.this, XListViewActivity.class);
+//                startActivity(intent);
+                startAnimActivity(XListViewActivity.class);
+                WriteComActivity.this.finish();
             }
         });
     }
@@ -66,7 +68,7 @@ public class WriteComActivity extends BaseActivity{
     @Override
     protected Object doInBackground(Object[] params) {
         HttpClient httpClient = new DefaultHttpClient();
-        String url = "http://192.168.191.1/AMap/write_comm.php";
+        String url = getResources().getString(R.string.write_comm_to_w2);
         uploadData(url, httpClient);
         return null;
     }
@@ -94,7 +96,7 @@ public class WriteComActivity extends BaseActivity{
                 ShowToast("评论成功!");
 //                Toast.makeText(WriteComActivity.this, "评论成功！",
 //                        Toast.LENGTH_SHORT).show();
-                finish();
+                this.finish();
             }else{
                 ShowToast("网络错误");
 //                Toast.makeText(WriteComActivity.this, "网络错误",
