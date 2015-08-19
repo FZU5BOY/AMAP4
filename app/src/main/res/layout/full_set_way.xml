@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/content1"
-                    android:text="问讯处3!安检口2!商店27!登机口4"
+                    android:text="F1问讯处2!F2安检口2!F2商店27!F2登机口4"
                     android:visibility="gone"
                     />
                 <Button
@@ -124,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/content2"
-                    android:text="问讯处3!安检口2!商店27!出入口2"
+                    android:text="F1问讯处2!F2安检口2!F2商店27!出入口2"
                     android:visibility="gone"
                     />
                 <Button
@@ -183,7 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/content3"
-                    android:text="商店17!商店27!商店32!商店39!商店24"
+                    android:text="F1商店17!F1商店27!F1商店32!F1商店39!F1商店24"
                     android:visibility="gone"
                     />
                 <Button

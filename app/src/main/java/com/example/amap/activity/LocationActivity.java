@@ -18,6 +18,7 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
 import com.esri.android.map.TiledLayer;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
+import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.android.toolkit.map.MapViewHelper;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
@@ -220,6 +221,7 @@ import java.util.List;
 
 	private void initMap() {
 		mMapView =  (MapView) findViewById(R.id.map);
+		ArcGISRuntime.setClientId("uK0DxqYT0om1UXa9");
 		mvHelper = new MapViewHelper(mMapView);
 		mMapView.setMapBackground(0xeeeeee, 0xffffff, 0, 0);//设置地图网格，背景样式
 		//添加瓦片和绘制图层

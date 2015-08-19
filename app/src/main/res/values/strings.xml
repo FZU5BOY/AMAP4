@@ -36,7 +36,7 @@
     <string name="firendlocation">好友位置</string>
     <string name="makepath_error">不能生成路径.请检查输入</string>
     <string name="go_end_success">成功到达终点.</string>
-    <string name="go_mid_success">到达目前第一个目的地</string>
+    <string name="go_mid_success">已到达一个目的地</string>
     <string name="deviate_path">您偏移了路径，已为您重新规划</string>
     <string name="up_floor_ing">正在上楼中...</string>
     <string name="down_floor_ing">正在下楼中...</string>

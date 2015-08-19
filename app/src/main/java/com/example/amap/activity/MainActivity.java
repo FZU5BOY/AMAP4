@@ -11,6 +11,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -653,9 +656,13 @@ public class MainActivity extends BaseActivity {
                                 ShowToast(R.string.down_floor_ing);
                             }
 //						即到达了其中一个中转点，那么给予用户良好的提示，并进行接下来的路径规划
-                            else ShowToast(R.string.go_mid_success);
+                            else {
+                                ShowToast(R.string.go_mid_success);
+                                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                                r.play();
+                            }
 
-                            ShowLog("到达第一个中转点");
                             result = 1;
                         }
                     } else {
@@ -1351,6 +1358,57 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    private boolean findFeatureCurrentFirst(Future<FeatureResult> resultFuture,int i){
+        Log.i("zjx", "resultFuture:" + resultFuture);
+        try {
+            FeatureResult results = resultFuture.get();
+            if (results != null) {
+                ShowLog("results no null");
+                Feature feature = null;
+                Point poi = null;
+                for (Object element : results) {
+                    ShowLog("the element:" + element);
+                    if (element instanceof Feature) {
+                        feature = (Feature) element;
+                        ShowLog("Feature feature = (Feature) element;:" + element);
+                        // turn feature into graphic
+//							Random r = new Random();
+                        int color = Color.rgb(100, 100, 100);
+                        SimpleFillSymbol sfs = new SimpleFillSymbol(color);
+//							sfs.setAlpha(75);
+                        Graphic graphic = new Graphic(feature.getGeometry(),
+                                sfs);
+                        // add graphic to layer
+                        mGraphicsLayer[i].addGraphic(graphic);
+                        PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.begining));
+                        poi = new Point((double) feature.getAttributeValue("pointX"), (double) feature.getAttributeValue("pointy"));
+                        Graphic gp = new Graphic(poi, pic);
+                        mGraphicsLayer[i].addGraphic(gp);
+
+                    }
+
+                }
+                if (feature != null) {
+                    currentFloor=i;
+                    showcurrentfloor();
+                    mMapView.centerAt(poi, true);
+                    mMapView.setScale(7000.0);
+//                        viewHandler.sendEmptyMessage(UPDATESCALE);
+                    //个人感觉搜索还是不要显示的好
+                    TextView text = (TextView) findViewById(R.id.poiname);
+                    text.setText(feature.getAttributeValue("nickname").toString());
+                    allinfo.setVisibility(View.VISIBLE);
+                    currentFeature = feature;
+                    currentMyPoint = new MyPoint(MapToMyPointX(feature.getAttributeValue("x1")), MapToMyPointY(feature.getAttributeValue("y1")), i);
+                    return true;
+                }
+            }
+
+        } catch (Exception e) {
+            Log.i("zjx", "e:" + e);
+        }
+        return false;
+    }
     //回调
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -1379,52 +1437,14 @@ public class MainActivity extends BaseActivity {
                     Log.i("zjx", "i m callback");
                 }
             };
-            Future<FeatureResult> resultFuture = featureLayers.get(currentFloor).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback);
-            Log.i("zjx", "resultFuture:" + resultFuture);
-            try {
-                FeatureResult results = resultFuture.get();
-                if (results != null) {
-                    Log.i("zjx", "results no null");
-                    Feature feature = null;
-                    Point poi = null;
-                    for (Object element : results) {
-                        Log.i("zjx", "the element:" + element);
-                        if (element instanceof Feature) {
-                            Log.i("zjx", "element");
-                            feature = (Feature) element;
-                            Log.i("zjx", "Feature feature = (Feature) element;:" + element);
-                            // turn feature into graphic
-//							Random r = new Random();
-                            int color = Color.rgb(100, 100, 100);
-                            SimpleFillSymbol sfs = new SimpleFillSymbol(color);
-//							sfs.setAlpha(75);
-                            Graphic graphic = new Graphic(feature.getGeometry(),
-                                    sfs);
-                            // add graphic to layer
-                            mGraphicsLayer[currentFloor].addGraphic(graphic);
-                            PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.begining));
-                            poi = new Point((double) feature.getAttributeValue("pointX"), (double) feature.getAttributeValue("pointy"));
-                            Graphic gp = new Graphic(poi, pic);
-                            mGraphicsLayer[currentFloor].addGraphic(gp);
+            boolean isok=findFeatureCurrentFirst(featureLayers.get(currentFloor).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback),currentFloor);
+            if(!isok){
+                for(int i=0;i<allfloor;i++){
+                    if(i==currentFloor)continue;
+                    boolean isok2=findFeatureCurrentFirst(featureLayers.get(i).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback),i);
+                    if(isok2)break;
 
-                        }
-
-                    }
-                    if (feature != null) {
-                        mMapView.centerAt(poi, true);
-                        mMapView.setScale(7000.0);
-//                        viewHandler.sendEmptyMessage(UPDATESCALE);
-                        //个人感觉搜索还是不要显示的好
-                        TextView text = (TextView) findViewById(R.id.poiname);
-                        text.setText(feature.getAttributeValue("nickname").toString());
-                        allinfo.setVisibility(View.VISIBLE);
-                        currentFeature = feature;
-                        currentMyPoint = new MyPoint(MapToMyPointX(feature.getAttributeValue("x1")), MapToMyPointY(feature.getAttributeValue("y1")), currentFloor);
-                    }
                 }
-
-            } catch (Exception e) {
-                Log.i("zjx", "e:" + e);
             }
             return;
         } else if (requestCode == 1 && resultCode == 1) {//rount
