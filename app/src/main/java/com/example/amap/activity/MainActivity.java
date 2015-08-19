@@ -559,7 +559,7 @@ public class MainActivity extends BaseActivity {
         }
         if (isshutok) {
             Intent intent = new Intent(MainActivity.this
-                    , PersonActivity.class);
+                    , MainActivity.class);
             PendingIntent pi = PendingIntent.getActivity(
                     MainActivity.this, 4, intent, 0);
             Notification notify = new Notification.Builder(v.getContext())
