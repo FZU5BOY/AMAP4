@@ -28,11 +28,20 @@ public class AnalogLocation {
     private AMapPoint aMapPoint = new AMapPoint();
     private static Context context = CustomApplcation.getInstance();
     ShangeUtil su= ShangeUtil.getInstance();//栅格工具类
+    public String ipstring="";
     private int LOCATION_OK = 1;
     private int LOCATION_NO_IN_MAP = 2;
     private int LOCATION_NET_ERROR = 3;
     private int LOCATION_LOCATION_IP_NOSET = 4;
     private int LOCATION_LOCATION_IP_ERROR = 5;
+    private static class LazyHolder {
+        private static final AnalogLocation INSTANCE = new AnalogLocation();
+    }
+    public static final AnalogLocation getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+    private AnalogLocation(){
+    }
 //    /**
 //     * 初始化
 //     *
@@ -66,26 +75,6 @@ public String getLocationIP(){
     }
     return "";
 }
-    /**
-     * 以字符为单位读取文件，常用于读文本，数字等类型的文件
-     */
-    public String readFileByBytes(String fileName) {
-        String text = "";
-        File file = new File(fileName);
-        FileInputStream in = null;
-        try {
-            // 一次读一个字节
-            in = new FileInputStream(file);
-            byte[] readBytes = new byte[in.available()];
-            while (in.read(readBytes) != -1) {
-            }
-            text = new String(readBytes);
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return text;
-    }
     //连接定位接口并得到json
     public String GetJSONString(URL url){
         StringBuilder sb = new StringBuilder();
@@ -114,8 +103,14 @@ public String getLocationIP(){
    public AMapPoint location()
     {
 //        String locateIp = readFileByBytes("ip.txt");
+        String locateIp="";
         AMapPoint bMapPoint=new AMapPoint();
-        String locateIp = getLocationIP();
+        if(ipstring==null||"".equals(ipstring)){
+         locateIp = getLocationIP();
+            Log.i("zjx","ip is null,re get");
+            ipstring=locateIp;
+        }
+        else locateIp=ipstring;
         if(locateIp==null||"".equals(locateIp)){
             bMapPoint.setState(LOCATION_LOCATION_IP_NOSET);
             return bMapPoint;

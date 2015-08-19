@@ -233,8 +233,8 @@ public class MainActivity extends BaseActivity {
                 }
         });
         clear = (Button) findViewById(R.id.button_clear);
-        mMapView.setMaxScale(6500);//1：6500
-        mMapView.setMinScale(20000.0);//1：20000
+//        mMapView.setMaxScale(6500);//1：6500
+//        mMapView.setMinScale(20000.0);//1：20000
         mMapView.centerAt(new Point(500.0, -500.0), false);//
         search_main = (Button) findViewById(R.id.search_main);//进入搜索
         search_main.setOnClickListener(new View.OnClickListener() {

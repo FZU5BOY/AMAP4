@@ -28,6 +28,7 @@ import com.example.amap.activity.MainActivity;
 import com.example.amap.activity.NaviActivity;
 import com.example.amap.activity.SetMyInfoActivity;
 import com.example.amap.util.SharePreferenceUtil;
+import com.example.amap.util.location.AnalogLocation;
 import com.example.amap.util.rount.MyPoint;
 
 import java.io.FileInputStream;
@@ -152,6 +153,7 @@ public class SettingsFragment extends FragmentBase implements OnClickListener {
                                     fos = getActivity().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
                                     String text = et.getText().toString();
                                     fos.write(text.getBytes());
+                                    AnalogLocation.getInstance().ipstring=text;
 //                                    Toast.makeText(getApplicationContext(), "success!", Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     e.printStackTrace();

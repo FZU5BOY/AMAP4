@@ -21,14 +21,13 @@ public class LocationService extends Service {
     public void onCreate() {
         super.onCreate();
         customApplcation=CustomApplcation.getInstance();
-        analogLocation=new AnalogLocation();
-
+        analogLocation=AnalogLocation.getInstance();
         new Thread(new Runnable(){
             @Override
             public void run() {
                 while (!threadDisable) {
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(300);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
