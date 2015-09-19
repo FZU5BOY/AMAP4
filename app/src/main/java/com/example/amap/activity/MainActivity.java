@@ -1527,6 +1527,9 @@ public class MainActivity extends BaseActivity {
 //						mGraphicsLayer[midlist.get(i+1).z].addGraphic(gp);
                         main_gp = new Graphic(endpoi, endpic);
                         main_fl = midlist.get(i + 1).z;
+//                        Message message=new Message();
+//                        Bundle bundle1=new Bundle();
+//                        bundle1
 //						mGraphicsLayer[midlist.get(i+1).z].addGraphic(gp);
                         viewHandler.sendEmptyMessage(UPDATEGP);
                         makePathAll(midlist.get(i), midlist.get(i + 1), true);

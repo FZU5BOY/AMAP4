@@ -30,6 +30,6 @@ dependencies {
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
     compile 'com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar'
     compile 'com.nhaarman.listviewanimations:lib-core-slh:3.1.0@aar'
-    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.nineoldandroids:library:2.4.+'
     compile 'com.android.support:support-v13:+'
 }

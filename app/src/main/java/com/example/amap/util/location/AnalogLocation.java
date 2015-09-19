@@ -129,6 +129,7 @@ public String getLocationIP(){
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             bMapPoint.setState(LOCATION_LOCATION_IP_ERROR);
             return bMapPoint;
         }
