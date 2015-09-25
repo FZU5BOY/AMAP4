@@ -5,9 +5,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -18,7 +20,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,10 +59,12 @@ import com.esri.core.symbol.PictureMarkerSymbol;
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.tasks.query.QueryParameters;
+import com.example.amap.IGetLocationService;
 import com.example.amap.config.Config;
 import com.example.amap.custom.MyToast;
 import com.example.amap.R;
 import com.example.amap.service.LocationService;
+import com.example.amap.service.StepCountLocationService;
 import com.example.amap.util.rount.HeuryCache;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.util.rount.Node;
@@ -184,11 +190,12 @@ public class MainActivity extends BaseActivity {
     NotificationManager nm;//通知
     static final int NOTIFICATION_ID = 0x123;//通知的id
     private SharedPreferences setting;//is first
-
+    //aidl service
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //		Log.i("zjx", "main oncreate");
 //create地图
+        //123
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         ArcGISRuntime.setClientId("uK0DxqYT0om1UXa9");
@@ -214,7 +221,7 @@ public class MainActivity extends BaseActivity {
             Log.i("zjx", "未找到地图包");
             isloadok = false;
         }
-        calloutView = View.inflate(this, R.xml.callout, null); //动态加载view
+        calloutView = View.inflate(this,R.xml.callout, null); //动态加载view
         //实例化控件
         dingwei = (TextView) findViewById(R.id.dingwei);
         button_dingwei = (Button) findViewById(R.id.button_dingwei);
@@ -378,6 +385,10 @@ public class MainActivity extends BaseActivity {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
+                    case 10086:
+                        int mStep=msg.getData().getInt("step");
+                        dingwei.setText("一共走了"+mStep+"步");
+                        break;
                     case HIDECALLOUTANDALLINFO:
                         mMapView.getCallout().hide();
                         allinfo.setVisibility(View.GONE);
@@ -697,11 +708,19 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
+
             double ax = bundle.getDouble("ax");
             double ay = bundle.getDouble("ay");
             int az = bundle.getInt("az");
             int astate = bundle.getInt("astate");
             switch (astate) {
+                case 10086:{
+                    Message msg = new Message();
+                    msg.what = 10086;
+                    msg.setData(bundle);//mes利用Bundle传递数据
+                    viewHandler.sendMessage(msg);
+                    break;
+                }
                 case LOCATION_OK:
                     viewHandler.sendEmptyMessage(LOCATION_ING);
                     if (isFirstLocating) {
@@ -1075,18 +1094,19 @@ public class MainActivity extends BaseActivity {
             setFlag();
             if (!isLocating) {
                 viewHandler.sendEmptyMessage(LOCATION_START);
-                startService(new Intent(this, LocationService.class));
+                startService(new Intent(this, StepCountLocationService.class));
                 receiver = new MyReceiver();
                 IntentFilter filter = new IntentFilter();
                 filter.setPriority(30);
-                filter.addAction("com.example.amap.service.LocationService");
+//                filter.addAction("com.example.amap.service.LocationService");
+                filter.addAction("com.example.amap.service.StepCountLocationService");
                 registerReceiver(receiver, filter);
                 isLocating = true;
             } else {
                 viewHandler.sendEmptyMessage(LOCATION_CLOST);
                 unregisterReceiver(receiver);
                 //结束服务，如果想让服务一直运行就注销此句
-                stopService(new Intent(this, LocationService.class));
+                stopService(new Intent(this, StepCountLocationService.class));
                 isLocating = false;
                 isFirstLocating = true;
             }
@@ -1721,6 +1741,7 @@ public class MainActivity extends BaseActivity {
         mMapView.destroyDrawingCache();
         try {
             unregisterReceiver(receiver);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1731,7 +1752,8 @@ public class MainActivity extends BaseActivity {
         }
         //结束服务，如果想让服务一直运行就注销此句
         try {
-            stopService(new Intent(this, LocationService.class));
+            stopService(new Intent(this, StepCountLocationService.class));
+//            stopService(new Intent(this, LocationService.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

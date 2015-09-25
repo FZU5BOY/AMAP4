@@ -66,6 +66,8 @@
     <!-- 用于读取手机当前的状态-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
     <!-- baidumap 所需的权限 -end -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" ></uses-permission>
     />
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -189,6 +191,7 @@
             <!--</intent-filter>-->
         <!--</service>-->
         <service android:name=".service.LocationService" />
+        <service android:name=".service.StepCountLocationService"/>
         <!-- IM聊天所需的Push start-->
         <service
             android:name="cn.bmob.push.lib.service.PushService"
