@@ -62,6 +62,8 @@ public class StepCountLocationService extends Service {
     public float weight;
     public String sex;
     public float lenOfStep;
+    private final double SHOP_LENGHT =400.0; //50 格 400 米 1格8米
+    //0.008 映射到 1/50=20  0.02的关系
     //service
     private Date startdate;//运动开始时间
     private Date nowdate;//目前时间
@@ -280,8 +282,8 @@ public class StepCountLocationService extends Service {
                 if((stepSub=(step-lastAMapPoint.getStep()))!=0){
                     double lenStep=stepSub*0.5;
                     double dia=Math.toRadians(degreeSub);
-                    double sinStepY=lenStep*Math.sin(dia)/1000.0;//y+-
-                    double cosStepX=lenStep*Math.cos(dia)/1000.0;//x+-
+                    double sinStepY=lenStep*Math.sin(dia)/SHOP_LENGHT;//y+-  0.008 映射到0.02的关系
+                    double cosStepX=lenStep*Math.cos(dia)/SHOP_LENGHT;//x+-
                     Intent intent = new Intent();
                     double xMap=lastAMapPoint.getX()+cosStepX;
                     double yMap=lastAMapPoint.getY()+sinStepY;

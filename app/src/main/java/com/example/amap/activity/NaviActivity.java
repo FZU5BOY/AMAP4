@@ -85,7 +85,7 @@ public class NaviActivity extends Activity {
                                 while (!iszipok) {
                                     Thread.sleep(100);
                                 }
-                                progress.setMessage("导入成功...");
+                                progress.setMessage("导入成功...");//不在原始线程，，会出bug 不显示，这个要修改一下
                             } catch (Exception e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();

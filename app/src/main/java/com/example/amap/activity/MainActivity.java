@@ -191,6 +191,7 @@ public class MainActivity extends BaseActivity {
     NotificationManager nm;//通知
     static final int NOTIFICATION_ID = 0x123;//通知的id
     private SharedPreferences setting;//is first
+    private final double SHOP_LENGHT =400.0;//1比例尺:50  地图显示8cm 总室内长约400m
     //aidl service
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -484,7 +485,6 @@ public class MainActivity extends BaseActivity {
                         loactionGraphicsLayer.addGraphic(gp);
                         mMapView.centerAt(mapPoint, true);
                         mMapView.setScale(SCAMAX);
-//                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         break;
                     case UPDATEGP:
                         mGraphicsLayer[main_fl].addGraphic(main_gp);
@@ -493,7 +493,7 @@ public class MainActivity extends BaseActivity {
                         makePathAll(locateMyPoint, midPoints.getFirst(), false);
                         break;
                     case UPDATESCALE:
-                        int relScale=(int) ((mMapView.getScale()+1.0)/400.0);
+                        int relScale=(int) ((mMapView.getScale()+1.0)/SHOP_LENGHT);
                         scaleText.setText(relScale+"m");
                         break;
                     case FINDFIREND:{
@@ -1295,7 +1295,6 @@ public class MainActivity extends BaseActivity {
                                 Point poi = new Point((double) g.getAttributeValue("pointX"), (double) g.getAttributeValue("pointy"));
                                 mMapView.centerAt(poi, true);
                                 mMapView.setScale(SCAMAX);
-//                                viewHandler.sendEmptyMessage(UPDATESCALE);
                                 updateContent(R.drawable.ic_1, g.getAttributeValue("nickname").toString());
                                 Callout mapCallout = mMapView.getCallout();
                                 mapCallout.setCoordinates(poi);
@@ -1423,7 +1422,6 @@ public class MainActivity extends BaseActivity {
                     showcurrentfloor();
                     mMapView.centerAt(poi, true);
                     mMapView.setScale(SCAMAX);
-//                        viewHandler.sendEmptyMessage(UPDATESCALE);
                     //个人感觉搜索还是不要显示的好
                     TextView text = (TextView) findViewById(R.id.poiname);
                     text.setText(feature.getAttributeValue("nickname").toString());
@@ -1577,7 +1575,6 @@ public class MainActivity extends BaseActivity {
                     viewHandler.sendEmptyMessage(UPDATEGP);
                     mMapView.centerAt(poi2, true);
                     mMapView.setScale(SCAMAX);
-//                    viewHandler.sendEmptyMessage(UPDATESCALE);
                 }
 
             } else {
@@ -1638,7 +1635,6 @@ public class MainActivity extends BaseActivity {
                         Graphic gp = new Graphic(poi, pic);
                         mMapView.centerAt(poi, true);
                         mMapView.setScale(SCAMAX);
-//                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         mGraphicsLayer[currentFloor].updateGraphic(minpid, gp);
                         TextView text = (TextView) findViewById(R.id.poiname);
                         text.setText(mfeature.getAttributeValue("nickname").toString());
