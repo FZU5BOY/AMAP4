@@ -60,6 +60,7 @@ import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.tasks.query.QueryParameters;
 import com.example.amap.IGetLocationService;
+import com.example.amap.bean.AMapPoint;
 import com.example.amap.config.Config;
 import com.example.amap.custom.MyToast;
 import com.example.amap.R;
@@ -115,7 +116,7 @@ public class MainActivity extends BaseActivity {
     private boolean flag = true;
     private boolean isFirstLocating = true;
     private boolean isLocating = false;
-
+    private final double SCAMAX =1000.0;
     private synchronized void setFlag() {
         flag = false;
     }
@@ -385,7 +386,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case 10086:
+                    case 10087:
                         int mStep=msg.getData().getInt("step");
                         dingwei.setText("一共走了"+mStep+"步");
                         break;
@@ -459,29 +460,30 @@ public class MainActivity extends BaseActivity {
                         locateMyPoint = null;
                         loactionGraphicsLayer.removeAll();
                         break;
-                    case LOCATION_OK:
+//                    case LOCATION_OK:
+                    case 10086:
                         Bundle bundle = msg.getData();
                         double ax = bundle.getDouble("ax");
                         double ay = bundle.getDouble("ay");
                         int az = bundle.getInt("az");
                         PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
                         Point mapPoint = new Point(LocationToMapX(ax), LocationToMapY(ay));
-
                         Graphic gp = new Graphic(mapPoint, pic);
                         MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), az);
                         //在servicel里面控制了 所以这句基本不会运行
-                        if (locateMyPoint != null && newMyPoint.equal(locateMyPoint)) {
-                            loactionGraphicsLayer.addGraphic(gp);
-                            break;
-                        }
+//                        if (locateMyPoint != null && newMyPoint.equal(locateMyPoint)) {
+//                            loactionGraphicsLayer.addGraphic(gp);
+//                            break;
+//                        }
                         locateMyPoint = newMyPoint;
+                        ShowLog(locateMyPoint.toString());
                         if (az != currentFloor) {
                             currentFloor = az;
                             showcurrentfloor();
                         }
                         loactionGraphicsLayer.addGraphic(gp);
                         mMapView.centerAt(mapPoint, true);
-                        mMapView.setScale(7000.0);
+                        mMapView.setScale(SCAMAX);
 //                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         break;
                     case UPDATEGP:
@@ -534,7 +536,7 @@ public class MainActivity extends BaseActivity {
                 showcurrentfloor();
                 Point poi2 = new Point(startMyPoint.x * 20.0, -startMyPoint.y * 20.0);
                 mMapView.centerAt(poi2, true);
-                mMapView.setScale(7000.0);
+                mMapView.setScale(SCAMAX);
 //                viewHandler.sendEmptyMessage(UPDATESCALE);
             } else if (locateMyPoint != null) {
                 rountstart = getResources().getString(R.string.mylocation);
@@ -547,7 +549,7 @@ public class MainActivity extends BaseActivity {
                 showcurrentfloor();
                 Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                 mMapView.centerAt(poi2, true);
-                mMapView.setScale(7000.0);
+                mMapView.setScale(SCAMAX);
 //                viewHandler.sendEmptyMessage(UPDATESCALE);
                 //注册广播
                 receiver2 = new MyReceiver2();
@@ -714,25 +716,28 @@ public class MainActivity extends BaseActivity {
             int az = bundle.getInt("az");
             int astate = bundle.getInt("astate");
             switch (astate) {
-                case 10086:{
+                case 10087:{
                     Message msg = new Message();
                     msg.what = 10086;
                     msg.setData(bundle);//mes利用Bundle传递数据
                     viewHandler.sendMessage(msg);
                     break;
                 }
-                case LOCATION_OK:
+//                case LOCATION_OK:
+                case 10086:
                     viewHandler.sendEmptyMessage(LOCATION_ING);
                     if (isFirstLocating) {
                         ShowToast(R.string.location_success);
                         isFirstLocating = false;
                     }
                     Message msg = new Message();
-                    msg.what = LOCATION_OK;
+//                    msg.what = LOCATION_OK;
+                    msg.what=10086;
                     msg.setData(bundle);//mes利用Bundle传递数据
                     Point mapPoint = new Point(LocationToMapX(ax), LocationToMapY(ay));
+                    ShowLog(mapPoint.toString());
                     MyPoint newMyPoint = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), az);
-
+                    ShowLog("zzz:"+newMyPoint.toString());
                     if (locateMyPoint!=null && !newMyPoint.equal(locateMyPoint)) {//注意是不等号= =
                         Bundle addBundle = new Bundle();
                         addBundle.putBoolean("ischanged", true);
@@ -1077,8 +1082,13 @@ public class MainActivity extends BaseActivity {
     }
 
     public double LocationToMapY(double y) {
+
+//        return (y - 1.0) * 1000.0;
+
         return (y - 1.0) * 1000.0;
+
     }
+
 
     public double MapToLocationX(double x) {
         return x / 1000.0;
@@ -1284,7 +1294,7 @@ public class MainActivity extends BaseActivity {
                                 text.setText(g.getAttributeValue("nickname").toString());
                                 Point poi = new Point((double) g.getAttributeValue("pointX"), (double) g.getAttributeValue("pointy"));
                                 mMapView.centerAt(poi, true);
-                                mMapView.setScale(7000.0);
+                                mMapView.setScale(SCAMAX);
 //                                viewHandler.sendEmptyMessage(UPDATESCALE);
                                 updateContent(R.drawable.ic_1, g.getAttributeValue("nickname").toString());
                                 Callout mapCallout = mMapView.getCallout();
@@ -1412,7 +1422,7 @@ public class MainActivity extends BaseActivity {
                     currentFloor=i;
                     showcurrentfloor();
                     mMapView.centerAt(poi, true);
-                    mMapView.setScale(7000.0);
+                    mMapView.setScale(SCAMAX);
 //                        viewHandler.sendEmptyMessage(UPDATESCALE);
                     //个人感觉搜索还是不要显示的好
                     TextView text = (TextView) findViewById(R.id.poiname);
@@ -1525,7 +1535,7 @@ public class MainActivity extends BaseActivity {
                     }
                     Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                     mMapView.centerAt(poi2, true);
-                    mMapView.setScale(7000.0);
+                    mMapView.setScale(SCAMAX);
 
                     receiver2 = new MyReceiver2();
                     IntentFilter filter = new IntentFilter();
@@ -1566,7 +1576,7 @@ public class MainActivity extends BaseActivity {
 //						mGraphicsLayer[midlist.get(i+1).z].addGraphic(gp);
                     viewHandler.sendEmptyMessage(UPDATEGP);
                     mMapView.centerAt(poi2, true);
-                    mMapView.setScale(7000.0);
+                    mMapView.setScale(SCAMAX);
 //                    viewHandler.sendEmptyMessage(UPDATESCALE);
                 }
 
@@ -1627,7 +1637,7 @@ public class MainActivity extends BaseActivity {
                         poi = new Point((double) mfeature.getAttributeValue("pointX"), (double) mfeature.getAttributeValue("pointy"));
                         Graphic gp = new Graphic(poi, pic);
                         mMapView.centerAt(poi, true);
-                        mMapView.setScale(7000.0);
+                        mMapView.setScale(SCAMAX);
 //                        viewHandler.sendEmptyMessage(UPDATESCALE);
                         mGraphicsLayer[currentFloor].updateGraphic(minpid, gp);
                         TextView text = (TextView) findViewById(R.id.poiname);
@@ -1842,7 +1852,7 @@ public class MainActivity extends BaseActivity {
                     currentFloor=z;
                     showcurrentfloor();
                     mMapView.centerAt(poi, true);
-                    mMapView.setScale(7000.0);
+                    mMapView.setScale(SCAMAX);
                     ShowToast("您尚未开启定位，请开启定位后重试");
                 }
                 if (locateMyPoint != null) {
@@ -1853,7 +1863,7 @@ public class MainActivity extends BaseActivity {
                     showcurrentfloor();
                     Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
                     mMapView.centerAt(poi2, true);
-                    mMapView.setScale(7000.0);
+                    mMapView.setScale(SCAMAX);
                     //注册广播
 //                    if(receiver2==null)receiver2 = new MyReceiver2();
                     receiver2 = new MyReceiver2();

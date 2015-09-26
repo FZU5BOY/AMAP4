@@ -71,9 +71,10 @@ public class StepCountLocationService extends Service {
     private float walkspeed=0;//步行速度 单位：km/h
     //常量
     final float alpha = 0.99f;//alpha=t/t+dt
-    private AMapPoint lastAMapPoint=new AMapPoint();
+    private AMapPoint lastAMapPoint=new AMapPoint(0.5,0.5,1,30,0);
     Handler handler;
     private int oldStep=0;
+    private double houseNorth = 30.0;//在地图上 从入口进去的时候指南针的角度 30为预设
     public void init(){
         startdate = new Date();
 //        height = (float)data[0];
@@ -271,12 +272,31 @@ public class StepCountLocationService extends Service {
 //                oldStep=step;
 //                //根据差计算步长
 //                Log.i("zjx", "隔2s的步数差：" + stepSub);
-                Intent intent = new Intent();
-                intent.putExtra("step", step);
-                intent.putExtra("astate",10086);
-                intent.setAction("com.example.amap.service.StepCountLocationService");
-                sendOrderedBroadcast(intent, null);
-            }
+
+
+                double degreeSub=(houseNorth+90.0+360.0-lastDegree)%360; //相对地球竖直向上↑的角度差 角度从逆时针算
+//                Log.i("zjx","degreeSub:"+degreeSub);
+                int stepSub=0;
+                if((stepSub=(step-lastAMapPoint.getStep()))!=0){
+                    double lenStep=stepSub*0.5;
+                    double dia=Math.toRadians(degreeSub);
+                    double sinStepY=lenStep*Math.sin(dia)/1000.0;//y+-
+                    double cosStepX=lenStep*Math.cos(dia)/1000.0;//x+-
+                    Intent intent = new Intent();
+                    double xMap=lastAMapPoint.getX()+cosStepX;
+                    double yMap=lastAMapPoint.getY()+sinStepY;
+                    Log.i("zjx","location:"+xMap+";;;"+yMap);
+                    intent.putExtra("ax",xMap);
+                    intent.putExtra("ay",yMap);
+                    intent.putExtra("az",1);
+                    intent.putExtra("step", step);
+                    intent.putExtra("degree",lastDegree);
+                    intent.putExtra("astate",10086);
+                    intent.setAction("com.example.amap.service.StepCountLocationService");
+                    sendOrderedBroadcast(intent, null);
+                    lastAMapPoint =new AMapPoint(xMap,yMap,1,lastDegree,step);
+                }
+                }
         }
     };
     private class OrientationListener implements SensorEventListener {
@@ -299,6 +319,7 @@ public class StepCountLocationService extends Service {
                     degree = lastDegree;
                     //改变方向
                     lastDegree = currentDegree;
+
                 }
             }
         }

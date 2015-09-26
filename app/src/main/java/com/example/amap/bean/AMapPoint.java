@@ -19,6 +19,8 @@ public class AMapPoint implements Serializable {
 	private Double x = Double.valueOf(0.0D);
 	private Double y = Double.valueOf(0.0D);
 	private Integer z = Integer.valueOf(0);
+	private Double degree = Double.valueOf(0.0D);
+	private int step =  Integer.valueOf(0);
 	private String detailAddress = String.valueOf("detailAddress");;
 	private int state = 1;
 	public AMapPoint() {
@@ -49,6 +51,13 @@ public class AMapPoint implements Serializable {
 		this.setZ(z);
 		this.setAmapId(amapId);
 		this.setDetailAddress(detailAddress);
+	}
+	public AMapPoint(double x, double y,Integer z,double degree,int step){
+		this.setX(x);
+		this.setY(y);
+		this.setZ(z);
+		this.setDegree(degree);
+		this.setStep(step);
 	}
 	public AMapPoint(int state) {
 		this.setState(state);
@@ -98,5 +107,21 @@ public class AMapPoint implements Serializable {
 	public boolean equal(AMapPoint a){
 		if(this.state==a.getState()&&Math.abs(a.getX()-this.x)<0.005&&Math.abs(a.getY()-this.y)<0.005&&this.z==a.z)return true;
 		return false;
+	}
+
+	public Double getDegree() {
+		return degree;
+	}
+
+	public void setDegree(Double degree) {
+		this.degree = degree;
+	}
+
+	public int getStep() {
+		return step;
+	}
+
+	public void setStep(int step) {
+		this.step = step;
 	}
 }
