@@ -79,7 +79,6 @@ public class StepCountLocationService extends Service {
         startdate = new Date();
 //        height = (float)data[0];
 //        weight = (float)data[1];
-
         height=170;
         weight=60;
         count=1;
