@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
@@ -123,8 +122,8 @@ public abstract class DialogBase extends Dialog {
 
 		// 如果设置为全屏
 		if(isFullScreen) {
-			params.width = WindowManager.LayoutParams.MATCH_PARENT;
-			params.height = WindowManager.LayoutParams.MATCH_PARENT;
+			params.width = LayoutParams.MATCH_PARENT;
+			params.height = LayoutParams.MATCH_PARENT;
 		}
 
 		//设置点击dialog外部区域可取消
@@ -137,7 +136,7 @@ public abstract class DialogBase extends Dialog {
 		}
 		getWindow().setAttributes(params);
 		this.setOnDismissListener(GetOnDismissListener());
-		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		this.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 	}
 
 	/**

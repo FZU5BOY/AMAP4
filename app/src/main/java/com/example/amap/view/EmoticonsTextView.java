@@ -1,8 +1,5 @@
 package com.example.amap.view;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +9,9 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EmoticonsTextView extends TextView {
 

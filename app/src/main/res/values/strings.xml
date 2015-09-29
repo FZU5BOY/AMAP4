@@ -154,4 +154,7 @@
 
     <string name="write_comm_to_w2">http://192.168.191.1/AMap/write_comm.php</string>
     <string name="get_comm_from_w2">http://192.168.191.1/AMap/get_comm.php</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
 </resources>

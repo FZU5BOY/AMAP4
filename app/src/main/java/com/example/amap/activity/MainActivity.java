@@ -64,6 +64,7 @@ import com.example.amap.bean.AMapPoint;
 import com.example.amap.config.Config;
 import com.example.amap.custom.MyToast;
 import com.example.amap.R;
+import com.example.amap.qr_codescan.MipcaActivityCapture;
 import com.example.amap.service.LocationService;
 import com.example.amap.service.StepCountLocationService;
 import com.example.amap.util.rount.HeuryCache;
@@ -160,7 +161,7 @@ public class MainActivity extends BaseActivity {
     Button font_up;
     Button font_down;
     Button font_middle;
-    Button button_dingwei;
+    Button button_dingwei,qrScanBtn;
     Button shut_photo,bigger_map,smaller_map;
     Button poiDetBtn;
     int floorShange[] = {R.raw.b1shange, R.raw.f1shange, R.raw.f2shange};
@@ -513,7 +514,14 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
+        qrScanBtn = (Button) findViewById(R.id.qrScaner);
+        qrScanBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i("zjx", "click to scan qrscan");
+                Intent intent = new Intent(MainActivity.this, MipcaActivityCapture.class);
+                startActivity(intent);
+            }
+        });
     }
     private void goThere(){
         Log.i("zjx", "go there");
