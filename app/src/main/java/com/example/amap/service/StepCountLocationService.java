@@ -18,6 +18,7 @@ import android.util.Log;
 import com.example.amap.CustomApplcation;
 import com.example.amap.bean.AMapPoint;
 import com.example.amap.util.location.AnalogLocation;
+import com.example.amap.util.location.StepLocation;
 
 import java.util.Date;
 
@@ -26,6 +27,7 @@ import java.util.Date;
  * Created by Administrator on 2015/9/24.
  */
 public class StepCountLocationService extends Service {
+
     private boolean threadDisable=false;
     protected static final int UPDATE = 3;
 
@@ -73,7 +75,8 @@ public class StepCountLocationService extends Service {
     private float walkspeed=0;//步行速度 单位：km/h
     //常量
     final float alpha = 0.99f;//alpha=t/t+dt
-    private AMapPoint lastAMapPoint=new AMapPoint(0.5,0.5,1,30,0);
+    StepLocation stepLocation=StepLocation.getInstance();
+//    public  AMapPoint lastAMapPoint =new AMapPoint(0.5,0.5,1,30,0);
     Handler handler;
     private int oldStep=0;
     private double houseNorth = 30.0;//在地图上 从入口进去的时候指南针的角度 30为预设
@@ -279,15 +282,22 @@ public class StepCountLocationService extends Service {
                 double degreeSub=(houseNorth+90.0+360.0-lastDegree)%360; //相对地球竖直向上↑的角度差 角度从逆时针算
 //                Log.i("zjx","degreeSub:"+degreeSub);
                 int stepSub=0;
-                if((stepSub=(step-lastAMapPoint.getStep()))!=0){
-                    double lenStep=stepSub*0.5;
-                    double dia=Math.toRadians(degreeSub);
-                    double sinStepY=lenStep*Math.sin(dia)/SHOP_LENGHT;//y+-  0.008 映射到0.02的关系
-                    double cosStepX=lenStep*Math.cos(dia)/SHOP_LENGHT;//x+-
+                if((stepSub=(step-stepLocation.lastAMapPoint.getStep()))!=0){
+                    double xMap,yMap;
                     Intent intent = new Intent();
-                    double xMap=lastAMapPoint.getX()+cosStepX;
-                    double yMap=lastAMapPoint.getY()+sinStepY;
-                    Log.i("zjx","location:"+xMap+";;;"+yMap);
+                    if(stepSub<0){
+                         xMap=stepLocation.lastAMapPoint.getX();
+                         yMap=stepLocation.lastAMapPoint.getY();
+                    }
+                    else {
+                        double lenStep = stepSub * 0.5;
+                        double dia = Math.toRadians(degreeSub);
+                        double sinStepY = lenStep * Math.sin(dia) / SHOP_LENGHT;//y+-  0.008 映射到0.02的关系
+                        double cosStepX = lenStep * Math.cos(dia) / SHOP_LENGHT;//x+-
+                         xMap = stepLocation.lastAMapPoint.getX() + cosStepX;
+                         yMap = stepLocation.lastAMapPoint.getY() + sinStepY;
+                        Log.i("zjx", "location:" + xMap + ";;;" + yMap);
+                    }
                     intent.putExtra("ax",xMap);
                     intent.putExtra("ay",yMap);
                     intent.putExtra("az",1);
@@ -296,7 +306,7 @@ public class StepCountLocationService extends Service {
                     intent.putExtra("astate",10086);
                     intent.setAction("com.example.amap.service.StepCountLocationService");
                     sendOrderedBroadcast(intent, null);
-                    lastAMapPoint =new AMapPoint(xMap,yMap,1,lastDegree,step);
+                    stepLocation.lastAMapPoint =new AMapPoint(xMap,yMap,1,lastDegree,step);
                 }
                 }
         }

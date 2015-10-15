@@ -30,6 +30,8 @@ import com.example.amap.camera.CameraManager;
 import com.example.amap.decoding.CaptureActivityHandler;
 import com.example.amap.decoding.InactivityTimer;
 import com.example.amap.decoding.RGBLuminanceSource;
+import com.example.amap.service.StepCountLocationService;
+import com.example.amap.util.location.StepLocation;
 import com.example.amap.view.ViewfinderView;
 import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
@@ -268,9 +270,20 @@ public class MipcaActivityCapture extends Activity implements Callback , View.On
 		Bundle bundle = new Bundle();
         Log.i(TAG, resultString);
 //        resultString 即为获取到的结果   Zeashon
-        bundle.putString("result", resultString);
-		bundle.putParcelable("bitmap", bitmap);
-		resultIntent.putExtras(bundle);
+        bundle.putString("LocationResult", resultString);
+		//z&x&y 1[0,2]&0.5[0,1]&0.3[0,1]
+		String xyz[]=resultString.split("&");
+		StepLocation stepLocation=StepLocation.getInstance();
+		int sz;double sx,sy;
+		sz=Integer.parseInt(xyz[0]);
+		sx=Double.parseDouble(xyz[1]);
+		sy=Double.parseDouble(xyz[2]);
+		if(0<=sz&&sz<=2&&sx<=1.0&&sy<=1.0&&sx>=0.0&&sy>=0.0){
+		stepLocation.lastAMapPoint.setZ(sz);
+		stepLocation.lastAMapPoint.setX(sx);
+		stepLocation.lastAMapPoint.setY(sy);
+		stepLocation.lastAMapPoint.setStep(stepLocation.lastAMapPoint.getStep()+2);
+		}
 		this.setResult(RESULT_OK, resultIntent);
 		MipcaActivityCapture.this.finish();
 	}

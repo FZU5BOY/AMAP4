@@ -519,7 +519,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 Log.i("zjx", "click to scan qrscan");
                 Intent intent = new Intent(MainActivity.this, MipcaActivityCapture.class);
-                startActivity(intent);
+                startActivityForResult(intent, Config.MainToMipca);
             }
         });
     }
@@ -1655,6 +1655,10 @@ public class MainActivity extends BaseActivity {
                 Log.i("zjx", "e:" + e);
             }
             return;
+        }
+        else if(requestCode==Config.MainToMipca&&resultCode==RESULT_OK){
+           // String LocationResult = bundle.getString("LocationResult");
+
         }
     }
 
