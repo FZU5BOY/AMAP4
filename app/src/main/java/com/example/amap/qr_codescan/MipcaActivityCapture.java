@@ -274,10 +274,10 @@ public class MipcaActivityCapture extends Activity implements Callback , View.On
 		//z&x&y 1[0,2]&0.5[0,1]&0.3[0,1]
 		String xyz[]=resultString.split("&");
 		StepLocation stepLocation=StepLocation.getInstance();
-		int sz;double sx,sy;
-		sz=Integer.parseInt(xyz[0]);
-		sx=Double.parseDouble(xyz[1]);
-		sy=Double.parseDouble(xyz[2]);
+		double sx,sy;int sz;
+		sx=Double.parseDouble(xyz[0]);
+		sy=Double.parseDouble(xyz[1]);
+		sz=Integer.parseInt(xyz[2]);
 		if(0<=sz&&sz<=2&&sx<=1.0&&sy<=1.0&&sx>=0.0&&sy>=0.0){
 		stepLocation.lastAMapPoint.setZ(sz);
 		stepLocation.lastAMapPoint.setX(sx);

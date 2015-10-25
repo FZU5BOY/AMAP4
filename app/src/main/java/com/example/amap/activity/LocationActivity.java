@@ -24,7 +24,10 @@ import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.PictureMarkerSymbol;
 import com.example.amap.R;
+import com.example.amap.config.Config;
 import com.example.amap.service.LocationService;
+import com.example.amap.service.StepCountLocationService;
+import com.example.amap.util.location.StepLocation;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.view.HeaderLayout;
 
@@ -51,36 +54,28 @@ import java.util.List;
 	private static Handler viewHandler;//用于更新UI
 	MapViewHelper mvHelper;//帮助类，某些操作更快捷
 	final  int SHOWCURRENTFLOOR = 11;
-	final int allfloor =3 ;
 	private boolean service_is_run =true;
 	public static MyPoint locateMyPoint = null;//当前定位地址
 	final String extern = Environment.getExternalStorageDirectory().getPath();
-	//tpk文件地址
-	final String tpkPath[] = {"/arcgis/b1/b1.tpk", "/arcgis/f1/f1.tpk", "/arcgis/f2/f2.tpk"};
-	//geo文件地址
-	public static final String GEO_FILENAME[] =
-			{"/arcgis/b1/data/b1.geodatabase", "/arcgis/f1/data/f1.geodatabase", "/arcgis/f2/data/f2.geodatabase"};
-	int currentFloor = 1;//当前楼层 默认F1
-	String geofilename[] = {extern + GEO_FILENAME[0], extern + GEO_FILENAME[1], extern + GEO_FILENAME[2]};
-	String floorname[] = {"B1", "F1", "F2"};
+	int currentFloor = Config.CurrentFloorDefault;
 	List<TiledLayer> mTileLayers = new ArrayList<>();
 	GraphicsLayer loactionGraphicsLayer = new GraphicsLayer();
 	static List<FeatureLayer> featureLayers = new ArrayList<>();
 	//Point，MyPoint,Location转换
 	public int MapToMyPointX(Object x) {
-		return (int) ((double) x / 20.0);
+		return (int) ((double) x / Config.GRID_SIZE);
 	}
 
 	public int MapToMyPointY(Object y) {
-		return (int) (-(double) y / 20.0);
+		return (int) (-(double) y / Config.GRID_SIZE);
 	}
 
 	public double LocationToMapX(double x) {
-		return x * 1000.0;
+		return x * Config.MAP_PIX_SIZE;
 	}
 
 	public double LocationToMapY(double y) {
-		return (y - 1.0) * 1000.0;
+		return (y - 1.0) * Config.MAP_PIX_SIZE;
 	}
 
 	@Override
@@ -92,7 +87,7 @@ import java.util.List;
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
 					case SHOWCURRENTFLOOR:
-						for (int i = 0; i < allfloor; i++) {
+						for (int i = 0; i < Config.Main_allfloor; i++) {
 							if (i != currentFloor) {
 								mMapView.getLayer(i ).setVisible(false);
 							} else {
@@ -125,7 +120,7 @@ import java.util.List;
 						locateMyPoint = null;
 						loactionGraphicsLayer.removeAll();
 						break;
-					case LOCATION_OK:
+					case 10086:
 						loactionGraphicsLayer.removeAll();
 						Bundle bundle = msg.getData();
 						double ax = bundle.getDouble("ax");
@@ -142,7 +137,7 @@ import java.util.List;
 						}
 						loactionGraphicsLayer.addGraphic(gp);
 						mMapView.centerAt(mapPoint, true);
-						mMapView.setScale(7000.0);
+						mMapView.setScale(Config.Main_SCAMAX);
 						mHeaderLayout.getRightImageButton().setEnabled(true);
 						break;
 					default:
@@ -156,7 +151,7 @@ import java.util.List;
 	public static boolean isServiceRunning(Context context) {
 		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if ("com.example.amap.service.LocationService".equals(service.service.getClassName())) {
+			if ("com.example.amap.service.StepCountLocationService".equals(service.service.getClassName())) {
 				return true;
 			}
 		}
@@ -171,12 +166,12 @@ import java.util.List;
 		}
 		else {
 			service_is_run=false;
-			startService(new Intent(this, LocationService.class));
+			startService(new Intent(this, StepCountLocationService.class));
 		}
 		receiver = new MyReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.setPriority(30);
-		filter.addAction("com.example.amap.service.LocationService");
+		filter.addAction("com.example.amap.service.StepCountLocationService");
 		registerReceiver(receiver, filter);
 	}
 	private void showcurrentfloor() {
@@ -193,9 +188,9 @@ import java.util.List;
 			int az = bundle.getInt("az");
 			int astate = bundle.getInt("astate");
 			switch (astate) {
-				case LOCATION_OK:
+				case 10086:
 					Message msg = new Message();
-					msg.what = LOCATION_OK;
+					msg.what=10086;
 					msg.setData(bundle);//mes利用Bundle传递数据
 					viewHandler.sendMessage(msg);
 					if(isfirstLocation)ShowToast("定位成功");
@@ -226,12 +221,12 @@ import java.util.List;
 		mMapView.setMapBackground(0xeeeeee, 0xffffff, 0, 0);//设置地图网格，背景样式
 		//添加瓦片和绘制图层
 		try {
-			mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[0]));
-			mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[1]));
-			mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[2]));
-			mMapView.addLayer(mTileLayers.get(0));
-			mMapView.addLayer(mTileLayers.get(1));
-			mMapView.addLayer(mTileLayers.get(2));
+			for(int i=0;i<Config.Main_allfloor;i++) {
+				mTileLayers.add(new ArcGISLocalTiledLayer(extern + Config.Main_tpkPath[i]));
+			}
+			for(int i=0;i<Config.Main_allfloor;i++){
+				mMapView.addLayer(mTileLayers.get(i));
+			}
 			mMapView.addLayer(loactionGraphicsLayer);
 		} catch (Exception e) {
 			Log.i("zjx", "未找到地图包");
@@ -241,10 +236,8 @@ import java.util.List;
 		if (type.equals("select")) {// 选择发送位置
 			initTopBarForBoth("分享位置", R.drawable.base_action_bar_true_bg_selector,
 					new HeaderLayout.onRightImageButtonClickListener() {
-
 						@Override
 						public void onClick() {
-							// TODO Auto-generated method stub
 							gotoChatPage();
 						}
 					});
@@ -252,7 +245,6 @@ import java.util.List;
 			startLocation();
 			showcurrentfloor();
 		} else {// 查看当前位置并到这儿去
-//			initTopBarForLeft("位置");
 			initTopBarForBoth("到这儿去", R.drawable.base_action_bar_true_bg_selector,
 					new HeaderLayout.onRightImageButtonClickListener() {
 						@Override
@@ -266,15 +258,14 @@ import java.util.List;
 			int x=b.getInt("x");
 			int y=b.getInt("y");
 			int z=b.getInt("z");
-			MyPoint newMyPoint = new MyPoint(x,y,z);
 			currentFloor = z;
 			PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.man));
-			Point mapPoint = new Point(x*20.0,-y*20.0);
+			Point mapPoint = new Point(x*Config.GRID_SIZE,-y*Config.GRID_SIZE);
 			Graphic gp = new Graphic(mapPoint, pic);
 			loactionGraphicsLayer.addGraphic(gp);
 			showcurrentfloor();
 			mMapView.centerAt(mapPoint, true);
-			mMapView.setScale(7000.0);
+			mMapView.setScale(Config.Main_SCAMAX);
 			mHeaderLayout.getRightImageButton().setEnabled(true);
 		}
 

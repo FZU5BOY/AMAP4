@@ -97,53 +97,43 @@ import cn.bmob.im.BmobChat;
 
 
 public class MainActivity extends BaseActivity {
+    //handle 消息值
     private static final int GO_HOME = 100;
     private static final int GO_LOGIN = 200;
-    final int HIDECALLOUTANDALLINFO = 12;//handle 消息值
-    final int SHOWCURRENTFLOOR = 13;
-    final int COMPLETEAAL = 14;
-    final int LOCATION_START = 15;
-    final int UPDATEGP = 16;
-    final int LOCATION_CLOST = 17;
-    final int LOCATION_ING = 18;
-    final int MAKE_PATH_ALL = 19;
-    final int UPDATESCALE = 20;
-    final int FINDFIREND = 21;
-    private final int LOCATION_OK = 1;
-    private final int LOCATION_NO_IN_MAP = 2;
-    private final int LOCATION_NET_ERROR = 3;
-    private final int LOCATION_LOCATION_IP_NOSET = 4;
-    private final int LOCATION_LOCATION_IP_ERROR = 5;
+    private static final int HIDECALLOUTANDALLINFO = 12;
+    private static final int SHOWCURRENTFLOOR = 13;
+    private static final int COMPLETEAAL = 14;
+    private static final int LOCATION_START = 15;
+    private static final int UPDATEGP = 16;
+    private static final int LOCATION_CLOST = 17;
+    private static final int LOCATION_ING = 18;
+    private static final int MAKE_PATH_ALL = 19;
+    private static final int UPDATESCALE = 20;
+    private static final int FINDFIREND = 21;
+    private static  final int LOCATION_OK = 1;
+    private static  final int LOCATION_NO_IN_MAP = 2;
+    private static  final int LOCATION_NET_ERROR = 3;
+    private static  final int LOCATION_LOCATION_IP_NOSET = 4;
+    private static  final int LOCATION_LOCATION_IP_ERROR = 5;
     private boolean flag = true;
     private boolean isFirstLocating = true;
     private boolean isLocating = false;
-    private final double SCAMAX =1000.0;
     private synchronized void setFlag() {
         flag = false;
     }
 
-    //test git
     Graphic main_gp;//临时变量
     int main_fl;//临时变量 handle用
     boolean isloadok = true;//是否加载成功,判断是否正确引入地图包
     final int OFFSET = 0;//设置偏移量，即到达某点的大致范围就算到达;之前设为1感觉效果不是很好
     MapView mMapView = null;//地图
     MapViewHelper mvHelper;//帮助类，某些操作更快捷
-    ShangeUtil su = ShangeUtil.getInstance();//栅格工具类
-    HeuryCache heuryCache = HeuryCache.getInstance();//h 缓存
     Deque<List<Node>> paths = new ArrayDeque<>();//多点路径规划时用到
     Deque<Integer> pathId = new ArrayDeque<>();
-    Deque<Integer> pointId = new ArrayDeque<>();
     Deque<MyPoint> midPoints = new ArrayDeque<>();
     //得到sd卡根
     final String extern = Environment.getExternalStorageDirectory().getPath();
-    //tpk文件地址
-    final String tpkPath[] = {"/arcgis/b1/b1.tpk", "/arcgis/f1/f1.tpk", "/arcgis/f2/f2.tpk"};
-    //geo文件地址
-    public static final String GEO_FILENAME[] =
-            {"/arcgis/b1/data/b1.geodatabase", "/arcgis/f1/data/f1.geodatabase", "/arcgis/f2/data/f2.geodatabase"};
-    int currentFloor = 1;//当前楼层 默认F1
-    static int allfloor = 3; //所有楼层
+    int currentFloor = Config.CurrentFloorDefault;//当前楼层
     String rountstart = null;
     String rountend = null;
     ArrayList<String> rountmid = new ArrayList<>();
@@ -164,7 +154,6 @@ public class MainActivity extends BaseActivity {
     Button button_dingwei,qrScanBtn;
     Button shut_photo,bigger_map,smaller_map;
     Button poiDetBtn;
-    int floorShange[] = {R.raw.b1shange, R.raw.f1shange, R.raw.f2shange};
     Button clear;
     TextView dingwei,scaleText;
     RelativeLayout allinfo;
@@ -175,9 +164,6 @@ public class MainActivity extends BaseActivity {
     RelativeLayout rount;
     RelativeLayout tools;
     RelativeLayout person;
-    //图层各个加载配置
-    String geofilename[] = {extern + GEO_FILENAME[0], extern + GEO_FILENAME[1], extern + GEO_FILENAME[2]};
-    String floorname[] = {"B1", "F1", "F2"};
     List<TiledLayer> mTileLayers = new ArrayList<>();
     GraphicsLayer mGraphicsLayer[] = {new GraphicsLayer(), new GraphicsLayer(), new GraphicsLayer()};
     GraphicsLayer loactionGraphicsLayer = new GraphicsLayer();
@@ -185,43 +171,35 @@ public class MainActivity extends BaseActivity {
     private MyReceiver receiver = null;
     private MyReceiver2 receiver2 = null;
     View calloutView;//地图的callout
-    Timer timer;//timer
     private static List<PoiSearch> ls = null;
     private MyToast toast;//自定义toast控件
     private static Handler viewHandler;//用于更新UI
     NotificationManager nm;//通知
     static final int NOTIFICATION_ID = 0x123;//通知的id
     private SharedPreferences setting;//is first
-    private final double SHOP_LENGHT =400.0;//1比例尺:50  地图显示8cm 总室内长约400m
-    //aidl service
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//		Log.i("zjx", "main oncreate");
-//create地图
-        //123
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        ArcGISRuntime.setClientId("uK0DxqYT0om1UXa9");
+        ArcGISRuntime.setClientId(Config.ClientID);
         setContentView(R.layout.main);
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        currentFloor = 1;//默认为F1
+        currentFloor =  Config.CurrentFloorDefault;
         mMapView = (MapView) findViewById(R.id.map);
         mvHelper = new MapViewHelper(mMapView);
         mMapView.setMapBackground(0xeeeeee, 0xffffff, 0, 0);//设置地图网格，背景样式
         //添加瓦片和绘制图层
         try {
-            mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[0]));
-            mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[1]));
-            mTileLayers.add(new ArcGISLocalTiledLayer(extern + tpkPath[2]));
-            mMapView.addLayer(mTileLayers.get(0));
-            mMapView.addLayer(mGraphicsLayer[0]);
-            mMapView.addLayer(mTileLayers.get(1));
-            mMapView.addLayer(mGraphicsLayer[1]);
-            mMapView.addLayer(mTileLayers.get(2));
-            mMapView.addLayer(mGraphicsLayer[2]);
+            for(int i=0;i<Config.Main_allfloor;i++) {
+                mTileLayers.add(new ArcGISLocalTiledLayer(extern + Config.Main_tpkPath[i]));
+            }
+            for(int i=0;i<Config.Main_allfloor;i++){
+                mMapView.addLayer(mTileLayers.get(i));
+                mMapView.addLayer(mGraphicsLayer[i]);
+            }
             mMapView.addLayer(loactionGraphicsLayer);
         } catch (Exception e) {
-            Log.i("zjx", "未找到地图包");
+           ShowLog("未找到地图包");
             isloadok = false;
         }
         calloutView = View.inflate(this,R.xml.callout, null); //动态加载view
@@ -245,17 +223,18 @@ public class MainActivity extends BaseActivity {
         clear = (Button) findViewById(R.id.button_clear);
 //        mMapView.setMaxScale(6500);//1：6500
 //        mMapView.setMinScale(20000.0);//1：20000
-        mMapView.centerAt(new Point(500.0, -500.0), false);//
+        mMapView.centerAt(new Point(500.0, -500.0), false);//初始在中点
         search_main = (Button) findViewById(R.id.search_main);//进入搜索
         search_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("zjx", "click to search");
+                ShowLog("click to search");
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
         scaleText = (TextView)findViewById(R.id.scale_map_num);
+        scaleText.setText(Config.StartScale+"m");
         bigger_map =(Button) findViewById(R.id.bigger_map);
         smaller_map=(Button)findViewById(R.id.smaller_map);
         bigger_map.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +277,6 @@ public class MainActivity extends BaseActivity {
                     double dianti = getCloestfeature(getResources().getString(R.string.dianti));
                     intent.putExtra("dianti", dianti);
                 }
-
                 startActivityForResult(intent, 2);
             }
         });
@@ -306,7 +284,7 @@ public class MainActivity extends BaseActivity {
         poiDetBtn = (Button) findViewById(R.id.poiDet);
         poiDetBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.i("zjx", "click to shop detail");
+                ShowLog("click to shop detail");
                 Intent intent = new Intent(MainActivity.this, XListViewActivity.class);
                 startActivity(intent);
             }
@@ -315,7 +293,7 @@ public class MainActivity extends BaseActivity {
         person.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("zjx", "click to tow");
+                ShowLog("click to tow");
                 if (userManager.getCurrentUser() != null) {
                     // 每次自动登陆的时候就需要更新下当前位置和好友的资料，因为好友的头像，昵称啥的是经常变动的
                     updateUserInfos();
@@ -323,15 +301,13 @@ public class MainActivity extends BaseActivity {
                 } else {
                     mHandler.sendEmptyMessageDelayed(GO_LOGIN, 1000);
                 }
-//				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//				startActivity(intent);
             }
         });
         tools = (RelativeLayout) findViewById(R.id.tools);//工具
         tools.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("zjx", "click to tow");
+                ShowLog("click to tow");
                 Intent intent = new Intent(MainActivity.this, ToolsActivity.class);
                 startActivity(intent);
             }
@@ -340,7 +316,6 @@ public class MainActivity extends BaseActivity {
         rount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("zjx", "click to tow");
                 Intent intent = new Intent(MainActivity.this, MakeRoadActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("islocation", locateMyPoint != null);
@@ -351,8 +326,6 @@ public class MainActivity extends BaseActivity {
                 startActivityForResult(intent, 1);
             }
         });
-
-
         allinfo = (RelativeLayout) findViewById(R.id.allinfo);
         font_middle = (Button) findViewById(R.id.font_middle);
         search_video = (Button) findViewById(R.id.search_video);//语音搜索
@@ -397,9 +370,9 @@ public class MainActivity extends BaseActivity {
                         allinfo.setVisibility(View.GONE);
                         break;
                     case SHOWCURRENTFLOOR:
-                        font_middle.setText(floorname[currentFloor]);
+                        font_middle.setText(Config.Main_floorName[currentFloor]);
                         // We will spin off the initialization in a new thread
-                        for (int i = 0; i < allfloor; i++) {
+                        for (int i = 0; i < Config.Main_allfloor; i++) {
                             if (i != currentFloor) {
                                 mMapView.getLayer(i * 2).setVisible(false);
                                 mMapView.getLayer(i * 2 + 1).setVisible(false);
@@ -485,7 +458,7 @@ public class MainActivity extends BaseActivity {
                         }
                         loactionGraphicsLayer.addGraphic(gp);
                         mMapView.centerAt(mapPoint, true);
-                        mMapView.setScale(SCAMAX);
+                        mMapView.setScale(Config.Main_SCAMAX);
                         break;
                     case UPDATEGP:
                         mGraphicsLayer[main_fl].addGraphic(main_gp);
@@ -494,8 +467,15 @@ public class MainActivity extends BaseActivity {
                         makePathAll(locateMyPoint, midPoints.getFirst(), false);
                         break;
                     case UPDATESCALE:
-                        int relScale=(int) ((mMapView.getScale()+1.0)/SHOP_LENGHT);
+                        double relScale0=(mMapView.getScale()+1.0)/Config.SHOP_LENGHT;
+                        if(relScale0<1.0){
+                            java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
+                            scaleText.setText(df.format(relScale0)+"m");
+                        }
+                        else{
+                        int relScale=(int) (relScale0);
                         scaleText.setText(relScale+"m");
+                        }
                         break;
                     case FINDFIREND:{
 
@@ -542,9 +522,9 @@ public class MainActivity extends BaseActivity {
                 mp.execute(startMyPoint, endMyPoint);
                 currentFloor = startMyPoint.z;
                 showcurrentfloor();
-                Point poi2 = new Point(startMyPoint.x * 20.0, -startMyPoint.y * 20.0);
+                Point poi2 = new Point(startMyPoint.x * Config.GRID_SIZE, -startMyPoint.y *Config.GRID_SIZE);
                 mMapView.centerAt(poi2, true);
-                mMapView.setScale(SCAMAX);
+                mMapView.setScale(Config.Main_SCAMAX);
 //                viewHandler.sendEmptyMessage(UPDATESCALE);
             } else if (locateMyPoint != null) {
                 rountstart = getResources().getString(R.string.mylocation);
@@ -555,15 +535,15 @@ public class MainActivity extends BaseActivity {
                 mp.execute(locateMyPoint, endMyPoint);
                 currentFloor = locateMyPoint.z;
                 showcurrentfloor();
-                Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+                Point poi2 = new Point(locateMyPoint.x * Config.GRID_SIZE, -locateMyPoint.y * Config.GRID_SIZE);
                 mMapView.centerAt(poi2, true);
-                mMapView.setScale(SCAMAX);
+                mMapView.setScale(Config.Main_SCAMAX);
 //                viewHandler.sendEmptyMessage(UPDATESCALE);
                 //注册广播
                 receiver2 = new MyReceiver2();
                 IntentFilter filter = new IntentFilter();
                 filter.setPriority(20);
-                filter.addAction("com.example.amap.service.LocationService");
+                filter.addAction("com.example.amap.service.StepCountLocationService");
                 registerReceiver(receiver2, filter);
             }
         }
@@ -630,7 +610,6 @@ public class MainActivity extends BaseActivity {
             }
             MakePath mp = new MakePath(from_here.getContext());
             mp.execute(startMyPoint, endMyPoint);
-//					makePathAll(startMyPoint, endMyPoint);
         }
     }
     private class MyReceiver2 extends BroadcastReceiver {
@@ -643,9 +622,9 @@ public class MainActivity extends BaseActivity {
             int astate = bundle.getInt("astate");
             Bundle addBundle = getResultExtras(true);
             boolean ischanged = addBundle.getBoolean("ischanged", false);
-            if (astate != LOCATION_OK) return;
+            if (astate != 10086) return;
+            ShowLog("执行 MyReceiver2");
             Point mapPoint = new Point(LocationToMapX(ax), LocationToMapY(ay));
-            MyPoint locateMyPoint2 = new MyPoint(MapToMyPointX(mapPoint.getX()), MapToMyPointY(mapPoint.getY()), az);
             int result;
             if (!ischanged) {
                 ShowLog("还在该点");
@@ -705,11 +684,7 @@ public class MainActivity extends BaseActivity {
                 Message msg = new Message();
                 msg.what = MAKE_PATH_ALL;
                 viewHandler.sendMessage(msg);
-//				makePathAll(locateMyPoint, midPoints.getFirst(), false);
                 showcurrentfloor();
-//				Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
-//				mMapView.centerAt(poi2, true);
-//				mMapView.setScale(7000.0);
             }
         }
     }
@@ -724,14 +699,6 @@ public class MainActivity extends BaseActivity {
             int az = bundle.getInt("az");
             int astate = bundle.getInt("astate");
             switch (astate) {
-                case 10087:{
-                    Message msg = new Message();
-                    msg.what = 10086;
-                    msg.setData(bundle);//mes利用Bundle传递数据
-                    viewHandler.sendMessage(msg);
-                    break;
-                }
-//                case LOCATION_OK:
                 case 10086:
                     viewHandler.sendEmptyMessage(LOCATION_ING);
                     if (isFirstLocating) {
@@ -739,7 +706,6 @@ public class MainActivity extends BaseActivity {
                         isFirstLocating = false;
                     }
                     Message msg = new Message();
-//                    msg.what = LOCATION_OK;
                     msg.what=10086;
                     msg.setData(bundle);//mes利用Bundle传递数据
                     Point mapPoint = new Point(LocationToMapX(ax), LocationToMapY(ay));
@@ -803,7 +769,7 @@ public class MainActivity extends BaseActivity {
 
     //上楼点击事件
     public void TurnUP(View source) {
-        if (currentFloor + 1 >= allfloor) {
+        if (currentFloor + 1 >= Config.Main_allfloor) {
             Log.i("zjx", "tai gao le");
         } else {
             viewHandler.sendEmptyMessage(HIDECALLOUTANDALLINFO);
@@ -1001,7 +967,7 @@ public class MainActivity extends BaseActivity {
                 for (int i = 0; i < ls; i++) {
                     Node aaa=mylist.get(i);
                     MyPoint pos = new MyPoint(aaa.X,aaa.Y);
-                    Point p = new Point((pos.x * 20.0 + 10.0), -pos.y * 20.0 - 10.0);
+                    Point p = new Point((pos.x * Config.GRID_SIZE + Config.GRID_SIZE/2), -pos.y * Config.GRID_SIZE -Config.GRID_SIZE/2);
                     if (i == 0) polyline.startPath(p);
                     else polyline.lineTo(p);
                     //放入cache
@@ -1010,7 +976,7 @@ public class MainActivity extends BaseActivity {
 //                        heuryCache.hashMap.put(aaa.X*100+aaa.Y,len);
 //                    }
                 }
-                SimpleLineSymbol simpleLineSymbol = new SimpleLineSymbol(Color.argb(255, 255, 22, 34), 10, SimpleLineSymbol.STYLE.SOLID);
+                SimpleLineSymbol simpleLineSymbol = new SimpleLineSymbol(Color.argb(255, 255, 22, 34),(float) Config.GRID_SIZE/2, SimpleLineSymbol.STYLE.SOLID);
                 Graphic graphic1 = new Graphic(polyline, simpleLineSymbol);
                 //如果是第一次规划
                 if (isfirst) {
@@ -1065,7 +1031,7 @@ public class MainActivity extends BaseActivity {
 
     //清除绘制图层
     public void ClearAllGraphic() {
-        for (int i = 0; i < allfloor; i++) {
+        for (int i = 0; i < Config.Main_allfloor; i++) {
             mGraphicsLayer[i].removeAll();
         }
         mMapView.getCallout().hide();
@@ -1078,32 +1044,32 @@ public class MainActivity extends BaseActivity {
     }
     //Point(Map 0~1000 -1000~0)，MyPoint(0~50),Location(模拟定位 0~1)转换
     public int MapToMyPointX(Object x) {
-        return (int) ((double) x / 20.0);
+        return (int) ((double) x / Config.GRID_SIZE);
     }
 
     public int MapToMyPointY(Object y) {
-        return (int) (-(double) y / 20.0);
+        return (int) (-(double) y / Config.GRID_SIZE);
     }
 
     public double LocationToMapX(double x) {
-        return x * 1000.0;
+        return x * Config.MAP_PIX_SIZE;
     }
 
     public double LocationToMapY(double y) {
 
 //        return (y - 1.0) * 1000.0;
 
-        return (y - 1.0) * 1000.0;
+        return (y - 1.0) * Config.MAP_PIX_SIZE;
 
     }
 
 
     public double MapToLocationX(double x) {
-        return x / 1000.0;
+        return x / Config.MAP_PIX_SIZE;
     }
 
     public double MapToLocationY(double y) {
-        return y / 1000.0 + 1;
+        return y / Config.MAP_PIX_SIZE + 1;
     }
 
     //定位
@@ -1219,7 +1185,7 @@ public class MainActivity extends BaseActivity {
             }
             else if (endMyPoint != null) {
                 PictureMarkerSymbol pic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-                Point poi = new Point((double) (endMyPoint.x*20.0), (double)  (-endMyPoint.y*20.0));
+                Point poi = new Point((double) (endMyPoint.x*Config.GRID_SIZE), (double)  (-endMyPoint.y*Config.GRID_SIZE));
                 Graphic gp = new Graphic(poi, pic);
                 mGraphicsLayer[endMyPoint.z].addGraphic(gp);
             }
@@ -1238,18 +1204,15 @@ public class MainActivity extends BaseActivity {
 
     //初始化数据图层
     private void initializeRoutingAndGeocoding() {
-        for (int i = 0; i < allfloor; i++) {
+        for (int i = 0; i < Config.Main_allfloor; i++) {
             Geodatabase geodatabase = null;
             try {
-                geodatabase = new Geodatabase(geofilename[i]);
+                geodatabase = new Geodatabase(extern+Config.GEO_FILENAME[i]);
                 List<GeodatabaseFeatureTable> table = geodatabase.getGeodatabaseTables();
-                Log.i("zjx", "list:" + table);
-
+                ShowLog("list:" + table);
                 GeodatabaseFeatureTable mytable;
-                if (i == 1) mytable = geodatabase.getGeodatabaseFeatureTableByLayerId(0);
-                else mytable = geodatabase.getGeodatabaseFeatureTableByLayerId(1);
-
-                Log.i("zjx", "mytable:" + mytable);
+                mytable = geodatabase.getGeodatabaseFeatureTableByLayerId(Config.featureTableIDs[i]);
+                ShowLog("mytable:" + mytable);
                 featureLayers.add(new FeatureLayer(mytable));
                 // Attempt to load the local geocoding and routing data
                 mMapView.addLayer(featureLayers.get(i));
@@ -1302,7 +1265,7 @@ public class MainActivity extends BaseActivity {
                                 text.setText(g.getAttributeValue("nickname").toString());
                                 Point poi = new Point((double) g.getAttributeValue("pointX"), (double) g.getAttributeValue("pointy"));
                                 mMapView.centerAt(poi, true);
-                                mMapView.setScale(SCAMAX);
+                                mMapView.setScale(Config.Main_SCAMAX);
                                 updateContent(R.drawable.ic_1, g.getAttributeValue("nickname").toString());
                                 Callout mapCallout = mMapView.getCallout();
                                 mapCallout.setCoordinates(poi);
@@ -1326,7 +1289,6 @@ public class MainActivity extends BaseActivity {
         //后期拓展
         @Override
         public boolean onDoubleTap(MotionEvent point) {
-
             mMapView.zoomin();
             ShowLog("scale:" + mMapView.getScale());
             return true;
@@ -1352,14 +1314,11 @@ public class MainActivity extends BaseActivity {
             public void onError(Throwable e) {
                 e.printStackTrace();
             }
-
             public void onCallback(FeatureResult featureIterator) {
                 //...
             }
-
-
         };
-        for (int i = 0; i < allfloor; i++) {
+        for (int i = 0; i < Config.Main_allfloor; i++) {
             Future<FeatureResult> resultFuture = featureLayers.get(i).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback);
             try {
                 FeatureResult results = resultFuture.get();
@@ -1421,15 +1380,13 @@ public class MainActivity extends BaseActivity {
                         poi = new Point((double) feature.getAttributeValue("pointX"), (double) feature.getAttributeValue("pointy"));
                         Graphic gp = new Graphic(poi, pic);
                         mGraphicsLayer[i].addGraphic(gp);
-
                     }
-
                 }
                 if (feature != null) {
                     currentFloor=i;
                     showcurrentfloor();
                     mMapView.centerAt(poi, true);
-                    mMapView.setScale(SCAMAX);
+                    mMapView.setScale(Config.Main_SCAMAX);
                     //个人感觉搜索还是不要显示的好
                     TextView text = (TextView) findViewById(R.id.poiname);
                     text.setText(feature.getAttributeValue("nickname").toString());
@@ -1475,7 +1432,7 @@ public class MainActivity extends BaseActivity {
             };
             boolean isok=findFeatureCurrentFirst(featureLayers.get(currentFloor).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback),currentFloor);
             if(!isok){
-                for(int i=0;i<allfloor;i++){
+                for(int i=0;i<Config.Main_allfloor;i++){
                     if(i==currentFloor)continue;
                     boolean isok2=findFeatureCurrentFirst(featureLayers.get(i).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback),i);
                     if(isok2)break;
@@ -1539,9 +1496,9 @@ public class MainActivity extends BaseActivity {
 
 
                     }
-                    Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+                    Point poi2 = new Point(locateMyPoint.x *Config.GRID_SIZE, -locateMyPoint.y *Config.GRID_SIZE);
                     mMapView.centerAt(poi2, true);
-                    mMapView.setScale(SCAMAX);
+                    mMapView.setScale(Config.Main_SCAMAX);
 
                     receiver2 = new MyReceiver2();
                     IntentFilter filter = new IntentFilter();
@@ -1549,24 +1506,14 @@ public class MainActivity extends BaseActivity {
                     filter.addAction("com.example.amap.service.LocationService");
                     registerReceiver(receiver2, filter);
                 } else {
-
                     for (int i = 0; i < midlist.size() - 1; i++) {
                         Log.i("zjx", "s:" + midlist.get(i).toString() + "******e:" + midlist.get(i + 1).toString());
-//						MakePath mp = new MakePath(getApplicationContext());
-//						mp.execute(midlist.get(i), midlist.get(i+1));
-
                         PictureMarkerSymbol endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.begining));
                         if (i + 1 == midlist.size() - 1)
                             endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
                         Point endpoi = new Point(LocationToMapX(midlist.get(i + 1).x), LocationToMapY(midlist.get(i + 1).y));
-//						Graphic gp = new Graphic(endpoi,endpic);
-//						mGraphicsLayer[midlist.get(i+1).z].addGraphic(gp);
                         main_gp = new Graphic(endpoi, endpic);
                         main_fl = midlist.get(i + 1).z;
-//                        Message message=new Message();
-//                        Bundle bundle1=new Bundle();
-//                        bundle1
-//						mGraphicsLayer[midlist.get(i+1).z].addGraphic(gp);
                         viewHandler.sendEmptyMessage(UPDATEGP);
                         makePathAll(midlist.get(i), midlist.get(i + 1), true);
 //
@@ -1574,15 +1521,12 @@ public class MainActivity extends BaseActivity {
                     }
                     PictureMarkerSymbol endpic = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.begining));
 
-                    Point poi2 = new Point(ms.x * 20.0, -ms.y * 20.0);
-//					Graphic gp = new Graphic(poi2,endpic);
-//					mGraphicsLayer[ms.z].addGraphic(gp);
+                    Point poi2 = new Point(ms.x * Config.GRID_SIZE, -ms.y * Config.GRID_SIZE);
                     main_gp = new Graphic(poi2, endpic);
                     main_fl = ms.z;
-//						mGraphicsLayer[midlist.get(i+1).z].addGraphic(gp);
                     viewHandler.sendEmptyMessage(UPDATEGP);
                     mMapView.centerAt(poi2, true);
-                    mMapView.setScale(SCAMAX);
+                    mMapView.setScale(Config.Main_SCAMAX);
                 }
 
             } else {
@@ -1642,7 +1586,7 @@ public class MainActivity extends BaseActivity {
                         poi = new Point((double) mfeature.getAttributeValue("pointX"), (double) mfeature.getAttributeValue("pointy"));
                         Graphic gp = new Graphic(poi, pic);
                         mMapView.centerAt(poi, true);
-                        mMapView.setScale(SCAMAX);
+                        mMapView.setScale(Config.Main_SCAMAX);
                         mGraphicsLayer[currentFloor].updateGraphic(minpid, gp);
                         TextView text = (TextView) findViewById(R.id.poiname);
                         text.setText(mfeature.getAttributeValue("nickname").toString());
@@ -1694,7 +1638,7 @@ public class MainActivity extends BaseActivity {
             }
         } catch (Exception e) {
         }
-        for (int i = 0; i < allfloor; i++) {
+        for (int i = 0; i < Config.Main_allfloor; i++) {
             if (i == currentFloor) continue;//少操作
             resultFuture = featureLayers.get(i).selectFeatures(qParameters, FeatureLayer.SelectionMode.NEW, callback);
             try {
@@ -1838,29 +1782,15 @@ public class MainActivity extends BaseActivity {
                 mMapView.getCallout().hide();
                 endMyPoint = new MyPoint(x,y,z);
                 PictureMarkerSymbol pic5 = new PictureMarkerSymbol(getResources().getDrawable(R.drawable.ending));
-                Point poi5 = new Point((double) (endMyPoint.x*20.0), (double)  (-endMyPoint.y*20.0));
+                Point poi5 = new Point((double) (endMyPoint.x*Config.GRID_SIZE), (double)  (-endMyPoint.y*Config.GRID_SIZE));
                 Graphic gp5 = new Graphic(poi5, pic5);
                 mGraphicsLayer[endMyPoint.z].addGraphic(gp5);
                 if (locateMyPoint == null) {
-//                    receiver = new MyReceiver();
-//                    IntentFilter filter = new IntentFilter();
-//                    filter.setPriority(30);
-//                    filter.addAction("com.example.amap.service.LocationService");
-//                    registerReceiver(receiver, filter);
-//                    isLocating = true;
-//                    try {
-//                        MakePath mp = new MakePath(MainActivity.this);
-//                        mp.execute(locateMyPoint, endMyPoint);
-//                    }
-//                    catch(Exception e){
-//                        e.printStackTrace();
-//                    }
-
-                    Point poi = new Point(x*20.0,-y*20.0);
+                    Point poi = new Point(x*Config.GRID_SIZE,-y*Config.GRID_SIZE);
                     currentFloor=z;
                     showcurrentfloor();
                     mMapView.centerAt(poi, true);
-                    mMapView.setScale(SCAMAX);
+                    mMapView.setScale(Config.Main_SCAMAX);
                     ShowToast("您尚未开启定位，请开启定位后重试");
                 }
                 if (locateMyPoint != null) {
@@ -1869,11 +1799,9 @@ public class MainActivity extends BaseActivity {
                     mp.execute(locateMyPoint, endMyPoint);
                     currentFloor = locateMyPoint.z;
                     showcurrentfloor();
-                    Point poi2 = new Point(locateMyPoint.x * 20.0, -locateMyPoint.y * 20.0);
+                    Point poi2 = new Point(locateMyPoint.x *Config.GRID_SIZE, -locateMyPoint.y * Config.GRID_SIZE);
                     mMapView.centerAt(poi2, true);
-                    mMapView.setScale(SCAMAX);
-                    //注册广播
-//                    if(receiver2==null)receiver2 = new MyReceiver2();
+                    mMapView.setScale(Config.Main_SCAMAX);
                     receiver2 = new MyReceiver2();
                     IntentFilter filter = new IntentFilter();
                     filter.setPriority(5);

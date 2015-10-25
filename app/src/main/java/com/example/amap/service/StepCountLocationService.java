@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.example.amap.CustomApplcation;
 import com.example.amap.bean.AMapPoint;
+import com.example.amap.config.Config;
 import com.example.amap.util.location.AnalogLocation;
 import com.example.amap.util.location.StepLocation;
 
@@ -64,8 +65,7 @@ public class StepCountLocationService extends Service {
     public float weight;
     public String sex;
     public float lenOfStep;
-    private final double SHOP_LENGHT =400.0; //50 格 400 米 1格8米
-    //0.008 映射到 1/50=20  0.02的关系
+    private final double SHOP_LENGHT =Config.SHOP_LENGHT;
     //service
     private Date startdate;//运动开始时间
     private Date nowdate;//目前时间
@@ -76,10 +76,9 @@ public class StepCountLocationService extends Service {
     //常量
     final float alpha = 0.99f;//alpha=t/t+dt
     StepLocation stepLocation=StepLocation.getInstance();
-//    public  AMapPoint lastAMapPoint =new AMapPoint(0.5,0.5,1,30,0);
     Handler handler;
     private int oldStep=0;
-    private double houseNorth = 30.0;//在地图上 从入口进去的时候指南针的角度 30为预设
+    private double houseNorth = Config.Location_houseNorth;//在地图上 从入口进去的时候指南针的角度 30为预设
     public void init(){
         startdate = new Date();
 //        height = (float)data[0];
@@ -277,10 +276,8 @@ public class StepCountLocationService extends Service {
 //                oldStep=step;
 //                //根据差计算步长
 //                Log.i("zjx", "隔2s的步数差：" + stepSub);
-
-
                 double degreeSub=(houseNorth+90.0+360.0-lastDegree)%360; //相对地球竖直向上↑的角度差 角度从逆时针算
-//                Log.i("zjx","degreeSub:"+degreeSub);
+                Log.i("zjx","degreeSub:"+degreeSub);
                 int stepSub=0;
                 if((stepSub=(step-stepLocation.lastAMapPoint.getStep()))!=0){
                     double xMap,yMap;
@@ -290,23 +287,26 @@ public class StepCountLocationService extends Service {
                          yMap=stepLocation.lastAMapPoint.getY();
                     }
                     else {
-                        double lenStep = stepSub * 0.5;
+                        double lenStep = stepSub * 0.5;//走的距离 需要转换
                         double dia = Math.toRadians(degreeSub);
-                        double sinStepY = lenStep * Math.sin(dia) / SHOP_LENGHT;//y+-  0.008 映射到0.02的关系
-                        double cosStepX = lenStep * Math.cos(dia) / SHOP_LENGHT;//x+-
+                        double sinStepY = lenStep * Math.sin(dia) / Config.Real_Map_Size;//y+-
+                        double cosStepX = lenStep * Math.cos(dia) / Config.Real_Map_Size;//x+-
                          xMap = stepLocation.lastAMapPoint.getX() + cosStepX;
                          yMap = stepLocation.lastAMapPoint.getY() + sinStepY;
-                        Log.i("zjx", "location:" + xMap + ";;;" + yMap);
+                        //更新到CustomApplcation
+                        CustomApplcation.lastPoint=stepLocation.lastAMapPoint;
+                        Log.i("zjx", "location:" + xMap + ";;;" + yMap+":::"+stepLocation.lastAMapPoint.getZ());
                     }
                     intent.putExtra("ax",xMap);
                     intent.putExtra("ay",yMap);
-                    intent.putExtra("az",1);
+                    intent.putExtra("az",stepLocation.lastAMapPoint.getZ());
                     intent.putExtra("step", step);
-                    intent.putExtra("degree",lastDegree);
-                    intent.putExtra("astate",10086);
+                    intent.putExtra("degree", lastDegree);
+                    intent.putExtra("astate", 10086);
                     intent.setAction("com.example.amap.service.StepCountLocationService");
                     sendOrderedBroadcast(intent, null);
-                    stepLocation.lastAMapPoint =new AMapPoint(xMap,yMap,1,lastDegree,step);
+                    int zTemp=stepLocation.lastAMapPoint.getZ();
+                    stepLocation.lastAMapPoint =new AMapPoint(xMap,yMap,zTemp,lastDegree,step);
                 }
                 }
         }
@@ -322,16 +322,15 @@ public class StepCountLocationService extends Service {
             // TODO Auto-generated method stub
 
             if(first_orietation){
-
                 lastDegree = event.values[0];
                 first_orietation = false;
             }else{
                 currentDegree = event.values[0];
-                if(Math.abs(currentDegree - lastDegree) > 10){
+                if(Math.abs(currentDegree - lastDegree) > 5){
                     degree = lastDegree;
                     //改变方向
-                    lastDegree = currentDegree;
-
+                    lastDegree = -currentDegree;
+                    Log.i("zjx","lastDegree:"+lastDegree);
                 }
             }
         }
@@ -343,7 +342,7 @@ public class StepCountLocationService extends Service {
         Sensor acceleromererSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         sensorManager.registerListener(accelerometerListener, acceleromererSensor,10000);
-        sensorManager.registerListener(orientationListener,orientationSensor,SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(orientationListener,orientationSensor,SensorManager.SENSOR_DELAY_FASTEST);
         System.out.println("deadReckoningService started");
     }
 //    如果一个 Service 已经被启动，

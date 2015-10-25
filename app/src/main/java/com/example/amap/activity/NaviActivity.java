@@ -237,9 +237,9 @@ public class NaviActivity extends Activity {
         protected String doInBackground(String... params) {
             try {
                 Date a = new Date();
-                UnzipAssets.unZip(NaviActivity.this, "b1.zip", OUTPUT_DIRECTORY, true);
-                UnzipAssets.unZip(NaviActivity.this, "f1.zip", OUTPUT_DIRECTORY, true);
-                UnzipAssets.unZip(NaviActivity.this, "f2.zip", OUTPUT_DIRECTORY, true);
+                for(int i=0;i<Config.MapPackageZip.length;i++){
+                    UnzipAssets.unZip(NaviActivity.this, Config.MapPackageZip[i], OUTPUT_DIRECTORY, true);
+                }
                 Date b = new Date();
                 iszipok = true;
                 Log.i("zjx", "the time is:" + (b.getTime() - a.getTime()));

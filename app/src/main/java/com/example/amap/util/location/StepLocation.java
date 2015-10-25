@@ -6,6 +6,7 @@ import android.util.Log;
 import com.esri.core.geometry.Point;
 import com.example.amap.CustomApplcation;
 import com.example.amap.bean.AMapPoint;
+import com.example.amap.config.Config;
 import com.example.amap.util.CommonUtils;
 import com.example.amap.util.rount.MyPoint;
 import com.example.amap.util.rount.ShangeUtil;
@@ -24,7 +25,7 @@ import java.net.URLConnection;
  * Created by Administrator on 2015/7/31.
  */
 public class StepLocation {
-    public  AMapPoint lastAMapPoint=new AMapPoint(0.5,0.5,1,30,0);
+    public  AMapPoint lastAMapPoint=new AMapPoint(0.5,0.5, Config.CurrentFloorDefault,30,0);
     private static class LazyHolder {
         private static final StepLocation INSTANCE = new StepLocation();
     }

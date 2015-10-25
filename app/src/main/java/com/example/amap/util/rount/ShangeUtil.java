@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.amap.CustomApplcation;
 import com.example.amap.R;
+import com.example.amap.config.Config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,20 +20,19 @@ import java.util.List;
  * 静态内部类 懒汉单例
  */
 public class ShangeUtil {
-    private final int floorShange[] = {R.raw.b1shange, R.raw.f1shange, R.raw.f2shange};
     private static class LazyHolder {
         private static final ShangeUtil INSTANCE = new ShangeUtil();
     }
     private ShangeUtil(){
         Log.i("zjx","start to init");
-        for(int i=0;i<=2;i++)
+        for(int i=0;i<Config.Main_allfloor;i++)
        shapeList.add(getMap(i));
     }
     public static final ShangeUtil getInstance() {
         return LazyHolder.INSTANCE;
     }
     public int[] HIT = {1}; //设置哪些值代表为障碍物
-    public final int SHANGESIZE =50;
+    public final int SHANGESIZE = Config.GRID_COUNT;
     private   List shapeList=new ArrayList();
     private static Context context = CustomApplcation.getInstance();
 
@@ -42,7 +42,7 @@ public class ShangeUtil {
 
     //静态工厂方法
     public  int[][] getMap(int floor){
-        InputStream inputStream=this.context.getResources().openRawResource(floorShange[floor]);
+        InputStream inputStream=this.context.getResources().openRawResource(Config.ROUNT_floorShange[floor]);
         String all="";
         all=getString(inputStream);
         String as[]=all.split("\\s");
@@ -51,11 +51,10 @@ public class ShangeUtil {
         int in=-1;
         try {
             for(int i=0;i<as.length;i++){
-                if(i%50==0)in++;
+                if(i%Config.GRID_COUNT==0)in++;
                 asd[in][i%SHANGESIZE]=nuechange(Integer.parseInt(as[i]));
-                System.out.print(asd[in][i%SHANGESIZE]);
+//                System.out.print(asd[in][i%SHANGESIZE]);
             }
-//		 System.out.println(asd[30][15]);
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println(asd[1][1]);
@@ -65,7 +64,9 @@ public class ShangeUtil {
         return asd;
     }
     public  int nuechange(int num){
-        if(num==-9999)return 0;
+//        if(num==-9999)return 0;//可走
+//        else return 1;//不可走
+        if(num==0)return 0;
         else return 1;
     }
     public static String getString(InputStream inputStream) {
@@ -81,7 +82,6 @@ public class ShangeUtil {
         try {
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
-//                sb.append("\n");
             }
             inputStreamReader.close();
         } catch (IOException e) {
