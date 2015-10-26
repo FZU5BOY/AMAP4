@@ -275,14 +275,19 @@ public class MipcaActivityCapture extends Activity implements Callback , View.On
 		String xyz[]=resultString.split("&");
 		StepLocation stepLocation=StepLocation.getInstance();
 		double sx,sy;int sz;
-		sx=Double.parseDouble(xyz[0]);
-		sy=Double.parseDouble(xyz[1]);
-		sz=Integer.parseInt(xyz[2]);
-		if(0<=sz&&sz<=2&&sx<=1.0&&sy<=1.0&&sx>=0.0&&sy>=0.0){
-		stepLocation.lastAMapPoint.setZ(sz);
-		stepLocation.lastAMapPoint.setX(sx);
-		stepLocation.lastAMapPoint.setY(sy);
-		stepLocation.lastAMapPoint.setStep(stepLocation.lastAMapPoint.getStep()+2);
+		try{
+			sx=Double.parseDouble(xyz[0]);
+			sy=Double.parseDouble(xyz[1]);
+			sz=Integer.parseInt(xyz[2]);
+			if(0<=sz&&sz<=2&&sx<=1.0&&sy<=1.0&&sx>=0.0&&sy>=0.0){
+				stepLocation.lastAMapPoint.setZ(sz);
+				stepLocation.lastAMapPoint.setX(sx);
+				stepLocation.lastAMapPoint.setY(sy);
+				stepLocation.lastAMapPoint.setStep(stepLocation.lastAMapPoint.getStep()+2);
+			}
+		}
+		catch(Exception e){
+
 		}
 		this.setResult(RESULT_OK, resultIntent);
 		MipcaActivityCapture.this.finish();

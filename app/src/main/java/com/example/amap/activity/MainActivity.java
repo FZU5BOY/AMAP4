@@ -921,9 +921,11 @@ public class MainActivity extends BaseActivity {
                 ShowLog("开始寻路----");
                 Date dateb = new Date();
                 if (isfirst) {
-                    midPoints.addLast(OBJECT_POS);
                     mylist = astar.searchPath(START_POS, OBJECT_POS);
-                    paths.addLast(mylist);
+                    if(mylist!=null&&mylist.size()>0) {
+                        midPoints.addLast(OBJECT_POS);
+                        paths.addLast(mylist);
+                    }
                 }
                 //不是第一次规划
                 else {
@@ -935,23 +937,35 @@ public class MainActivity extends BaseActivity {
                         int path_lenth = paths.getFirst().size();//首条路径的长度
                         //在原路径在 截取后半段即可
                         if (sub != -1) {
-                            mylist = paths.getFirst().subList(sub, path_lenth);//重新切割list得到新的路径
-                            Log.i("zjx", "不需要重新规划");
-                            paths.removeFirst();
-                            paths.addFirst(mylist);
+                            List mList=new ArrayList();
+                             mList=paths.getFirst().subList(sub, path_lenth);
+                            if(mList!=null&&mList.size()>0) {
+                                mylist = paths.getFirst().subList(sub, path_lenth);//重新切割list得到新的路径
+                                Log.i("zjx", "不需要重新规划");
+                                paths.removeFirst();
+                                paths.addFirst(mylist);
+                            }
                         }
                         //偏移路径重新规划
                         else {
-                            mylist = astar.searchPath(START_POS, OBJECT_POS);
-                            MyToast.makeText(getApplicationContext(), R.string.deviate_path, 0.7).show();
-                            paths.removeFirst();
-                            paths.addFirst(mylist);
+                            List mList=new ArrayList();
+                             mList=astar.searchPath(START_POS, OBJECT_POS);
+                            if(mList!=null&&mList.size()>0) {
+                                mylist = mList;
+                                MyToast.makeText(getApplicationContext(), R.string.deviate_path, 0.7).show();
+                                paths.removeFirst();
+                                paths.addFirst(mylist);
+                            }
+//                            else  MyToast.makeText(getApplicationContext(), R.string.deviate_path, 0.7).show();
                         }
 
                     }
                     //规划的路不是第一段，为后面的
-                    else mylist = astar.searchPath(START_POS, OBJECT_POS);
-
+                    else{
+                        List mList=new ArrayList();
+                        mList=astar.searchPath(START_POS, OBJECT_POS);
+                        if(mList!=null&&mList.size()>0)mylist =mList;
+                    }
                 }
                 Date datec = new Date();
                 ShowLog("寻找路径成功，耗时" + (datec.getTime() - dateb.getTime()) + "ms");
@@ -960,7 +974,7 @@ public class MainActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //mylist空的情况即路径规划失败，可能为无法到达的点
+            //mylist空的情况即路径规划失败，可能为无法到达的点 或自身走进障碍区
             if (mylist != null) {
                 Polyline polyline = new Polyline();
                 int ls=mylist.size();
