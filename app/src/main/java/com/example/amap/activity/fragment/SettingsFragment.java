@@ -27,6 +27,8 @@ import com.example.amap.activity.LoginActivity;
 import com.example.amap.activity.MainActivity;
 import com.example.amap.activity.NaviActivity;
 import com.example.amap.activity.SetMyInfoActivity;
+import com.example.amap.config.Config;
+import com.example.amap.custom.MapSingleChoiceDialog;
 import com.example.amap.util.SharePreferenceUtil;
 import com.example.amap.util.location.AnalogLocation;
 import com.example.amap.util.rount.MyPoint;
@@ -41,7 +43,7 @@ import cn.bmob.im.BmobUserManager;
 
 public class SettingsFragment extends FragmentBase implements OnClickListener {
 
-    Button btn_logout,btnGoback,changeIp;
+    Button btn_logout,btnGoback,changeIp,change_map;
     TextView tv_set_name;
     RelativeLayout layout_info, rl_switch_notification, rl_switch_voice,
             rl_switch_vibrate, layout_blacklist;
@@ -100,7 +102,7 @@ public class SettingsFragment extends FragmentBase implements OnClickListener {
 
         tv_set_name = (TextView) findViewById(R.id.tv_set_name);
         btn_logout = (Button) findViewById(R.id.btn_logout);
-
+        change_map=(Button)findViewById(R.id.change_map);
         // 初始化
         boolean isAllowNotify = mSharedUtil.isAllowPushNotify();
 
@@ -130,6 +132,7 @@ public class SettingsFragment extends FragmentBase implements OnClickListener {
         btn_logout.setOnClickListener(this);
         layout_info.setOnClickListener(this);
         layout_blacklist.setOnClickListener(this);
+        change_map.setOnClickListener(this);
         changeIp = (Button) findViewById(R.id.button15);
         changeIp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,6 +270,25 @@ public class SettingsFragment extends FragmentBase implements OnClickListener {
             case R.id.layout_blacklist:// 启动到黑名单页面
                 startAnimActivity(new Intent(getActivity(), BlackListActivity.class));
                 break;
+            case R.id.change_map:{
+                MapSingleChoiceDialog mapSingleChoiceDialog=new MapSingleChoiceDialog(this.getContext(), new MapSingleChoiceDialog.OnTestListening() {
+                    @Override
+                    public void getTopicID(int newId) {
+                        SharePreferenceUtil sharePreferenceUtil=new SharePreferenceUtil(CustomApplcation.getInstance().getApplicationContext(),"config");
+                       int oldId=sharePreferenceUtil.getMapCurrentNo();
+                        ShowLog("oldId:"+oldId+",,newId"+newId);
+                       if(oldId!=newId){
+                           sharePreferenceUtil.setMapCurrentNo(newId);
+                           Config.changeInstance();
+                           //执行切换操作 退出原来的一些service和activity
+                           ShowLog("执行切换操作 退出原来的一些service和activity");
+                           MainActivity.mInstance.finish();
+                           startAnimActivity(MainActivity.class);
+                       }
+                    }
+                });
+                break;
+            }
             case R.id.layout_info:// 启动到个人资料页面
                 Intent intent = new Intent(getActivity(), SetMyInfoActivity.class);
                 intent.putExtra("from", "me");

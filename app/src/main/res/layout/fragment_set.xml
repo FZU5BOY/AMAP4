@@ -282,8 +282,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="导入地图"
-            android:id="@+id/button16"
+            android:text="切换地图"
+            android:id="@+id/change_map"
             android:paddingLeft="10dp"
             android:gravity="left|center_vertical"
             android:textSize="16sp"

@@ -25,13 +25,19 @@ import java.net.URLConnection;
  * Created by Administrator on 2015/7/31.
  */
 public class StepLocation {
-    public  AMapPoint lastAMapPoint=new AMapPoint(0.5,0.5, Config.CurrentFloorDefault,30,0);
+    public  AMapPoint lastAMapPoint;
     private static class LazyHolder {
-        private static final StepLocation INSTANCE = new StepLocation();
+        private static StepLocation INSTANCE = new StepLocation();
     }
-    public static final StepLocation getInstance() {
+    public static  StepLocation getInstance() {
         return LazyHolder.INSTANCE;
     }
     private StepLocation(){
+        Log.i("zjx","StepLocation 初始化");
+        lastAMapPoint=new AMapPoint(0.5,0.5, Config.CurrentFloorDefault,30,0);
+    }
+    public static void refresh(){
+        LazyHolder.INSTANCE=null;
+        LazyHolder.INSTANCE = new StepLocation();
     }
 }

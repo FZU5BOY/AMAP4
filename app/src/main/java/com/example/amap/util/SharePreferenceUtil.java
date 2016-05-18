@@ -18,7 +18,14 @@ public class SharePreferenceUtil {
 	private String SHARED_KEY_NOTIFY = "shared_key_notify";
 	private String SHARED_KEY_VOICE = "shared_key_sound";
 	private String SHARED_KEY_VIBRATE = "shared_key_vibrate";
-	
+	private String CONFIG_MAP_CURRENT_NO ="map_current_no";
+	public int getMapCurrentNo(){
+		return mSharedPreferences.getInt(CONFIG_MAP_CURRENT_NO,0);
+	}
+	public void setMapCurrentNo(int i){
+		editor.putInt(CONFIG_MAP_CURRENT_NO, i);
+		editor.commit();
+	}
 	// 是否允许推送通知
 	public boolean isAllowPushNotify() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_NOTIFY, true);

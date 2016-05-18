@@ -267,11 +267,9 @@ public class MipcaActivityCapture extends Activity implements Callback , View.On
 			return;
 		}
 		Intent resultIntent = new Intent();
-		Bundle bundle = new Bundle();
         Log.i(TAG, resultString);
 //        resultString 即为获取到的结果   Zeashon
-        bundle.putString("LocationResult", resultString);
-		//z&x&y 1[0,2]&0.5[0,1]&0.3[0,1]
+		//x&y&z 0.5[0,1]&0.3[0,1]&1[0,2]
 		String xyz[]=resultString.split("&");
 		StepLocation stepLocation=StepLocation.getInstance();
 		double sx,sy;int sz;
@@ -280,14 +278,18 @@ public class MipcaActivityCapture extends Activity implements Callback , View.On
 			sy=Double.parseDouble(xyz[1]);
 			sz=Integer.parseInt(xyz[2]);
 			if(0<=sz&&sz<=2&&sx<=1.0&&sy<=1.0&&sx>=0.0&&sy>=0.0){
-				stepLocation.lastAMapPoint.setZ(sz);
-				stepLocation.lastAMapPoint.setX(sx);
-				stepLocation.lastAMapPoint.setY(sy);
-				stepLocation.lastAMapPoint.setStep(stepLocation.lastAMapPoint.getStep()+2);
+				synchronized (stepLocation.lastAMapPoint){
+					stepLocation.lastAMapPoint.setZ(sz);
+					stepLocation.lastAMapPoint.setX(sx);
+					stepLocation.lastAMapPoint.setY(sy);
+					stepLocation.lastAMapPoint.setStep(stepLocation.lastAMapPoint.getStep()+2);
+					Log.i(TAG,"synchronized (stepLocation.lastAMapPoint) success");
+				}
 			}
 		}
 		catch(Exception e){
-
+			Log.i(TAG,"扫描定位 fail");
+			e.printStackTrace();
 		}
 		this.setResult(RESULT_OK, resultIntent);
 		MipcaActivityCapture.this.finish();

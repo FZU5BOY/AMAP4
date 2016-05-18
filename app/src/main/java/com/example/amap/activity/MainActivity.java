@@ -177,9 +177,11 @@ public class MainActivity extends BaseActivity {
     NotificationManager nm;//通知
     static final int NOTIFICATION_ID = 0x123;//通知的id
     private SharedPreferences setting;//is first
+    public static MainActivity mInstance=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mInstance=this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         ArcGISRuntime.setClientId(Config.ClientID);
         setContentView(R.layout.main);
@@ -1948,7 +1950,9 @@ public class MainActivity extends BaseActivity {
             return;
         }
         if (doubleBackToExitPressedOnce) {//按两次
-            super.onBackPressed();
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
             return;
         }
 

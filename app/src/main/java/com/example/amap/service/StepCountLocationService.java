@@ -65,7 +65,6 @@ public class StepCountLocationService extends Service {
     public float weight;
     public String sex;
     public float lenOfStep;
-    private final double SHOP_LENGHT =Config.SHOP_LENGHT;
     //service
     private Date startdate;//运动开始时间
     private Date nowdate;//目前时间
@@ -78,7 +77,6 @@ public class StepCountLocationService extends Service {
     StepLocation stepLocation=StepLocation.getInstance();
     Handler handler;
     private int oldStep=0;
-    private double houseNorth = Config.Location_houseNorth;//在地图上 从入口进去的时候指南针的角度 30为预设
     public void init(){
         startdate = new Date();
 //        height = (float)data[0];
@@ -276,8 +274,8 @@ public class StepCountLocationService extends Service {
 //                oldStep=step;
 //                //根据差计算步长
 //                Log.i("zjx", "隔2s的步数差：" + stepSub);
-                double degreeSub=(houseNorth+90.0+360.0-lastDegree)%360; //相对地球竖直向上↑的角度差 角度从逆时针算
-                Log.i("zjx","degreeSub:"+degreeSub);
+                double degreeSub=(Config.Location_houseNorth+90.0+360.0-lastDegree)%360; //相对地球竖直向上↑的角度差 角度从逆时针算
+//                Log.i("zjx","degreeSub:"+degreeSub);
                 int stepSub=0;
                 if((stepSub=(step-stepLocation.lastAMapPoint.getStep()))!=0){
                     double xMap,yMap;
@@ -330,7 +328,7 @@ public class StepCountLocationService extends Service {
                     degree = lastDegree;
                     //改变方向
                     lastDegree = -currentDegree;
-                    Log.i("zjx","lastDegree:"+lastDegree);
+//                    Log.i("zjx","lastDegree:"+lastDegree);
                 }
             }
         }
@@ -367,6 +365,7 @@ public class StepCountLocationService extends Service {
         threadDisable=true;
         Log.i("zjx", "service destroy");
         unRegisterSensors();
+        StepLocation.refresh();
         super.onDestroy();
     }
 
