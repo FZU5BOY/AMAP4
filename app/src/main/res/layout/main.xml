@@ -375,9 +375,16 @@
         android:layout_width="fill_parent"
         android:layout_height="120dp"
         android:layout_alignParentBottom="true"
-        android:background="#ffffffff"
+        android:background="#ffffff"
         android:clickable="true"
         android:visibility="gone">
+
+        <View
+            android:id="@+id/spit_view3"
+            android:layout_width="fill_parent"
+            android:layout_height="0.6dp"
+            android:layout_marginTop="0dp"
+            android:background="#c9cccc" />
 
         <LinearLayout
             android:id="@+id/show"

@@ -20,7 +20,8 @@
             android:gravity="center_vertical|center_horizontal"
             android:text="路线"
             android:textColor="@android:color/white"
-            android:textSize="21sp" />
+            android:textSize="21sp" />3
+
 
         <Button
             android:id="@+id/makeRoad_GoBack"

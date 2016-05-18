@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -16,7 +16,8 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:paddingTop="5dp">
 
             <Button
                 android:id="@+id/btn_message"
@@ -51,7 +52,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/btn_contract"
@@ -61,7 +62,7 @@
                 android:drawableTop="@drawable/tab_contact_btn"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
-                android:paddingTop="0dip"
+                android:paddingTop="5dip"
                 android:scaleType="matrix"
                 android:text="@string/main_tab_contact"
                 android:textColor="@drawable/tab_textcolor"
@@ -92,7 +93,7 @@
             android:drawableTop="@drawable/tab_circle_btn"
             android:onClick="onTabSelect"
             android:paddingBottom="2dip"
-            android:paddingTop="0dip"
+            android:paddingTop="5dp"
             android:scaleType="matrix"
             android:text="@string/mian_tab_circle"
             android:textColor="@drawable/tab_textcolor"

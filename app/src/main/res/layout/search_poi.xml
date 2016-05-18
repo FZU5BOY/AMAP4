@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_gravity="top"
-        android:background="#ff00a0e9" />
+        android:background="@color/myblue3" />
 
     <Button
         android:id="@+id/makeRoad_GoBack"

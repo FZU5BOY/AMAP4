@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.example.amap.CustomApplcation;
 import com.example.amap.R;
+import com.example.amap.activity.AddFriendActivity;
 import com.example.amap.activity.BlackListActivity;
 import com.example.amap.activity.FragmentBase;
 import com.example.amap.activity.LoginActivity;
@@ -38,6 +39,7 @@ import com.example.amap.util.CircularImage;
 import com.example.amap.util.ImageLoadOptions;
 import com.example.amap.util.SharePreferenceUtil;
 import com.example.amap.util.rount.MyPoint;
+import com.example.amap.view.HeaderLayout;
 import com.example.amap.view.xlist.XListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -89,8 +91,10 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
     }
 
     private void initView() {
-        user_set_name = (TextView) findViewById(R.id.user_name);
-        cover_user_photo = (ImageView) findViewById(R.id.cover_user_photo);
+//        user_set_name = (TextView) findViewById(R.id.user_name);
+//        cover_user_photo = (ImageView) findViewById(R.id.cover_user_photo);
+
+
         geneItems();
         mListView = (XListView) findViewById(R.id.mycirclexListView);
         mListView.setPullLoadEnable(true);
@@ -103,18 +107,22 @@ public class MyCircleFragment extends FragmentBase implements XListView.IXListVi
 //		mListView.setPullRefreshEnable(false);
         mListView.setXListViewListener(this);
         mHandler = new android.os.Handler();
-        cover_user_photo.setImageResource(R.drawable.head);
+//        cover_user_photo.setImageResource(R.drawable.head);
     }
 
     private void initData() {
-        user_set_name.setText(BmobUserManager.getInstance(getActivity())
-                .getCurrentUser().getNick().trim());
+        // 获取昵称  --start
+//        user_set_name.setText(BmobUserManager.getInstance(getActivity())
+//                .getCurrentUser().getNick().trim());
+        //获取昵称 --end
         //对UI组件的更新操作
-        ShowLog("photo:" + BmobUserManager.getInstance(getActivity())
-                .getCurrentUser().getAvatar());
-        String photo=BmobUserManager.getInstance(getActivity()).getCurrentUser().getAvatar();
-        refreshAvatar(photo);
-        ShowLog("photo:" + photo);
+        //获取头像   --start
+//        ShowLog("photo:" + BmobUserManager.getInstance(getActivity())
+//                .getCurrentUser().getAvatar());
+//        String photo=BmobUserManager.getInstance(getActivity()).getCurrentUser().getAvatar();
+//        refreshAvatar(photo);
+//        ShowLog("photo:" + photo);
+        //获取头像 --end
 //        URL picUrl = null;
 //        try {
 //            picUrl = new URL(BmobUserManager.getInstance(getActivity())
